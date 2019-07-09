@@ -2,6 +2,10 @@ package com.tobiasfertig.java.solidityartist;
 
 public class CodeWriter
 {
+	private static String INDENTATION = "    ";
+	private int level = 0;
+
+
 	public CodeWriter( )
 	{
 	}
@@ -15,6 +19,12 @@ public class CodeWriter
 	public CodeWriter write( Writable writable )
 	{
 		writable.write( this );
+		return this;
+	}
+
+	public CodeWriter writeAndIndent( String s )
+	{
+		System.out.print( getIndentationLevel( ) + s );
 		return this;
 	}
 
@@ -38,12 +48,15 @@ public class CodeWriter
 
 	public CodeWriter openCurlyBraces( )
 	{
-		System.out.print( "{" );
+		System.out.println( "{" );
+		this.level++;
 		return this;
 	}
 
 	public CodeWriter closeCurlyBraces( )
 	{
+		System.out.println( );
+		this.level--;
 		System.out.print( "}" );
 		return this;
 	}
@@ -51,7 +64,13 @@ public class CodeWriter
 	public CodeWriter emptyCurlyBraces( )
 	{
 		System.out.println( "{");
-		System.out.print( "}" );
+		System.out.print( getIndentationLevel( ) + "}" );
+		return this;
+	}
+
+	public CodeWriter semicolon( )
+	{
+		System.out.println( ";" );
 		return this;
 	}
 
@@ -63,7 +82,19 @@ public class CodeWriter
 
 	public CodeWriter newline( )
 	{
-		System.out.println( "\n" );
+		System.out.println( );
 		return this;
+	}
+
+	private String getIndentationLevel( )
+	{
+		StringBuilder stringBuilder = new StringBuilder( );
+
+		for(int i = 0; i < level; i++)
+		{
+			stringBuilder.append( INDENTATION );
+		}
+
+		return stringBuilder.toString( );
 	}
 }

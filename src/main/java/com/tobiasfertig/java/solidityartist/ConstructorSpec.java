@@ -1,6 +1,6 @@
 package com.tobiasfertig.java.solidityartist;
 
-public class ConstructorSpec
+public class ConstructorSpec implements Writable
 {
 	public final static String CONSTRUCTOR_KEYWORD = "constructor";
 
@@ -13,7 +13,7 @@ public class ConstructorSpec
 
 	public void write( CodeWriter writer )
 	{
-		writer.write( CONSTRUCTOR_KEYWORD )
+		writer.writeAndIndent( CONSTRUCTOR_KEYWORD )
 			  .emptyBraces( )
 			  .space( )
 			  .write( this.visibility )
@@ -21,13 +21,23 @@ public class ConstructorSpec
 			  .emptyCurlyBraces( );
 	}
 
-	public static final class Builder {
+	public static Builder builder( VisibilityName visibility )
+	{
+		return new Builder( visibility );
+	}
+
+	public static final class Builder
+	{
 		private final VisibilityName visibility;
 
-		private Builder(VisibilityName visibility)
+		private Builder( VisibilityName visibility )
 		{
 			this.visibility = visibility;
 		}
 
+		public ConstructorSpec build( )
+		{
+			return new ConstructorSpec( this );
+		}
 	}
 }
