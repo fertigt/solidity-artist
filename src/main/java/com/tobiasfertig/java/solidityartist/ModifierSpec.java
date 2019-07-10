@@ -9,11 +9,13 @@ public class ModifierSpec implements Writable
 
 	private final ModifierName modifierName;
 	private final Set<ParameterSpec> parameters;
+	private final CodeBlock code;
 
 	public ModifierSpec( Builder builder )
 	{
 		this.modifierName = builder.modifierName;
-		parameters = builder.parameters;
+		this.parameters = builder.parameters;
+		this.code = (builder.code != null) ? builder.code : CodeBlock.emptyBlock( );
 	}
 
 	@Override public void write( CodeWriter writer )
@@ -25,8 +27,15 @@ public class ModifierSpec implements Writable
 			  .writeParameters( parameters )
 			  .closeBraces( )
 			  .space( )
-			  .openCurlyBraces( )
-			  .writeAndIndent( "_;" )
+			  .openCurlyBraces( );
+
+		if(!code.isEmpty())
+		{
+			writer.write( code )
+				  .newline( );
+		}
+
+		writer.writeAndIndent( "_;" )
 			  .closeCurlyBraces( );
 	}
 
@@ -44,6 +53,7 @@ public class ModifierSpec implements Writable
 	{
 		private final ModifierName modifierName;
 		private final Set<ParameterSpec> parameters = new LinkedHashSet<>( );
+		private CodeBlock code;
 
 		private Builder( ModifierName modifierName )
 		{
@@ -63,6 +73,12 @@ public class ModifierSpec implements Writable
 		public Builder addParameter( ParameterSpec parameter )
 		{
 			this.parameters.add( parameter );
+			return this;
+		}
+
+		public Builder addCode( CodeBlock code )
+		{
+			this.code = code;
 			return this;
 		}
 
