@@ -82,7 +82,7 @@ public class CodeWriter
 	{
 		System.out.println( );
 		this.level--;
-		System.out.print( "}" );
+		System.out.print( getIndentationLevel( ) + "}" );
 		return this;
 	}
 

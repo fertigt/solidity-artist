@@ -1,6 +1,5 @@
 package com.tobiasfertig.java.solidityartist;
 
-import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -25,6 +24,7 @@ public class FunctionSpec implements Writable
 		this.returnParameters = builder.returnParameters;
 	}
 
+	//TODO: wenn name gesetzt, fehlt space
 	@Override public void write( CodeWriter writer )
 	{
 		writer.writeAndIndent( FUNCTION_KEYWORD )

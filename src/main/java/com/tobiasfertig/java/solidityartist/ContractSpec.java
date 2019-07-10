@@ -1,14 +1,18 @@
 package com.tobiasfertig.java.solidityartist;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 public class ContractSpec implements Writable
 {
 	public final static String CONTRACT_KEYWORD = "contract";
 	public final static String PRAGMA_KEYWORD = "pragma solidity";
 
-	private String pragma;
-	private String name;
-	private ConstructorSpec constructor;
-	private FunctionSpec fallbackFunction;
+	private final String pragma;
+	private final String name;
+	private final ConstructorSpec constructor;
+	private final FunctionSpec fallbackFunction;
+	private final Set<ModifierSpec> customModifiers;
 
 	private ContractSpec( Builder builder )
 	{
@@ -16,11 +20,17 @@ public class ContractSpec implements Writable
 		this.name = builder.name;
 		this.constructor = builder.constructorSpec;
 		this.fallbackFunction = builder.fallbackFunctionSpec;
+		this.customModifiers = builder.customModifiers;
 	}
 
 	private boolean hasFallbackFunction( )
 	{
 		return fallbackFunction != null;
+	}
+
+	private boolean hasCustomModifiers( )
+	{
+		return !customModifiers.isEmpty( );
 	}
 
 	public void write( CodeWriter writer )
@@ -42,7 +52,18 @@ public class ContractSpec implements Writable
 
 		if ( hasFallbackFunction( ) )
 		{
-			writer.write( fallbackFunction );
+			writer.write( fallbackFunction )
+				  .newline( )
+				  .newline( );
+		}
+
+		if ( hasCustomModifiers( ) )
+		{
+			for ( ModifierSpec customModifier : customModifiers )
+			{
+				writer.write( customModifier )
+					  .newline( );
+			}
 		}
 
 		writer.closeCurlyBraces( );
@@ -59,6 +80,7 @@ public class ContractSpec implements Writable
 		private final String name;
 		private ConstructorSpec constructorSpec;
 		private FunctionSpec fallbackFunctionSpec;
+		private final Set<ModifierSpec> customModifiers = new LinkedHashSet<>( );
 
 		private Builder( String pragma, String name )
 		{
@@ -75,6 +97,12 @@ public class ContractSpec implements Writable
 		public Builder addFallbackFunction( FunctionSpec fallbackFunctionSpec )
 		{
 			this.fallbackFunctionSpec = fallbackFunctionSpec;
+			return this;
+		}
+
+		public Builder addCustomModifier( ModifierSpec modifierSpec )
+		{
+			this.customModifiers.add( modifierSpec );
 			return this;
 		}
 
