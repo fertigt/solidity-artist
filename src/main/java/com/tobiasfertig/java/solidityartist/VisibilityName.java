@@ -14,7 +14,7 @@ public class VisibilityName implements Writable
 		this.keyword = keyword;
 	}
 
-	public void write( CodeWriter writer )
+	@Override public void write( CodeWriter writer )
 	{
 		writer.write( keyword );
 	}

@@ -8,12 +8,19 @@ public class ContractSpec implements Writable
 	private String pragma;
 	private String name;
 	private ConstructorSpec constructor;
+	private FunctionSpec fallbackFunction;
 
 	private ContractSpec( Builder builder )
 	{
 		this.pragma = builder.pragma;
 		this.name = builder.name;
 		this.constructor = builder.constructorSpec;
+		this.fallbackFunction = builder.fallbackFunctionSpec;
+	}
+
+	private boolean hasFallbackFunction( )
+	{
+		return fallbackFunction != null;
 	}
 
 	public void write( CodeWriter writer )
@@ -27,9 +34,18 @@ public class ContractSpec implements Writable
 			  .write( CONTRACT_KEYWORD )
 			  .space( )
 			  .write( this.name )
+			  .space( )
 			  .openCurlyBraces( )
 			  .write( constructor )
-			  .closeCurlyBraces( );
+			  .newline( )
+			  .newline( );
+
+		if ( hasFallbackFunction( ) )
+		{
+			writer.write( fallbackFunction );
+		}
+
+		writer.closeCurlyBraces( );
 	}
 
 	public static Builder builder( String pragma, String name )
@@ -42,6 +58,7 @@ public class ContractSpec implements Writable
 		private final String pragma;
 		private final String name;
 		private ConstructorSpec constructorSpec;
+		private FunctionSpec fallbackFunctionSpec;
 
 		private Builder( String pragma, String name )
 		{
@@ -52,6 +69,12 @@ public class ContractSpec implements Writable
 		public Builder addConstructor( ConstructorSpec constructorSpec )
 		{
 			this.constructorSpec = constructorSpec;
+			return this;
+		}
+
+		public Builder addFallbackFunction( FunctionSpec fallbackFunctionSpec )
+		{
+			this.fallbackFunctionSpec = fallbackFunctionSpec;
 			return this;
 		}
 
