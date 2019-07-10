@@ -9,13 +9,15 @@ public class FunctionSpec implements Writable
 
 	private final String name;
 	private final VisibilityName visibility;
-	private final Set<ModifierSpec> modifiers;
+	private final Set<ModifierName> modifiers;
+	private final Set<ModifierSpec> customModifiers;
 
 	private FunctionSpec( Builder builder )
 	{
 		this.name = ( builder.name == null ) ? "" : builder.name;
 		this.visibility = builder.visibility;
-		this.modifiers = builder.modifierSpecs;
+		this.modifiers = builder.modifiers;
+		this.customModifiers = builder.customModifierSpecs;
 	}
 
 	@Override public void write( CodeWriter writer )
@@ -27,9 +29,16 @@ public class FunctionSpec implements Writable
 			  .write( visibility )
 			  .space( );
 
-		for ( ModifierSpec modifier : modifiers )
+		for ( ModifierName modifier : modifiers )
 		{
-			writer.write( modifier );
+			writer.write( modifier )
+				  .space( );
+		}
+
+		for ( ModifierSpec modifier : customModifiers )
+		{
+			writer.write( modifier )
+				  .space( );
 		}
 
 		writer.emptyCurlyBraces( );
@@ -44,7 +53,8 @@ public class FunctionSpec implements Writable
 	{
 		private String name;
 		private final VisibilityName visibility;
-		private final Set<ModifierSpec> modifierSpecs = new LinkedHashSet<>( );
+		private final Set<ModifierName> modifiers = new LinkedHashSet<>( );
+		private final Set<ModifierSpec> customModifierSpecs = new LinkedHashSet<>( );
 
 		private Builder( VisibilityName visibility )
 		{
@@ -57,19 +67,35 @@ public class FunctionSpec implements Writable
 			return this;
 		}
 
-		public Builder addModifierSpecs( Iterable<ModifierSpec> modifierSpecs )
+		public Builder addModifierNames( Iterable<ModifierName> modifierNames )
 		{
-			for ( ModifierSpec modifierSpec : modifierSpecs )
+			for ( ModifierName modifierName : modifierNames )
 			{
-				this.modifierSpecs.add( modifierSpec );
+				this.modifiers.add( modifierName );
 			}
 
 			return this;
 		}
 
-		public Builder addModifier( ModifierSpec modifierSpec )
+		public Builder addModifierName( ModifierName modifierName )
 		{
-			this.modifierSpecs.add( modifierSpec );
+			this.modifiers.add( modifierName );
+			return this;
+		}
+
+		public Builder addCustomModifierSpecs( Iterable<ModifierSpec> customModifierSpecs )
+		{
+			for ( ModifierSpec modifierSpec : customModifierSpecs )
+			{
+				this.customModifierSpecs.add( modifierSpec );
+			}
+
+			return this;
+		}
+
+		public Builder addCustomModifierSpec( ModifierSpec customModifierSpec )
+		{
+			this.customModifierSpecs.add( customModifierSpec );
 			return this;
 		}
 
