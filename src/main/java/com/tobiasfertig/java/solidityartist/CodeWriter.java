@@ -1,5 +1,8 @@
 package com.tobiasfertig.java.solidityartist;
 
+import java.util.Iterator;
+import java.util.Set;
+
 public class CodeWriter
 {
 	private static String INDENTATION = "    ";
@@ -25,6 +28,28 @@ public class CodeWriter
 	public CodeWriter writeAndIndent( String s )
 	{
 		System.out.print( getIndentationLevel( ) + s );
+		return this;
+	}
+
+	public CodeWriter writeParameters( Set<ParameterSpec> parameters )
+	{
+		Iterator<ParameterSpec> iterator = parameters.iterator( );
+
+		if ( iterator.hasNext( ) )
+		{
+			ParameterSpec nextParameter = iterator.next( );
+
+			while ( iterator.hasNext( ) )
+			{
+				this.write( nextParameter )
+					.comma( )
+					.space( );
+				nextParameter = iterator.next( );
+			}
+
+			this.write( nextParameter );
+		}
+
 		return this;
 	}
 

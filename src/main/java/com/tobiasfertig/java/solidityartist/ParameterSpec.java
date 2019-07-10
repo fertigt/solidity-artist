@@ -2,6 +2,8 @@ package com.tobiasfertig.java.solidityartist;
 
 public class ParameterSpec implements Writable
 {
+	public final static String RETURN_PARAMETER_KEYWORD = "returns";
+
 	private TypeName type;
 	private LocationName location;
 	private String name;

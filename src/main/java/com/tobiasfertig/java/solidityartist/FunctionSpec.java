@@ -13,6 +13,7 @@ public class FunctionSpec implements Writable
 	private final VisibilityName visibility;
 	private final Set<ModifierName> modifiers;
 	private final Set<ModifierName> customModifiers;
+	private final Set<ParameterSpec> returnParameters;
 
 	private FunctionSpec( Builder builder )
 	{
@@ -21,17 +22,16 @@ public class FunctionSpec implements Writable
 		this.visibility = builder.visibility;
 		this.modifiers = builder.modifiers;
 		this.customModifiers = builder.customModifiers;
+		this.returnParameters = builder.returnParameters;
 	}
 
 	@Override public void write( CodeWriter writer )
 	{
 		writer.writeAndIndent( FUNCTION_KEYWORD )
 			  .write( this.name )
-			  .openBraces( );
-
-		writeParameters( writer );
-
-		writer.closeBraces( )
+			  .openBraces( )
+		      .writeParameters( this.parameters )
+			  .closeBraces( )
 			  .space( )
 			  .write( visibility )
 			  .space( );
@@ -48,27 +48,17 @@ public class FunctionSpec implements Writable
 				  .space( );
 		}
 
-		writer.emptyCurlyBraces( );
-	}
-
-	private void writeParameters( CodeWriter writer )
-	{
-		Iterator<ParameterSpec> iterator = parameters.iterator( );
-
-		if ( iterator.hasNext( ) )
+		if(!returnParameters.isEmpty())
 		{
-			ParameterSpec nextParameter = iterator.next( );
-
-			while ( iterator.hasNext( ) )
-			{
-				writer.write( nextParameter )
-					  .comma( )
-					  .space( );
-				nextParameter = iterator.next( );
-			}
-
-			writer.write( nextParameter );
+			writer.write( ParameterSpec.RETURN_PARAMETER_KEYWORD )
+				  .space( )
+				  .openBraces( )
+				  .writeParameters( this.returnParameters )
+				  .closeBraces( )
+				  .space( );
 		}
+
+		writer.emptyCurlyBraces( );
 	}
 
 	public static Builder builder( VisibilityName visibility )
@@ -83,6 +73,7 @@ public class FunctionSpec implements Writable
 		private final VisibilityName visibility;
 		private final Set<ModifierName> modifiers = new LinkedHashSet<>( );
 		private final Set<ModifierName> customModifiers = new LinkedHashSet<>( );
+		private final Set<ParameterSpec> returnParameters = new LinkedHashSet<>( );
 
 		private Builder( VisibilityName visibility )
 		{
@@ -156,6 +147,22 @@ public class FunctionSpec implements Writable
 		public Builder addCustomModifierName( ModifierName customModifierName )
 		{
 			this.customModifiers.add( customModifierName );
+			return this;
+		}
+
+		public Builder addReturnParameters( Iterable<ParameterSpec> returnParameters )
+		{
+			for ( ParameterSpec returnParameter : returnParameters )
+			{
+				this.returnParameters.add( returnParameter );
+			}
+
+			return this;
+		}
+
+		public Builder addReturnParameter( ParameterSpec returnParameter )
+		{
+			this.returnParameters.add( returnParameter );
 			return this;
 		}
 
