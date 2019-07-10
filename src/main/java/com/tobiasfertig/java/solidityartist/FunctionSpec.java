@@ -13,6 +13,7 @@ public class FunctionSpec implements Writable
 	private final Set<ModifierName> modifiers;
 	private final Set<ModifierName> customModifiers;
 	private final Set<ParameterSpec> returnParameters;
+	private final CodeBlock code;
 
 	private FunctionSpec( Builder builder )
 	{
@@ -22,6 +23,7 @@ public class FunctionSpec implements Writable
 		this.modifiers = builder.modifiers;
 		this.customModifiers = builder.customModifiers;
 		this.returnParameters = builder.returnParameters;
+		this.code = (builder.code != null) ? builder.code : CodeBlock.emptyBlock( );
 	}
 
 	//TODO: wenn name gesetzt, fehlt space
@@ -59,7 +61,15 @@ public class FunctionSpec implements Writable
 				  .space( );
 		}
 
-		writer.emptyCurlyBraces( );
+		if ( code.isEmpty( ) )
+		{
+			writer.emptyCurlyBraces( );
+		} else
+		{
+			writer.openCurlyBraces( )
+				  .write( code )
+				  .closeCurlyBraces( );
+		}
 	}
 
 	public static Builder builder( VisibilityName visibility )
@@ -75,6 +85,7 @@ public class FunctionSpec implements Writable
 		private final Set<ModifierName> modifiers = new LinkedHashSet<>( );
 		private final Set<ModifierName> customModifiers = new LinkedHashSet<>( );
 		private final Set<ParameterSpec> returnParameters = new LinkedHashSet<>( );
+		private CodeBlock code;
 
 		private Builder( VisibilityName visibility )
 		{
@@ -164,6 +175,12 @@ public class FunctionSpec implements Writable
 		public Builder addReturnParameter( ParameterSpec returnParameter )
 		{
 			this.returnParameters.add( returnParameter );
+			return this;
+		}
+
+		public Builder addCode( CodeBlock code )
+		{
+			this.code = code;
 			return this;
 		}
 
