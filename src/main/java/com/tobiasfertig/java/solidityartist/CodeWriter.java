@@ -68,6 +68,12 @@ public class CodeWriter
 		return this;
 	}
 
+	public CodeWriter comma( )
+	{
+		System.out.print( "," );
+		return this;
+	}
+
 	public CodeWriter semicolon( )
 	{
 		System.out.println( ";" );

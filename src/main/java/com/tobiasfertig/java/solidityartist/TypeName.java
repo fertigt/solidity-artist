@@ -2,7 +2,7 @@ package com.tobiasfertig.java.solidityartist;
 
 import java.lang.reflect.Type;
 
-public class TypeName
+public class TypeName implements Writable
 {
 	public static final TypeName BOOLEAN = new TypeName( "bool" );
 	public static final TypeName ADDRESS = new TypeName( "address" );
@@ -118,9 +118,8 @@ public class TypeName
 		this.keyword = keyword;
 	}
 
-	public CodeWriter write( CodeWriter writer )
+	@Override public void write( CodeWriter writer )
 	{
 		writer.write( keyword );
-		return writer;
 	}
 }
