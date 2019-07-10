@@ -10,17 +10,26 @@ public class ContractSpec implements Writable
 
 	private final String pragma;
 	private final String name;
+	private final Set<StateVariableSpec> stateVariables;
 	private final ConstructorSpec constructor;
 	private final FunctionSpec fallbackFunction;
 	private final Set<ModifierSpec> customModifiers;
+	private final Set<FunctionSpec> functions;
 
 	private ContractSpec( Builder builder )
 	{
 		this.pragma = builder.pragma;
 		this.name = builder.name;
+		this.stateVariables = builder.stateVariables;
 		this.constructor = builder.constructorSpec;
 		this.fallbackFunction = builder.fallbackFunctionSpec;
 		this.customModifiers = builder.customModifiers;
+		this.functions = builder.functions;
+	}
+
+	private boolean hasStateVariables( )
+	{
+		return !stateVariables.isEmpty( );
 	}
 
 	private boolean hasFallbackFunction( )
@@ -31,6 +40,11 @@ public class ContractSpec implements Writable
 	private boolean hasCustomModifiers( )
 	{
 		return !customModifiers.isEmpty( );
+	}
+
+	private boolean hasFunctions( )
+	{
+		return !functions.isEmpty( );
 	}
 
 	public void write( CodeWriter writer )
@@ -45,7 +59,17 @@ public class ContractSpec implements Writable
 			  .space( )
 			  .write( this.name )
 			  .space( )
-			  .openCurlyBraces( )
+			  .openCurlyBraces( );
+
+		if ( hasStateVariables( ) )
+		{
+			for ( StateVariableSpec stateVariable : stateVariables )
+			{
+				writer.write( stateVariable );
+			}
+		}
+
+		writer.newline( )
 			  .write( constructor )
 			  .newline( )
 			  .newline( );
@@ -62,6 +86,16 @@ public class ContractSpec implements Writable
 			for ( ModifierSpec customModifier : customModifiers )
 			{
 				writer.write( customModifier )
+					  .newline( )
+					  .newline( );
+			}
+		}
+
+		if ( hasFunctions( ) )
+		{
+			for ( FunctionSpec function : functions )
+			{
+				writer.write( function )
 					  .newline( );
 			}
 		}
@@ -78,14 +112,22 @@ public class ContractSpec implements Writable
 	{
 		private final String pragma;
 		private final String name;
+		private final Set<StateVariableSpec> stateVariables = new LinkedHashSet<>( );
 		private ConstructorSpec constructorSpec;
 		private FunctionSpec fallbackFunctionSpec;
 		private final Set<ModifierSpec> customModifiers = new LinkedHashSet<>( );
+		private final Set<FunctionSpec> functions = new LinkedHashSet<>( );
 
 		private Builder( String pragma, String name )
 		{
 			this.pragma = pragma;
 			this.name = name;
+		}
+
+		public Builder addStateVariable( StateVariableSpec stateVariableSpec )
+		{
+			this.stateVariables.add( stateVariableSpec );
+			return this;
 		}
 
 		public Builder addConstructor( ConstructorSpec constructorSpec )
@@ -103,6 +145,12 @@ public class ContractSpec implements Writable
 		public Builder addCustomModifier( ModifierSpec modifierSpec )
 		{
 			this.customModifiers.add( modifierSpec );
+			return this;
+		}
+
+		public Builder addFunction( FunctionSpec functionSpec )
+		{
+			this.functions.add( functionSpec );
 			return this;
 		}
 

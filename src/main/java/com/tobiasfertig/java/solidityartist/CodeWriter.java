@@ -31,6 +31,13 @@ public class CodeWriter
 		return this;
 	}
 
+	public CodeWriter writeAndIndent( Writable writable )
+	{
+		this.write( getIndentationLevel( ) );
+		writable.write( this );
+		return this;
+	}
+
 	public CodeWriter writeParameters( Set<ParameterSpec> parameters )
 	{
 		Iterator<ParameterSpec> iterator = parameters.iterator( );

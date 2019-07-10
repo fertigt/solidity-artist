@@ -28,9 +28,10 @@ public class FunctionSpec implements Writable
 	@Override public void write( CodeWriter writer )
 	{
 		writer.writeAndIndent( FUNCTION_KEYWORD )
+			  .space( )
 			  .write( this.name )
 			  .openBraces( )
-		      .writeParameters( this.parameters )
+			  .writeParameters( this.parameters )
 			  .closeBraces( )
 			  .space( )
 			  .write( visibility )
