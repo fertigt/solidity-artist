@@ -147,6 +147,7 @@ public class ContractSpec implements Writable
 		if ( hasConstructor( ) )
 		{
 			writer.write( constructor )
+				  .newline( )
 				  .newline( );
 		}
 
