@@ -115,7 +115,7 @@ public class ContractSpec implements Writable
 		{
 			writer.write( IS_KEYWORD )
 				  .space( )
-				  .write( superContracts )
+				  .writeStrings( superContracts )
 				  .space( );
 		}
 

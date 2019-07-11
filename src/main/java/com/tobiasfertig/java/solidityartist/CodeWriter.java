@@ -44,7 +44,7 @@ public class CodeWriter
 		return this;
 	}
 
-	public CodeWriter write( Iterable<String> strings )
+	public CodeWriter writeStrings( Iterable<String> strings )
 	{
 		Iterator<String> iterator = strings.iterator( );
 
@@ -62,6 +62,25 @@ public class CodeWriter
 
 			this.write( s );
 		}
+
+		return this;
+	}
+
+	public CodeWriter write( Iterable<? extends Writable> writables )
+	{
+		Iterator<? extends Writable> iterator = writables.iterator( );
+		Writable writable = iterator.next( );
+
+		while ( iterator.hasNext( ) )
+		{
+			this.write( writable )
+				.comma( )
+				.space( );
+
+			writable = iterator.next( );
+		}
+
+		this.write( writable );
 
 		return this;
 	}

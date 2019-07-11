@@ -4,9 +4,9 @@ public class ParameterSpec implements Writable
 {
 	public final static String RETURN_PARAMETER_KEYWORD = "returns";
 
-	private TypeName type;
-	private AttributeName attribute;
-	private String name;
+	private final TypeName type;
+	private final AttributeName attribute;
+	private final String name;
 
 	private ParameterSpec( Builder builder )
 	{
@@ -30,6 +30,11 @@ public class ParameterSpec implements Writable
 			writer.space( )
 				  .write( this.name );
 		}
+	}
+
+	public TypeName getType( )
+	{
+		return type;
 	}
 
 	public static Builder builder( TypeName type )

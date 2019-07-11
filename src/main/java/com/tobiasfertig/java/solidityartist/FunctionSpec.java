@@ -26,6 +26,31 @@ public class FunctionSpec implements Writable
 		this.code = builder.code;
 	}
 
+	public Set<ParameterSpec> getParameters( )
+	{
+		return parameters;
+	}
+
+	public VisibilityName getVisibility( )
+	{
+		return visibility;
+	}
+
+	public Set<ModifierName> getModifiers( )
+	{
+		return modifiers;
+	}
+
+	public Set<ModifierName> getCustomModifiers( )
+	{
+		return customModifiers;
+	}
+
+	public Set<ParameterSpec> getReturnParameters( )
+	{
+		return returnParameters;
+	}
+
 	@Override public void write( CodeWriter writer )
 	{
 		writer.writeAndIndent( FUNCTION_KEYWORD );
@@ -81,6 +106,8 @@ public class FunctionSpec implements Writable
 					  .closeCurlyBraces( );
 			}
 		}
+
+
 	}
 
 	public static Builder builder( VisibilityName visibility )
