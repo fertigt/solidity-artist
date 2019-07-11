@@ -23,7 +23,7 @@ public class FunctionSpec implements Writable
 		this.modifiers = builder.modifiers;
 		this.customModifiers = builder.customModifiers;
 		this.returnParameters = builder.returnParameters;
-		this.code = (builder.code != null) ? builder.code : CodeBlock.emptyBlock( );
+		this.code = builder.code;
 	}
 
 	@Override public void write( CodeWriter writer )
@@ -39,39 +39,47 @@ public class FunctionSpec implements Writable
 			  .writeParameters( this.parameters )
 			  .closeBraces( )
 			  .space( )
-			  .write( visibility )
-			  .space( );
+			  .write( visibility );
 
 		for ( ModifierName modifier : modifiers )
 		{
-			writer.write( modifier )
-				  .space( );
+			writer.space( )
+				  .write( modifier );
 		}
 
 		for ( ModifierName customModifier : customModifiers )
 		{
-			writer.write( customModifier )
-				  .space( );
+			writer.space( )
+				  .write( customModifier );
 		}
 
 		if(!returnParameters.isEmpty())
 		{
-			writer.write( ParameterSpec.RETURN_PARAMETER_KEYWORD )
-				  .space( )
+			writer.space( )
+				  .write( ParameterSpec.RETURN_PARAMETER_KEYWORD )
 				  .openBraces( )
 				  .writeParameters( this.returnParameters )
-				  .closeBraces( )
-				  .space( );
+				  .closeBraces( );
 		}
 
-		if ( code.isEmpty( ) )
+		if ( code == null )
 		{
-			writer.emptyCurlyBraces( );
-		} else
+			writer.semicolon( );
+		}
+		else
 		{
-			writer.openCurlyBraces( )
-				  .write( code )
-				  .closeCurlyBraces( );
+			if ( code.isEmpty( ) )
+			{
+				writer.space()
+					  .emptyCurlyBraces( );
+			}
+			else
+			{
+				writer.space( )
+					  .openCurlyBraces( )
+					  .write( code )
+					  .closeCurlyBraces( );
+			}
 		}
 	}
 
@@ -88,7 +96,7 @@ public class FunctionSpec implements Writable
 		private final Set<ModifierName> modifiers = new LinkedHashSet<>( );
 		private final Set<ModifierName> customModifiers = new LinkedHashSet<>( );
 		private final Set<ParameterSpec> returnParameters = new LinkedHashSet<>( );
-		private CodeBlock code;
+		private CodeBlock code = CodeBlock.emptyBlock( );
 
 		private Builder( VisibilityName visibility )
 		{
@@ -184,6 +192,12 @@ public class FunctionSpec implements Writable
 		public Builder addCode( CodeBlock code )
 		{
 			this.code = code;
+			return this;
+		}
+
+		public Builder isAbstract( )
+		{
+			this.code = null;
 			return this;
 		}
 

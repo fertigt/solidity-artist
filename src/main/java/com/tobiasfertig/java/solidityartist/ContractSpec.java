@@ -190,6 +190,7 @@ public class ContractSpec implements Writable
 			for ( FunctionSpec function : functions )
 			{
 				writer.write( function )
+					  .newline( )
 					  .newline( );
 			}
 		}
