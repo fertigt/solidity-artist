@@ -14,6 +14,7 @@ public class ContractSpec implements Writable
 	private final String name;
 	private final Set<String> superContracts;
 	private final Set<UsingForSpec> usingForSpecs;
+	private final Set<EnumTypeName> enumDeclarations;
 	private final Set<StructTypeName> structDeclarations;
 	private final Set<StateVariableSpec> stateVariables;
 	private final Set<EventSpec> events;
@@ -29,6 +30,7 @@ public class ContractSpec implements Writable
 		this.name = builder.name;
 		this.superContracts = builder.superContracts;
 		this.usingForSpecs = builder.usingForSpecs;
+		this.enumDeclarations = builder.enumDeclarations;
 		this.structDeclarations = builder.structDeclarations;
 		this.stateVariables = builder.stateVariables;
 		this.events = builder.events;
@@ -51,6 +53,11 @@ public class ContractSpec implements Writable
 	private boolean hasUsingForSpecs( )
 	{
 		return !usingForSpecs.isEmpty( );
+	}
+
+	private boolean hasEnumDeclarations( )
+	{
+		return !enumDeclarations.isEmpty( );
 	}
 
 	private boolean hasStructDeclarations( )
@@ -129,6 +136,16 @@ public class ContractSpec implements Writable
 			}
 
 			writer.newline( );
+		}
+
+		if ( hasEnumDeclarations( ) )
+		{
+			for ( EnumTypeName enumDeclaration : enumDeclarations )
+			{
+				writer.write( enumDeclaration )
+					  .newline( )
+					  .newline( );
+			}
 		}
 
 		if ( hasStructDeclarations( ) )
@@ -210,6 +227,7 @@ public class ContractSpec implements Writable
 		private final String name;
 		private final Set<String> superContracts = new LinkedHashSet<>( );
 		private final Set<UsingForSpec> usingForSpecs = new LinkedHashSet<>( );
+		private final Set<EnumTypeName> enumDeclarations = new LinkedHashSet<>( );
 		private final Set<StructTypeName> structDeclarations = new LinkedHashSet<>( );
 		private final Set<StateVariableSpec> stateVariables = new LinkedHashSet<>( );
 		private final Set<EventSpec> events = new LinkedHashSet<>( );
@@ -245,6 +263,12 @@ public class ContractSpec implements Writable
 		public Builder addUsingForSpec( UsingForSpec usingForSpec )
 		{
 			this.usingForSpecs.add( usingForSpec );
+			return this;
+		}
+
+		public Builder addEnumDeclaration( EnumTypeName enumTypeName )
+		{
+			this.enumDeclarations.add( enumTypeName );
 			return this;
 		}
 
