@@ -44,6 +44,28 @@ public class CodeWriter
 		return this;
 	}
 
+	public CodeWriter write( Iterable<String> strings )
+	{
+		Iterator<String> iterator = strings.iterator( );
+
+		if ( iterator.hasNext( ) )
+		{
+			String s = iterator.next( );
+
+			while ( iterator.hasNext( ) )
+			{
+				this.write( s )
+					.comma( )
+					.space( );
+				s = iterator.next( );
+			}
+
+			this.write( s );
+		}
+
+		return this;
+	}
+
 	public CodeWriter writeParameters( Set<ParameterSpec> parameters )
 	{
 		Iterator<ParameterSpec> iterator = parameters.iterator( );

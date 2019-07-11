@@ -12,6 +12,7 @@ public class ContractSpec implements Writable
 	private final String pragma;
 	private final Set<ImportSpec> importStatements;
 	private final String name;
+	private final Set<String> superContracts;
 	private final Set<StateVariableSpec> stateVariables;
 	private final Set<EventSpec> events;
 	private final ConstructorSpec constructor;
@@ -24,6 +25,7 @@ public class ContractSpec implements Writable
 		this.pragma = builder.pragma;
 		this.importStatements = builder.importStatements;
 		this.name = builder.name;
+		this.superContracts = builder.superContracts;
 		this.stateVariables = builder.stateVariables;
 		this.events = builder.events;
 		this.constructor = builder.constructorSpec;
@@ -37,9 +39,19 @@ public class ContractSpec implements Writable
 		return !importStatements.isEmpty( );
 	}
 
+	private boolean hasSuperContracts( )
+	{
+		return !superContracts.isEmpty( );
+	}
+
 	private boolean hasStateVariables( )
 	{
 		return !stateVariables.isEmpty( );
+	}
+
+	private boolean hasConstructor( )
+	{
+		return this.constructor != null;
 	}
 
 	private boolean hasEvents( )
@@ -76,14 +88,24 @@ public class ContractSpec implements Writable
 			{
 				writer.write( importStatement );
 			}
+
+			writer.newline( );
 		}
 
-		writer.newline( )
-			  .write( CONTRACT_KEYWORD )
+		writer.write( CONTRACT_KEYWORD )
 			  .space( )
 			  .write( this.name )
-			  .space( )
-			  .openCurlyBraces( );
+			  .space( );
+
+		if ( hasSuperContracts( ) )
+		{
+			writer.write( IS_KEYWORD )
+				  .space( )
+				  .write( superContracts )
+				  .space( );
+		}
+
+		writer.openCurlyBraces( );
 
 		if ( hasStateVariables( ) )
 		{
@@ -91,9 +113,9 @@ public class ContractSpec implements Writable
 			{
 				writer.write( stateVariable );
 			}
-		}
 
-		writer.newline( );
+			writer.newline( );
+		}
 
 		if ( hasEvents( ) )
 		{
@@ -101,12 +123,15 @@ public class ContractSpec implements Writable
 			{
 				writer.write( event );
 			}
+
+			writer.newline( );
 		}
 
-		writer.newline( )
-			  .write( constructor )
-			  .newline( )
-			  .newline( );
+		if ( hasConstructor( ) )
+		{
+			writer.write( constructor )
+				  .newline( );
+		}
 
 		if ( hasFallbackFunction( ) )
 		{
@@ -147,6 +172,7 @@ public class ContractSpec implements Writable
 		private final String pragma;
 		private final Set<ImportSpec> importStatements = new LinkedHashSet<>( );
 		private final String name;
+		private final Set<String> superContracts = new LinkedHashSet<>( );
 		private final Set<StateVariableSpec> stateVariables = new LinkedHashSet<>( );
 		private final Set<EventSpec> events = new LinkedHashSet<>( );
 		private ConstructorSpec constructorSpec;
@@ -163,6 +189,18 @@ public class ContractSpec implements Writable
 		public Builder addImportStatement( ImportSpec importStatement )
 		{
 			this.importStatements.add( importStatement );
+			return this;
+		}
+
+		public Builder addSuperContract( String name )
+		{
+			this.superContracts.add( name );
+			return this;
+		}
+
+		public Builder addSuperContract( ContractSpec superContract )
+		{
+			this.superContracts.add( superContract.name );
 			return this;
 		}
 
