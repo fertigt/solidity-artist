@@ -13,6 +13,7 @@ public class ContractSpec implements Writable
 	private final Set<ImportSpec> importStatements;
 	private final String name;
 	private final Set<String> superContracts;
+	private final Set<UsingForSpec> usingForSpecs;
 	private final Set<StateVariableSpec> stateVariables;
 	private final Set<EventSpec> events;
 	private final ConstructorSpec constructor;
@@ -26,6 +27,7 @@ public class ContractSpec implements Writable
 		this.importStatements = builder.importStatements;
 		this.name = builder.name;
 		this.superContracts = builder.superContracts;
+		this.usingForSpecs = builder.usingForSpecs;
 		this.stateVariables = builder.stateVariables;
 		this.events = builder.events;
 		this.constructor = builder.constructorSpec;
@@ -42,6 +44,11 @@ public class ContractSpec implements Writable
 	private boolean hasSuperContracts( )
 	{
 		return !superContracts.isEmpty( );
+	}
+
+	private boolean hasUsingForSpecs( )
+	{
+		return !usingForSpecs.isEmpty( );
 	}
 
 	private boolean hasStateVariables( )
@@ -106,6 +113,16 @@ public class ContractSpec implements Writable
 		}
 
 		writer.openCurlyBraces( );
+
+		if ( hasUsingForSpecs( ) )
+		{
+			for ( UsingForSpec usingForSpec : usingForSpecs )
+			{
+				writer.write( usingForSpec );
+			}
+
+			writer.newline( );
+		}
 
 		if ( hasStateVariables( ) )
 		{
@@ -173,6 +190,7 @@ public class ContractSpec implements Writable
 		private final Set<ImportSpec> importStatements = new LinkedHashSet<>( );
 		private final String name;
 		private final Set<String> superContracts = new LinkedHashSet<>( );
+		private final Set<UsingForSpec> usingForSpecs = new LinkedHashSet<>( );
 		private final Set<StateVariableSpec> stateVariables = new LinkedHashSet<>( );
 		private final Set<EventSpec> events = new LinkedHashSet<>( );
 		private ConstructorSpec constructorSpec;
@@ -201,6 +219,12 @@ public class ContractSpec implements Writable
 		public Builder addSuperContract( ContractSpec superContract )
 		{
 			this.superContracts.add( superContract.name );
+			return this;
+		}
+
+		public Builder addUsingForSpec( UsingForSpec usingForSpec )
+		{
+			this.usingForSpecs.add( usingForSpec );
 			return this;
 		}
 

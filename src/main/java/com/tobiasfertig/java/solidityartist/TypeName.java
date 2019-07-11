@@ -108,9 +108,8 @@ public class TypeName implements Writable
 	public static final TypeName UINT240 = new TypeName( "uint240" );
 	public static final TypeName UINT248 = new TypeName( "uint248" );
 	public static final TypeName UINT256 = new TypeName( "uint256" );
+	public final static TypeName WILDCARD = new TypeName( "*" );
 
-
-	//TODO: modifier, data location, ...
 	private final String keyword;
 
 	public TypeName( String keyword )
