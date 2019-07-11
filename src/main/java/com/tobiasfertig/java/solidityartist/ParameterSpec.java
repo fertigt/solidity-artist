@@ -5,30 +5,30 @@ public class ParameterSpec implements Writable
 	public final static String RETURN_PARAMETER_KEYWORD = "returns";
 
 	private TypeName type;
-	private LocationName location;
+	private AttributeName attribute;
 	private String name;
 
 	private ParameterSpec( Builder builder )
 	{
 		this.type = builder.type;
-		this.location = builder.location;
+		this.attribute = builder.attribute;
 		this.name = builder.name;
 	}
 
 	@Override public void write( CodeWriter writer )
 	{
-		writer.write( type );
+		writer.write( this.type );
 
-		if ( location != null )
+		if ( this.attribute != null )
 		{
 			writer.space( )
-				  .write( location );
+				  .write( this.attribute );
 		}
 
-		if ( name != null )
+		if ( this.name != null )
 		{
 			writer.space( )
-				  .write( name );
+				  .write( this.name );
 		}
 	}
 
@@ -40,7 +40,7 @@ public class ParameterSpec implements Writable
 	public static final class Builder
 	{
 		private final TypeName type;
-		private LocationName location;
+		private AttributeName attribute;
 		private String name;
 
 		private Builder( TypeName type )
@@ -50,7 +50,13 @@ public class ParameterSpec implements Writable
 
 		public Builder addLocation( LocationName location )
 		{
-			this.location = location;
+			this.attribute = location;
+			return this;
+		}
+
+		public Builder addEventParameterAttribute( EventParameterAttributeName attribute )
+		{
+			this.attribute = attribute;
 			return this;
 		}
 

@@ -11,6 +11,7 @@ public class ContractSpec implements Writable
 	private final String pragma;
 	private final String name;
 	private final Set<StateVariableSpec> stateVariables;
+	private final Set<EventSpec> events;
 	private final ConstructorSpec constructor;
 	private final FunctionSpec fallbackFunction;
 	private final Set<ModifierSpec> customModifiers;
@@ -21,6 +22,7 @@ public class ContractSpec implements Writable
 		this.pragma = builder.pragma;
 		this.name = builder.name;
 		this.stateVariables = builder.stateVariables;
+		this.events = builder.events;
 		this.constructor = builder.constructorSpec;
 		this.fallbackFunction = builder.fallbackFunctionSpec;
 		this.customModifiers = builder.customModifiers;
@@ -30,6 +32,11 @@ public class ContractSpec implements Writable
 	private boolean hasStateVariables( )
 	{
 		return !stateVariables.isEmpty( );
+	}
+
+	private boolean hasEvents( )
+	{
+		return !events.isEmpty( );
 	}
 
 	private boolean hasFallbackFunction( )
@@ -66,6 +73,16 @@ public class ContractSpec implements Writable
 			for ( StateVariableSpec stateVariable : stateVariables )
 			{
 				writer.write( stateVariable );
+			}
+		}
+
+		writer.newline( );
+
+		if ( hasEvents( ) )
+		{
+			for ( EventSpec event : events )
+			{
+				writer.write( event );
 			}
 		}
 
@@ -113,6 +130,7 @@ public class ContractSpec implements Writable
 		private final String pragma;
 		private final String name;
 		private final Set<StateVariableSpec> stateVariables = new LinkedHashSet<>( );
+		private final Set<EventSpec> events = new LinkedHashSet<>( );
 		private ConstructorSpec constructorSpec;
 		private FunctionSpec fallbackFunctionSpec;
 		private final Set<ModifierSpec> customModifiers = new LinkedHashSet<>( );
@@ -127,6 +145,12 @@ public class ContractSpec implements Writable
 		public Builder addStateVariable( StateVariableSpec stateVariableSpec )
 		{
 			this.stateVariables.add( stateVariableSpec );
+			return this;
+		}
+
+		public Builder addEvent( EventSpec eventSpec )
+		{
+			this.events.add( eventSpec );
 			return this;
 		}
 
