@@ -63,7 +63,7 @@ public class ImportSpec implements Writable
 				  .write( this.fileNameAlias );
 		}
 
-		writer.semicolon( );
+		writer.semicolonAndNewline( );
 	}
 
 	private void writeAsteriskImport( CodeWriter writer )

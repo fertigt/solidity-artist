@@ -40,7 +40,7 @@ public class StateVariableSpec implements Writable
 				  .write( initialValue );
 		}
 
-		writer.semicolon( );
+		writer.semicolonAndNewline( );
 	}
 
 	public static Builder builder( TypeName type, String name )

@@ -136,6 +136,12 @@ public class CodeWriter
 
 	public CodeWriter semicolon( )
 	{
+		System.out.print( ";" );
+		return this;
+	}
+
+	public CodeWriter semicolonAndNewline( )
+	{
 		System.out.println( ";" );
 		return this;
 	}
@@ -149,6 +155,12 @@ public class CodeWriter
 	public CodeWriter newline( )
 	{
 		System.out.println( );
+		return this;
+	}
+
+	public CodeWriter indent( )
+	{
+		System.out.print( getIndentationLevel( ) );
 		return this;
 	}
 

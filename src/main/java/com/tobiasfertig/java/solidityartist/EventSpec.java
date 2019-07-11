@@ -24,7 +24,7 @@ public class EventSpec implements Writable
 			  .openBraces( )
 			  .writeParameters( parameters )
 			  .closeBraces( )
-			  .semicolon( );
+			  .semicolonAndNewline( );
 	}
 
 	public static Builder builder( String name )

@@ -17,8 +17,7 @@ public class MappingTypeName extends TypeName
 	@Override public void write( CodeWriter writer )
 	{
 		super.write( writer );
-		writer.space( )
-			  .openBraces( )
+		writer.openBraces( )
 			  .write( keyType )
 			  .space( )
 			  .write( "=>" )

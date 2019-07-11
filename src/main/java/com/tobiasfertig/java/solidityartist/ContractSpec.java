@@ -14,6 +14,7 @@ public class ContractSpec implements Writable
 	private final String name;
 	private final Set<String> superContracts;
 	private final Set<UsingForSpec> usingForSpecs;
+	private final Set<StructTypeName> structDeclarations;
 	private final Set<StateVariableSpec> stateVariables;
 	private final Set<EventSpec> events;
 	private final ConstructorSpec constructor;
@@ -28,6 +29,7 @@ public class ContractSpec implements Writable
 		this.name = builder.name;
 		this.superContracts = builder.superContracts;
 		this.usingForSpecs = builder.usingForSpecs;
+		this.structDeclarations = builder.structDeclarations;
 		this.stateVariables = builder.stateVariables;
 		this.events = builder.events;
 		this.constructor = builder.constructorSpec;
@@ -49,6 +51,11 @@ public class ContractSpec implements Writable
 	private boolean hasUsingForSpecs( )
 	{
 		return !usingForSpecs.isEmpty( );
+	}
+
+	private boolean hasStructDeclarations( )
+	{
+		return !structDeclarations.isEmpty( );
 	}
 
 	private boolean hasStateVariables( )
@@ -86,7 +93,7 @@ public class ContractSpec implements Writable
 		writer.write( PRAGMA_KEYWORD )
 			  .space( )
 			  .write( this.pragma )
-			  .semicolon( )
+			  .semicolonAndNewline( )
 			  .newline( );
 
 		if ( hasImportStatements( ) )
@@ -122,6 +129,16 @@ public class ContractSpec implements Writable
 			}
 
 			writer.newline( );
+		}
+
+		if ( hasStructDeclarations( ) )
+		{
+			for ( StructTypeName structDeclaration : structDeclarations )
+			{
+				writer.write( structDeclaration )
+					  .newline( )
+					  .newline( );
+			}
 		}
 
 		if ( hasStateVariables( ) )
@@ -192,6 +209,7 @@ public class ContractSpec implements Writable
 		private final String name;
 		private final Set<String> superContracts = new LinkedHashSet<>( );
 		private final Set<UsingForSpec> usingForSpecs = new LinkedHashSet<>( );
+		private final Set<StructTypeName> structDeclarations = new LinkedHashSet<>( );
 		private final Set<StateVariableSpec> stateVariables = new LinkedHashSet<>( );
 		private final Set<EventSpec> events = new LinkedHashSet<>( );
 		private ConstructorSpec constructorSpec;
@@ -226,6 +244,12 @@ public class ContractSpec implements Writable
 		public Builder addUsingForSpec( UsingForSpec usingForSpec )
 		{
 			this.usingForSpecs.add( usingForSpec );
+			return this;
+		}
+
+		public Builder addStructDeclaration( StructTypeName structTypeName )
+		{
+			this.structDeclarations.add( structTypeName );
 			return this;
 		}
 

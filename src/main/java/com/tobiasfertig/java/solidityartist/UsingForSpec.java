@@ -23,7 +23,7 @@ public class UsingForSpec implements Writable
 			  .write( FOR_KEYWORD )
 			  .space( )
 			  .write( source )
-			  .semicolon( );
+			  .semicolonAndNewline( );
 	}
 
 	public static Builder builder( TypeName extension, TypeName source )
