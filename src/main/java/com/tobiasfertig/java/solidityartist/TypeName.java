@@ -117,6 +117,11 @@ public class TypeName implements Writable
 		this.keyword = keyword;
 	}
 
+	public TypeName( TypeName typeName )
+	{
+		this.keyword = typeName.keyword;
+	}
+
 	@Override public void write( CodeWriter writer )
 	{
 		writer.write( keyword );
