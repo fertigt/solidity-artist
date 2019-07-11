@@ -26,13 +26,16 @@ public class FunctionSpec implements Writable
 		this.code = (builder.code != null) ? builder.code : CodeBlock.emptyBlock( );
 	}
 
-	//TODO: wenn name gesetzt, fehlt space
 	@Override public void write( CodeWriter writer )
 	{
-		writer.writeAndIndent( FUNCTION_KEYWORD )
-			  .space( )
-			  .write( this.name )
-			  .openBraces( )
+		writer.writeAndIndent( FUNCTION_KEYWORD );
+		if ( !this.name.isEmpty( ) )
+		{
+			writer.space( )
+				  .write( this.name );
+		}
+
+		writer.openBraces( )
 			  .writeParameters( this.parameters )
 			  .closeBraces( )
 			  .space( )
