@@ -109,13 +109,26 @@ public class ImportSpec implements Writable
 			nextEntry = iterator.next( );
 		}
 
-		writer.write( nextEntry.getKey( ) )
-			  .space( )
-			  .write( AS_KEYWORD )
-			  .space( )
-			  .write( nextEntry.getValue( ) )
-			  .write( "}" )
-			  .space( );
+		if ( nextEntry.getValue( ).isEmpty( ) )
+		{
+			writer.write( nextEntry.getKey( ) );
+		}
+		else
+		{
+			writer.write( nextEntry.getKey( ) )
+				  .space( )
+				  .write( AS_KEYWORD )
+				  .space( )
+				  .write( nextEntry.getValue( ) );
+		}
+
+		if ( symbolEntries.size( ) > 1 )
+		{
+			writer.write( "}" );
+
+		}
+
+		writer.space( );
 	}
 
 	public static Builder builder( String fileName )
