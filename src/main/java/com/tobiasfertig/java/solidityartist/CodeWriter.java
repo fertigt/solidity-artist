@@ -38,6 +38,12 @@ public class CodeWriter
 		return this;
 	}
 
+	public CodeWriter writeInQuotes( String s )
+	{
+		System.out.print( "\"" + s + "\"");
+		return this;
+	}
+
 	public CodeWriter writeParameters( Set<ParameterSpec> parameters )
 	{
 		Iterator<ParameterSpec> iterator = parameters.iterator( );

@@ -7,8 +7,10 @@ public class ContractSpec implements Writable
 {
 	public final static String CONTRACT_KEYWORD = "contract";
 	public final static String PRAGMA_KEYWORD = "pragma solidity";
+	public final static String IS_KEYWORD = "is";
 
 	private final String pragma;
+	private final Set<ImportSpec> importStatements;
 	private final String name;
 	private final Set<StateVariableSpec> stateVariables;
 	private final Set<EventSpec> events;
@@ -20,6 +22,7 @@ public class ContractSpec implements Writable
 	private ContractSpec( Builder builder )
 	{
 		this.pragma = builder.pragma;
+		this.importStatements = builder.importStatements;
 		this.name = builder.name;
 		this.stateVariables = builder.stateVariables;
 		this.events = builder.events;
@@ -27,6 +30,11 @@ public class ContractSpec implements Writable
 		this.fallbackFunction = builder.fallbackFunctionSpec;
 		this.customModifiers = builder.customModifiers;
 		this.functions = builder.functions;
+	}
+
+	private boolean hasImportStatements( )
+	{
+		return !importStatements.isEmpty( );
 	}
 
 	private boolean hasStateVariables( )
@@ -60,8 +68,17 @@ public class ContractSpec implements Writable
 			  .space( )
 			  .write( this.pragma )
 			  .semicolon( )
-			  .newline( )
-			  .newline( )
+			  .newline( );
+
+		if ( hasImportStatements( ) )
+		{
+			for ( ImportSpec importStatement : importStatements )
+			{
+				writer.write( importStatement );
+			}
+		}
+
+		writer.newline( )
 			  .write( CONTRACT_KEYWORD )
 			  .space( )
 			  .write( this.name )
@@ -128,6 +145,7 @@ public class ContractSpec implements Writable
 	public static final class Builder
 	{
 		private final String pragma;
+		private final Set<ImportSpec> importStatements = new LinkedHashSet<>( );
 		private final String name;
 		private final Set<StateVariableSpec> stateVariables = new LinkedHashSet<>( );
 		private final Set<EventSpec> events = new LinkedHashSet<>( );
@@ -140,6 +158,12 @@ public class ContractSpec implements Writable
 		{
 			this.pragma = pragma;
 			this.name = name;
+		}
+
+		public Builder addImportStatement( ImportSpec importStatement )
+		{
+			this.importStatements.add( importStatement );
+			return this;
 		}
 
 		public Builder addStateVariable( StateVariableSpec stateVariableSpec )
