@@ -18,6 +18,15 @@ public class ContractVisitorTests
 	}
 
 	@Test
+	public void testVisitDataTypeElement_WithName_CorrectStringReturned( )
+	{
+		DataTypeElement dataTypeElement = DataTypeElement.STRING;
+
+		dataTypeElement.accept( this.visitor );
+		assertEquals( "Should be the same text", "string", this.visitor.export() );
+	}
+
+	@Test
 	public void testVisitMemoryParameterElement_WithNameBeforeMemory_CorrectStringReturned( )
 	{
 		ParameterElement parameterElement = ParameterElement.builder( DataTypeElement.STRING )
