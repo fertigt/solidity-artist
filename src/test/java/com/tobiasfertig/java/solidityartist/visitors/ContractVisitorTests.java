@@ -2,6 +2,7 @@ package com.tobiasfertig.java.solidityartist.visitors;
 
 import com.tobiasfertig.java.solidityartist.elements.datatypes.DataTypeElement;
 import com.tobiasfertig.java.solidityartist.elements.functions.ParameterElement;
+import com.tobiasfertig.java.solidityartist.elements.typedeclarations.UsingForElement;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -115,5 +116,14 @@ public class ContractVisitorTests
 
 		parameterElement.accept( this.visitor );
 		assertEquals( "Should be the same text", "string storage", this.visitor.export( ) );
+	}
+
+	@Test
+	public void testUsingForElement_WithCustomExtensionAndSource_CorrectStringReturned( )
+	{
+		UsingForElement usingForElement = UsingForElement.builder( "X", "Y" ).build( );
+
+		usingForElement.accept( this.visitor );
+		assertEquals( "Should be the same text", "    using X for Y;\n", this.visitor.export( ) );
 	}
 }

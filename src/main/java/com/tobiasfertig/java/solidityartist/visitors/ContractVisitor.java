@@ -9,6 +9,7 @@ import com.tobiasfertig.java.solidityartist.elements.files.LibraryElement;
 import com.tobiasfertig.java.solidityartist.elements.functions.*;
 import com.tobiasfertig.java.solidityartist.elements.statevariables.StateVariableElement;
 import com.tobiasfertig.java.solidityartist.elements.typedeclarations.UsingForElement;
+import com.tobiasfertig.java.solidityartist.utils.Keywords;
 
 public class ContractVisitor extends VisitorImpl
 {
@@ -115,6 +116,15 @@ public class ContractVisitor extends VisitorImpl
 
 	@Override public void visit( UsingForElement element )
 	{
-
+		indent( );
+		sb.append( Keywords.USING );
+		space( );
+		element.getExtension( ).accept( this );
+		space( );
+		sb.append( Keywords.FOR );
+		space( );
+		element.getSource( ).accept( this );
+		semicolon( );
+		newline( );
 	}
 }
