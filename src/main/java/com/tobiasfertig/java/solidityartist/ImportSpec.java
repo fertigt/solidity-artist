@@ -1,5 +1,7 @@
 package com.tobiasfertig.java.solidityartist;
 
+import com.tobiasfertig.java.solidityartist.utils.Keywords;
+
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -7,9 +9,6 @@ import java.util.Set;
 
 public class ImportSpec implements Writable
 {
-	public final static String IMPORT_KEYWORD = "import";
-	public final static String AS_KEYWORD = "as";
-	public final static String FROM_KEYWORD = "from";
 	public final static String ASTERISK = "*";
 
 	private final Map<String, String> symbolMap;
@@ -35,7 +34,7 @@ public class ImportSpec implements Writable
 
 	@Override public void write( CodeWriter writer )
 	{
-		writer.write( IMPORT_KEYWORD )
+		writer.write( Keywords.IMPORT )
 			  .space( );
 
 		if ( hasSymbols( ) )
@@ -49,7 +48,7 @@ public class ImportSpec implements Writable
 				writeSymbolMap( writer );
 			}
 
-			writer.write( FROM_KEYWORD )
+			writer.write( Keywords.FROM )
 				  .space( );
 		}
 
@@ -58,7 +57,7 @@ public class ImportSpec implements Writable
 		if ( !this.fileNameAlias.isEmpty( ) )
 		{
 			writer.space( )
-				  .write( AS_KEYWORD )
+				  .write( Keywords.AS )
 				  .space( )
 				  .write( this.fileNameAlias );
 		}
@@ -70,7 +69,7 @@ public class ImportSpec implements Writable
 	{
 		writer.write( ASTERISK )
 			  .space( )
-			  .write( AS_KEYWORD )
+			  .write( Keywords.AS )
 			  .space( )
 			  .write( this.symbolMap.get( ASTERISK ) )
 			  .space( );
@@ -99,7 +98,7 @@ public class ImportSpec implements Writable
 			{
 				writer.write( nextEntry.getKey( ) )
 					  .space( )
-					  .write( AS_KEYWORD )
+					  .write( Keywords.AS )
 					  .space( )
 					  .write( nextEntry.getValue( ) )
 					  .comma( )
@@ -117,7 +116,7 @@ public class ImportSpec implements Writable
 		{
 			writer.write( nextEntry.getKey( ) )
 				  .space( )
-				  .write( AS_KEYWORD )
+				  .write( Keywords.AS )
 				  .space( )
 				  .write( nextEntry.getValue( ) );
 		}

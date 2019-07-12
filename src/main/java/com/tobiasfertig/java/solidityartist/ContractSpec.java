@@ -1,11 +1,12 @@
 package com.tobiasfertig.java.solidityartist;
 
+import com.tobiasfertig.java.solidityartist.utils.Keywords;
+
 import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class ContractSpec implements Writable
 {
-	public final static String CONTRACT_KEYWORD = "contract";
 	public final static String PRAGMA_KEYWORD = "pragma solidity";
 	public final static String IS_KEYWORD = "is";
 
@@ -113,7 +114,7 @@ public class ContractSpec implements Writable
 			writer.newline( );
 		}
 
-		writer.write( CONTRACT_KEYWORD )
+		writer.write( Keywords.CONTRACT )
 			  .space( )
 			  .write( this.name )
 			  .space( );

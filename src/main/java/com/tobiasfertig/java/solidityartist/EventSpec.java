@@ -1,12 +1,12 @@
 package com.tobiasfertig.java.solidityartist;
 
+import com.tobiasfertig.java.solidityartist.utils.Keywords;
+
 import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class EventSpec implements Writable
 {
-	public final static String EVENT_KEYWORD = "event";
-
 	private final String name;
 	private final Set<ParameterSpec> parameters;
 
@@ -18,7 +18,7 @@ public class EventSpec implements Writable
 
 	@Override public void write( CodeWriter writer )
 	{
-		writer.writeAndIndent( EVENT_KEYWORD )
+		writer.writeAndIndent( Keywords.EVENT )
 			  .space( )
 			  .write( this.name )
 			  .openBraces( )

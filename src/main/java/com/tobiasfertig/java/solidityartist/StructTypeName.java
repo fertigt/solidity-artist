@@ -1,19 +1,19 @@
 package com.tobiasfertig.java.solidityartist;
 
+import com.tobiasfertig.java.solidityartist.utils.Keywords;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 public class StructTypeName extends TypeName
 {
-	public final static String STRUCT_KEYWORD = "struct";
-
 	private String name;
 	private List<ParameterSpec> structMembers;
 
 	public StructTypeName( String name, List<ParameterSpec> structMembers )
 	{
-		super( STRUCT_KEYWORD );
+		super( Keywords.STRUCT.toString( ) );
 		this.name = name;
 		this.structMembers = structMembers;
 	}

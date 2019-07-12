@@ -1,12 +1,12 @@
 package com.tobiasfertig.java.solidityartist;
 
+import com.tobiasfertig.java.solidityartist.utils.Keywords;
+
 import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class ConstructorSpec implements Writable
 {
-	public final static String CONSTRUCTOR_KEYWORD = "constructor";
-
 	private final VisibilityName visibility;
 	private final Set<ModifierName> modifiers;
 	private final Set<ModifierName> customModifiers;
@@ -22,7 +22,7 @@ public class ConstructorSpec implements Writable
 
 	public void write( CodeWriter writer )
 	{
-		writer.writeAndIndent( CONSTRUCTOR_KEYWORD )
+		writer.writeAndIndent( Keywords.CONSTRUCTOR.toString( ) )
 			  .emptyBraces( )
 			  .space( )
 			  .write( this.visibility )

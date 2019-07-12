@@ -1,5 +1,7 @@
 package com.tobiasfertig.java.solidityartist;
 
+import com.tobiasfertig.java.solidityartist.utils.Keywords;
+
 import java.util.Iterator;
 
 public class FunctionTypeName extends TypeName
@@ -8,7 +10,7 @@ public class FunctionTypeName extends TypeName
 
 	public FunctionTypeName( FunctionSpec function )
 	{
-		super( FunctionSpec.FUNCTION_KEYWORD );
+		super( Keywords.FUNCTION.toString( ) );
 		this.function = function;
 	}
 
@@ -48,7 +50,7 @@ public class FunctionTypeName extends TypeName
 		if ( !this.function.getReturnParameters( ).isEmpty( ) )
 		{
 			writer.space( )
-				  .write( ParameterSpec.RETURN_PARAMETER_KEYWORD )
+				  .write( Keywords.RETURNS )
 				  .openBraces( );
 
 			Iterator<ParameterSpec> iterator = this.function.getReturnParameters( ).iterator( );

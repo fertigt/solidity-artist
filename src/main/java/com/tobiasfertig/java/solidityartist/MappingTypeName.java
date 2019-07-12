@@ -1,15 +1,15 @@
 package com.tobiasfertig.java.solidityartist;
 
+import com.tobiasfertig.java.solidityartist.utils.Keywords;
+
 public class MappingTypeName extends TypeName
 {
-	public final static String MAPPING_KEYWORD = "mapping";
-
 	private TypeName keyType;
 	private TypeName valueType;
 
 	public MappingTypeName( TypeName keyType, TypeName valueType )
 	{
-		super( MAPPING_KEYWORD );
+		super( Keywords.MAPPING.toString( ) );
 		this.keyType = keyType;
 		this.valueType = valueType;
 	}

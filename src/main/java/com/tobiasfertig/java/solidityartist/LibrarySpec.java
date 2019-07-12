@@ -1,12 +1,12 @@
 package com.tobiasfertig.java.solidityartist;
 
+import com.tobiasfertig.java.solidityartist.utils.Keywords;
+
 import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class LibrarySpec implements Writable
 {
-	public final static String LIBRARY_KEYWORD = "library";
-
 	private final String name;
 	private final Set<UsingForSpec> usingForSpecs;
 	private final Set<EnumTypeName> enumDeclarations;
@@ -65,7 +65,7 @@ public class LibrarySpec implements Writable
 
 	public void write( CodeWriter writer )
 	{
-		writer.write( LIBRARY_KEYWORD )
+		writer.write( Keywords.LIBRARY )
 			  .space( )
 			  .write( this.name )
 			  .space( );

@@ -1,7 +1,5 @@
 package com.tobiasfertig.java.solidityartist;
 
-import java.lang.reflect.Type;
-
 public class TypeName implements Writable
 {
 	public static final TypeName BOOLEAN = new TypeName( "bool" );

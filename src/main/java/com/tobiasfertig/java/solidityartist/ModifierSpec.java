@@ -1,12 +1,12 @@
 package com.tobiasfertig.java.solidityartist;
 
+import com.tobiasfertig.java.solidityartist.utils.Keywords;
+
 import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class ModifierSpec implements Writable
 {
-	public final static String MODIFIER_KEYWORD = "modifier";
-
 	private final ModifierName modifierName;
 	private final Set<ParameterSpec> parameters;
 	private final CodeBlock code;
@@ -20,7 +20,7 @@ public class ModifierSpec implements Writable
 
 	@Override public void write( CodeWriter writer )
 	{
-		writer.writeAndIndent( MODIFIER_KEYWORD )
+		writer.writeAndIndent( Keywords.MODIFIER )
 			  .space( )
 			  .write( modifierName )
 			  .openBraces( )

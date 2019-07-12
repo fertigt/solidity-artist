@@ -1,10 +1,9 @@
 package com.tobiasfertig.java.solidityartist;
 
+import com.tobiasfertig.java.solidityartist.utils.Keywords;
+
 public class UsingForSpec implements Writable
 {
-	public final static String USING_KEYWORD = "using";
-	public final static String FOR_KEYWORD = "for";
-
 	private final TypeName extension;
 	private final TypeName source;
 
@@ -16,11 +15,11 @@ public class UsingForSpec implements Writable
 
 	@Override public void write( CodeWriter writer )
 	{
-		writer.writeAndIndent( USING_KEYWORD )
+		writer.writeAndIndent( Keywords.USING )
 			  .space( )
 			  .write( extension )
 			  .space( )
-			  .write( FOR_KEYWORD )
+			  .write( Keywords.FOR )
 			  .space( )
 			  .write( source )
 			  .semicolonAndNewline( );

@@ -1,19 +1,19 @@
 package com.tobiasfertig.java.solidityartist;
 
+import com.tobiasfertig.java.solidityartist.utils.Keywords;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 public class EnumTypeName extends TypeName
 {
-	public final static String ENUM_KEYWORD = "enum";
-
 	private final String name;
 	private final List<String> values;
 
 	public EnumTypeName( String name, List<String> values )
 	{
-		super( ENUM_KEYWORD );
+		super( Keywords.ENUM.toString( ) );
 		this.name = name;
 		this.values = values;
 	}

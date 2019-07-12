@@ -1,12 +1,12 @@
 package com.tobiasfertig.java.solidityartist;
 
+import com.tobiasfertig.java.solidityartist.utils.Keywords;
+
 import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class FunctionSpec implements Writable
 {
-	public final static String FUNCTION_KEYWORD = "function";
-
 	private final String name;
 	private final Set<ParameterSpec> parameters;
 	private final VisibilityName visibility;
@@ -53,7 +53,7 @@ public class FunctionSpec implements Writable
 
 	@Override public void write( CodeWriter writer )
 	{
-		writer.writeAndIndent( FUNCTION_KEYWORD );
+		writer.writeAndIndent( Keywords.FUNCTION );
 		if ( !this.name.isEmpty( ) )
 		{
 			writer.space( )
@@ -81,7 +81,7 @@ public class FunctionSpec implements Writable
 		if(!returnParameters.isEmpty())
 		{
 			writer.space( )
-				  .write( ParameterSpec.RETURN_PARAMETER_KEYWORD )
+				  .write( Keywords.RETURNS )
 				  .openBraces( )
 				  .writeParameters( this.returnParameters )
 				  .closeBraces( );
