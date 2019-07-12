@@ -9,6 +9,7 @@ public class InterfaceSpec implements Writable
 
 	private final String name;
 	private final Set<UsingForSpec> usingForSpecs;
+	private final Set<EnumTypeName> enumDeclarations;
 	private final Set<StructTypeName> structDeclarations;
 	private final Set<EventSpec> events;
 	private final FunctionSpec fallbackFunction;
@@ -19,6 +20,7 @@ public class InterfaceSpec implements Writable
 	{
 		this.name = builder.name;
 		this.usingForSpecs = builder.usingForSpecs;
+		this.enumDeclarations = builder.enumDeclarations;
 		this.structDeclarations = builder.structDeclarations;
 		this.events = builder.events;
 		this.fallbackFunction = builder.fallbackFunctionSpec;
@@ -29,6 +31,11 @@ public class InterfaceSpec implements Writable
 	private boolean hasUsingForSpecs( )
 	{
 		return !usingForSpecs.isEmpty( );
+	}
+
+	private boolean hasEnumDeclarations( )
+	{
+		return !enumDeclarations.isEmpty( );
 	}
 
 	private boolean hasStructDeclarations( )
@@ -72,6 +79,16 @@ public class InterfaceSpec implements Writable
 			}
 
 			writer.newline( );
+		}
+
+		if ( hasEnumDeclarations( ) )
+		{
+			for ( EnumTypeName enumDeclaration : enumDeclarations )
+			{
+				writer.write( enumDeclaration )
+					  .newline( )
+					  .newline( );
+			}
 		}
 
 		if ( hasStructDeclarations( ) )
@@ -133,6 +150,7 @@ public class InterfaceSpec implements Writable
 	{
 		private final String name;
 		private final Set<UsingForSpec> usingForSpecs = new LinkedHashSet<>( );
+		private final Set<EnumTypeName> enumDeclarations = new LinkedHashSet<>( );
 		private final Set<StructTypeName> structDeclarations = new LinkedHashSet<>( );
 		private final Set<EventSpec> events = new LinkedHashSet<>( );
 		private FunctionSpec fallbackFunctionSpec;
@@ -147,6 +165,12 @@ public class InterfaceSpec implements Writable
 		public Builder addUsingForSpec( UsingForSpec usingForSpec )
 		{
 			this.usingForSpecs.add( usingForSpec );
+			return this;
+		}
+
+		public Builder addEnumDeclaration( EnumTypeName enumTypeName )
+		{
+			this.enumDeclarations.add( enumTypeName );
 			return this;
 		}
 
