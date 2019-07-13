@@ -1,6 +1,7 @@
 package com.tobiasfertig.java.solidityartist.visitors;
 
 import com.tobiasfertig.java.solidityartist.elements.datatypes.DataTypeElement;
+import com.tobiasfertig.java.solidityartist.elements.events.EventElement;
 import com.tobiasfertig.java.solidityartist.elements.parameters.ParameterElement;
 import com.tobiasfertig.java.solidityartist.elements.typedeclarations.EnumElement;
 import com.tobiasfertig.java.solidityartist.elements.typedeclarations.StructElement;
@@ -62,6 +63,53 @@ public class ContractVisitorTests
 		String expected = "enum Actions {\n" +
 			"    GoLeft\n" +
 			"}";
+		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
+	}
+
+	@Test
+	public void testVisitEventElement_With3Parameter_CorrectStringReturned( )
+	{
+		ParameterElement from = ParameterElement.builder( DataTypeElement.ADDRESS )
+												.isIndexedEventParameter( )
+												.addName( "from" )
+												.build( );
+
+		ParameterElement id = ParameterElement.builder( DataTypeElement.BYTES32 )
+												.isIndexedEventParameter( )
+												.addName( "id" )
+												.build( );
+
+		ParameterElement value = ParameterElement.builder( DataTypeElement.UINT )
+												.addName( "value" )
+												.build( );
+
+		EventElement event = EventElement.builder( "Deposit" )
+										 .addParameter( from )
+										 .addParameter( id )
+										 .addParameter( value )
+										 .build( );
+
+		event.accept( this.visitor );
+
+		String expected = "event Deposit(address indexed from, bytes32 indexed id, uint value);";
+		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
+	}
+
+	@Test
+	public void testVisitEventElement_With1Parameter_CorrectStringReturned( )
+	{
+		ParameterElement from = ParameterElement.builder( DataTypeElement.ADDRESS )
+												.isIndexedEventParameter( )
+												.addName( "from" )
+												.build( );
+
+		EventElement event = EventElement.builder( "Deposit" )
+										 .addParameter( from )
+										 .build( );
+
+		event.accept( this.visitor );
+
+		String expected = "event Deposit(address indexed from);";
 		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
 	}
 
@@ -224,11 +272,11 @@ public class ContractVisitorTests
 	}
 
 	@Test
-	public void testUsingForElement_WithCustomExtensionAndSource_CorrectStringReturned( )
+	public void testVisitUsingForElement_WithCustomExtensionAndSource_CorrectStringReturned( )
 	{
 		UsingForElement usingForElement = UsingForElement.builder( "X", "Y" ).build( );
 
 		usingForElement.accept( this.visitor );
-		assertEquals( "Should be the same text", "using X for Y;\n", this.visitor.export( ) );
+		assertEquals( "Should be the same text", "using X for Y;", this.visitor.export( ) );
 	}
 }

@@ -13,6 +13,11 @@ public abstract class VisitorImpl implements Visitor
 		sb = new StringBuilder( );
 	}
 
+	void closeBraces( )
+	{
+		sb.append( ")" );
+	}
+
 	void closeCurlyBraces( )
 	{
 		this.level--;
@@ -29,6 +34,11 @@ public abstract class VisitorImpl implements Visitor
 	void newline( )
 	{
 		sb.append( "\n" );
+	}
+
+	void openBraces( )
+	{
+		sb.append( "(" );
 	}
 
 	void openCurlyBraces( )

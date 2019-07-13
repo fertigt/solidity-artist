@@ -75,6 +75,18 @@ public class ContractVisitor extends VisitorImpl
 		closeCurlyBraces( );
 	}
 
+	@Override public void visit( EventElement element )
+	{
+		indent( );
+		sb.append( Keywords.EVENT );
+		space( );
+		sb.append( element.getName( ) );
+		openBraces( );
+		appendCollectionOfSolidityElementsWithDelimiter( element.getParameters( ), ", " );
+		closeBraces( );
+		semicolon( );
+	}
+
 	@Override public void visit( EventParameterElement element )
 	{
 		element.getDataType( ).accept( this );
@@ -86,11 +98,6 @@ public class ContractVisitor extends VisitorImpl
 			space( );
 			sb.append( element.getName( ) );
 		}
-	}
-
-	@Override public void visit( EventElement element )
-	{
-
 	}
 
 	@Override public void visit( FunctionElement element )
@@ -158,7 +165,6 @@ public class ContractVisitor extends VisitorImpl
 		space( );
 		element.getSource( ).accept( this );
 		semicolon( );
-		newline( );
 	}
 
 	private void appendCollectionWithDelimiter( Iterable<? extends Object> set, String delimiter )
