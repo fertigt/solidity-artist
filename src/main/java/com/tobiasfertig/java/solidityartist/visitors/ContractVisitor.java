@@ -8,9 +8,8 @@ import com.tobiasfertig.java.solidityartist.elements.files.ImportElement;
 import com.tobiasfertig.java.solidityartist.elements.files.InterfaceElement;
 import com.tobiasfertig.java.solidityartist.elements.files.LibraryElement;
 import com.tobiasfertig.java.solidityartist.elements.functions.*;
-import com.tobiasfertig.java.solidityartist.elements.parameters.MemoryParameterElement;
+import com.tobiasfertig.java.solidityartist.elements.parameters.DataLocationParameterElement;
 import com.tobiasfertig.java.solidityartist.elements.parameters.ParameterElement;
-import com.tobiasfertig.java.solidityartist.elements.parameters.StorageParameterElement;
 import com.tobiasfertig.java.solidityartist.elements.statevariables.StateVariableElement;
 import com.tobiasfertig.java.solidityartist.elements.typedeclarations.EnumElement;
 import com.tobiasfertig.java.solidityartist.elements.typedeclarations.StructElement;
@@ -87,7 +86,7 @@ public class ContractVisitor extends VisitorImpl
 
 	}
 
-	@Override public void visit( MemoryParameterElement element )
+	@Override public void visit( DataLocationParameterElement element )
 	{
 		element.getDataType( ).accept( this );
 		space( );
@@ -119,19 +118,6 @@ public class ContractVisitor extends VisitorImpl
 	@Override public void visit( StateVariableElement element )
 	{
 
-	}
-
-	@Override public void visit( StorageParameterElement element )
-	{
-		element.getDataType( ).accept( this );
-		space( );
-		sb.append( element.getDataLocation( ) );
-
-		if ( element.getName( ) != null )
-		{
-			space( );
-			sb.append( element.getName( ) );
-		}
 	}
 
 	@Override public void visit( StructElement element )

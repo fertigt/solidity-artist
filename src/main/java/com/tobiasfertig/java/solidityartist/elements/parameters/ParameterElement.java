@@ -2,6 +2,7 @@ package com.tobiasfertig.java.solidityartist.elements.parameters;
 
 import com.tobiasfertig.java.solidityartist.elements.SolidityElement;
 import com.tobiasfertig.java.solidityartist.elements.datatypes.DataTypeElement;
+import com.tobiasfertig.java.solidityartist.utils.Keywords;
 import com.tobiasfertig.java.solidityartist.visitors.Visitor;
 
 public class ParameterElement implements SolidityElement
@@ -14,12 +15,7 @@ public class ParameterElement implements SolidityElement
 		this( builder.dataType, builder.name );
 	}
 
-	ParameterElement( MemoryParameterElement.Builder builder )
-	{
-		this( builder.getDataType( ), builder.getName( ) );
-	}
-
-	ParameterElement( StorageParameterElement.Builder builder )
+	ParameterElement( DataLocationParameterElement.Builder builder )
 	{
 		this( builder.getDataType( ), builder.getName( ) );
 	}
@@ -66,14 +62,14 @@ public class ParameterElement implements SolidityElement
 			return this;
 		}
 
-		public MemoryParameterElement.Builder inMemory( )
+		public DataLocationParameterElement.Builder inMemory( )
 		{
-			return new MemoryParameterElement.Builder( this.dataType, this.name );
+			return new DataLocationParameterElement.Builder( this.dataType, this.name, Keywords.MEMORY );
 		}
 
-		public StorageParameterElement.Builder inStorage( )
+		public DataLocationParameterElement.Builder inStorage( )
 		{
-			return new StorageParameterElement.Builder( this.dataType, this.name );
+			return new DataLocationParameterElement.Builder( this.dataType, this.name, Keywords.STORAGE );
 		}
 
 		public ParameterElement build( )
