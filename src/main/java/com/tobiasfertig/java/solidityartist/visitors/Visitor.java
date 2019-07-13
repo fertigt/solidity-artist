@@ -8,6 +8,7 @@ import com.tobiasfertig.java.solidityartist.elements.files.InterfaceElement;
 import com.tobiasfertig.java.solidityartist.elements.files.LibraryElement;
 import com.tobiasfertig.java.solidityartist.elements.functions.*;
 import com.tobiasfertig.java.solidityartist.elements.statevariables.StateVariableElement;
+import com.tobiasfertig.java.solidityartist.elements.typedeclarations.EnumElement;
 import com.tobiasfertig.java.solidityartist.elements.typedeclarations.UsingForElement;
 
 public interface Visitor
@@ -21,6 +22,8 @@ public interface Visitor
 	void visit( ContractElement element );
 
 	void visit( DataTypeElement element );
+
+	void visit( EnumElement element );
 
 	void visit( EventElement element );
 

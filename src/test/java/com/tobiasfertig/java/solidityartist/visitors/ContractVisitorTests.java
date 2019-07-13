@@ -2,6 +2,7 @@ package com.tobiasfertig.java.solidityartist.visitors;
 
 import com.tobiasfertig.java.solidityartist.elements.datatypes.DataTypeElement;
 import com.tobiasfertig.java.solidityartist.elements.functions.ParameterElement;
+import com.tobiasfertig.java.solidityartist.elements.typedeclarations.EnumElement;
 import com.tobiasfertig.java.solidityartist.elements.typedeclarations.UsingForElement;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,6 +26,42 @@ public class ContractVisitorTests
 
 		dataTypeElement.accept( this.visitor );
 		assertEquals( "Should be the same text", "string", this.visitor.export() );
+	}
+
+	@Test
+	public void testVisitEnumElement_With4Values_CorrectStringReturned( )
+	{
+		EnumElement enumElement = EnumElement.builder( "Actions" )
+											 .addValue( "GoLeft" )
+											 .addValue( "GoRight" )
+											 .addValue( "GoStraight" )
+											 .addValue( "SitStill" )
+											 .build( );
+
+		enumElement.accept( this.visitor );
+
+		String expected = "enum Actions {\n" +
+						  "    GoLeft,\n" +
+					      "    GoRight,\n" +
+			              "    GoStraight,\n" +
+			              "    SitStill\n" +
+			              "}";
+		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
+	}
+
+	@Test
+	public void testVisitEnumElement_With1Value_CorrectStringReturned( )
+	{
+		EnumElement enumElement = EnumElement.builder( "Actions" )
+											 .addValue( "GoLeft" )
+											 .build( );
+
+		enumElement.accept( this.visitor );
+
+		String expected = "enum Actions {\n" +
+			"    GoLeft\n" +
+			"}";
+		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
 	}
 
 	@Test
@@ -124,6 +161,6 @@ public class ContractVisitorTests
 		UsingForElement usingForElement = UsingForElement.builder( "X", "Y" ).build( );
 
 		usingForElement.accept( this.visitor );
-		assertEquals( "Should be the same text", "    using X for Y;\n", this.visitor.export( ) );
+		assertEquals( "Should be the same text", "using X for Y;\n", this.visitor.export( ) );
 	}
 }

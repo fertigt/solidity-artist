@@ -8,8 +8,12 @@ import com.tobiasfertig.java.solidityartist.elements.files.InterfaceElement;
 import com.tobiasfertig.java.solidityartist.elements.files.LibraryElement;
 import com.tobiasfertig.java.solidityartist.elements.functions.*;
 import com.tobiasfertig.java.solidityartist.elements.statevariables.StateVariableElement;
+import com.tobiasfertig.java.solidityartist.elements.typedeclarations.EnumElement;
 import com.tobiasfertig.java.solidityartist.elements.typedeclarations.UsingForElement;
 import com.tobiasfertig.java.solidityartist.utils.Keywords;
+
+import java.util.Iterator;
+import java.util.Set;
 
 public class ContractVisitor extends VisitorImpl
 {
@@ -40,6 +44,18 @@ public class ContractVisitor extends VisitorImpl
 	@Override public void visit( DataTypeElement element )
 	{
 		sb.append( element.getTypeName( ) );
+	}
+
+	@Override public void visit( EnumElement element )
+	{
+		indent( );
+		sb.append( Keywords.ENUM );
+		space( );
+		sb.append( element.getName( ) );
+		space( );
+		openCurlyBraces( );
+		appendCollectionWithDelimiter( element.getValues( ), ",\n" );
+		closeCurlyBraces( );
 	}
 
 	@Override public void visit( EventElement element )
@@ -126,5 +142,25 @@ public class ContractVisitor extends VisitorImpl
 		element.getSource( ).accept( this );
 		semicolon( );
 		newline( );
+	}
+
+	private void appendCollectionWithDelimiter( Iterable<? extends Object> set, String delimiter )
+	{
+		Iterator<? extends Object> iterator = set.iterator( );
+		if ( iterator.hasNext( ) )
+		{
+			Object nextValue = iterator.next( );
+			while ( iterator.hasNext( ) )
+			{
+				indent( );
+				sb.append( nextValue.toString( ) );
+				sb.append( delimiter );
+
+				nextValue = iterator.next( );
+			}
+
+			indent( );
+			sb.append( nextValue );
+		}
 	}
 }

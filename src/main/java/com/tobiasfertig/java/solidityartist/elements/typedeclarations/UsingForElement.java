@@ -50,7 +50,7 @@ public class UsingForElement implements SolidityElement
 		return new Builder( extension, new DataTypeElement( source ) );
 	}
 
-	public final static class Builder
+	public static final class Builder
 	{
 		private final DataTypeElement extension;
 		private final DataTypeElement source;
