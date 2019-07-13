@@ -138,7 +138,29 @@ public class ContractVisitor extends VisitorImpl
 
 	@Override public void visit( StateVariableElement element )
 	{
+		indent( );
+		element.getDataType( ).accept( this );
+		space( );
+		sb.append( element.getVisibility( ) );
+		space( );
 
+		if ( element.isConstant( ) )
+		{
+			sb.append( Keywords.CONSTANT );
+			space( );
+		}
+
+		sb.append( element.getName( ) );
+
+		if ( !element.getInitialization( ).isEmpty( ) )
+		{
+			space( );
+			sb.append( "=" );
+			space( );
+			sb.append( element.getInitialization( ) );
+		}
+
+		semicolon( );
 	}
 
 	@Override public void visit( StructElement element )

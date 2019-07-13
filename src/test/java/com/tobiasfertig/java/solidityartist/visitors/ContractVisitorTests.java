@@ -4,6 +4,7 @@ import com.tobiasfertig.java.solidityartist.elements.datatypes.DataTypeElement;
 import com.tobiasfertig.java.solidityartist.elements.events.EventElement;
 import com.tobiasfertig.java.solidityartist.elements.functions.CodeElement;
 import com.tobiasfertig.java.solidityartist.elements.parameters.ParameterElement;
+import com.tobiasfertig.java.solidityartist.elements.statevariables.StateVariableElement;
 import com.tobiasfertig.java.solidityartist.elements.typedeclarations.EnumElement;
 import com.tobiasfertig.java.solidityartist.elements.typedeclarations.StructElement;
 import com.tobiasfertig.java.solidityartist.elements.typedeclarations.UsingForElement;
@@ -258,6 +259,75 @@ public class ContractVisitorTests
 
 		parameterElement.accept( this.visitor );
 		assertEquals( "Should be the same text", "address", this.visitor.export( ) );
+	}
+
+	@Test
+	public void testVisitStateVariableElement_WithNamePublic_CorrectStringReturned( )
+	{
+		StateVariableElement stateVariable = StateVariableElement.builder( DataTypeElement.ADDRESS, "owner" )
+																 .isPublic( )
+																 .build( );
+
+		stateVariable.accept( this.visitor );
+		assertEquals( "Should be the same text", "address public owner;", this.visitor.export( ) );
+	}
+
+	@Test
+	public void testVisitStateVariableElement_WithNamePrivate_CorrectStringReturned( )
+	{
+		StateVariableElement stateVariable = StateVariableElement.builder( DataTypeElement.ADDRESS, "owner" )
+																 .isPrivate( )
+																 .build( );
+
+		stateVariable.accept( this.visitor );
+		assertEquals( "Should be the same text", "address private owner;", this.visitor.export( ) );
+	}
+
+	@Test
+	public void testVisitStateVariableElement_WithNameExternal_CorrectStringReturned( )
+	{
+		StateVariableElement stateVariable = StateVariableElement.builder( DataTypeElement.ADDRESS, "owner" )
+																 .isExternal( )
+																 .build( );
+
+		stateVariable.accept( this.visitor );
+		assertEquals( "Should be the same text", "address external owner;", this.visitor.export( ) );
+	}
+
+	@Test
+	public void testVisitStateVariableElement_WithNameInternal_CorrectStringReturned( )
+	{
+		StateVariableElement stateVariable = StateVariableElement.builder( DataTypeElement.ADDRESS, "owner" )
+																 .isInternal( )
+																 .build( );
+
+		stateVariable.accept( this.visitor );
+		assertEquals( "Should be the same text", "address internal owner;", this.visitor.export( ) );
+	}
+
+	@Test
+	public void testVisitStateVariableElement_AsConstant_CorrectStringReturned( )
+	{
+		StateVariableElement stateVariable = StateVariableElement.builder( DataTypeElement.UINT, "amount" )
+																 .isPrivate( )
+																 .isConstant()
+																 .addInitialization( "5" )
+																 .build( );
+
+		stateVariable.accept( this.visitor );
+		assertEquals( "Should be the same text", "uint private constant amount = 5;", this.visitor.export( ) );
+	}
+
+	@Test
+	public void testVisitStateVariableElement_WithNameAndInitialization_CorrectStringReturned( )
+	{
+		StateVariableElement stateVariable = StateVariableElement.builder( DataTypeElement.UINT, "amount" )
+																 .isInternal( )
+																 .addInitialization( "5" )
+																 .build( );
+
+		stateVariable.accept( this.visitor );
+		assertEquals( "Should be the same text", "uint internal amount = 5;", this.visitor.export( ) );
 	}
 
 	@Test
