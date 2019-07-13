@@ -2,6 +2,7 @@ package com.tobiasfertig.java.solidityartist.visitors;
 
 import com.tobiasfertig.java.solidityartist.elements.datatypes.DataTypeElement;
 import com.tobiasfertig.java.solidityartist.elements.events.EventElement;
+import com.tobiasfertig.java.solidityartist.elements.functions.CodeElement;
 import com.tobiasfertig.java.solidityartist.elements.parameters.ParameterElement;
 import com.tobiasfertig.java.solidityartist.elements.typedeclarations.EnumElement;
 import com.tobiasfertig.java.solidityartist.elements.typedeclarations.StructElement;
@@ -19,6 +20,48 @@ public class ContractVisitorTests
 	public void setUp( )
 	{
 		this.visitor = new ContractVisitor( );
+	}
+
+	@Test
+	public void testVisitCodeElement_With4Line_CorrectStringReturned( )
+	{
+		CodeElement code = CodeElement.builder( )
+									  .addCode( "if (!self.flags[value]) {" )
+									  .addStatement( "    return false" )
+									  .addStatement( "    self.flags[value] = false" )
+									  .addStatement( "    return true" )
+									  .addCode( "}" )
+									  .build( );
+
+		code.accept( this.visitor );
+
+		String expected = "if (!self.flags[value]) {\n" +
+			"    return false;\n" +
+			"    self.flags[value] = false;\n" +
+			"    return true;\n" +
+			"}";
+		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
+	}
+
+	@Test
+	public void testVisitCodeElement_With1Line_CorrectStringReturned( )
+	{
+		CodeElement code = CodeElement.builder( )
+									  .addStatement( "self.flags[value] = false" )
+									  .build( );
+
+		code.accept( this.visitor );
+
+		String expected = "self.flags[value] = false;";
+		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
+	}
+
+	@Test
+	public void testVisitCodeElement_WithoutLines_CorrectStringReturned( )
+	{
+		CodeElement code = CodeElement.builder( ).build( );
+		code.accept( this.visitor );
+		assertEquals( "Should be the same text", "", this.visitor.export( ) );
 	}
 
 	@Test

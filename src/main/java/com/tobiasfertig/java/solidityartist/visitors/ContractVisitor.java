@@ -32,7 +32,7 @@ public class ContractVisitor extends VisitorImpl
 
 	@Override public void visit( CodeElement element )
 	{
-
+		appendCollection( element.getLines( ), "\n" );
 	}
 
 	@Override public void visit( ConstructorElement element )
@@ -71,7 +71,7 @@ public class ContractVisitor extends VisitorImpl
 		sb.append( element.getName( ) );
 		space( );
 		openCurlyBraces( );
-		appendCollectionWithDelimiter( element.getValues( ), ",\n" );
+		appendCollection( element.getValues( ), ",\n" );
 		closeCurlyBraces( );
 	}
 
@@ -82,7 +82,7 @@ public class ContractVisitor extends VisitorImpl
 		space( );
 		sb.append( element.getName( ) );
 		openBraces( );
-		appendCollectionOfSolidityElementsWithDelimiter( element.getParameters( ), ", " );
+		appendCollectionOfSolidityElementsInline( element.getParameters( ), ", " );
 		closeBraces( );
 		semicolon( );
 	}
@@ -149,7 +149,7 @@ public class ContractVisitor extends VisitorImpl
 		sb.append( element.getName( ) );
 		space( );
 		openCurlyBraces( );
-		appendCollectionOfSolidityElementsWithDelimiter( element.getStructMembers( ), ";\n" );
+		appendCollectionOfSolidityElements( element.getStructMembers( ), ";\n" );
 		semicolon( );
 		closeCurlyBraces( );
 	}
@@ -167,7 +167,7 @@ public class ContractVisitor extends VisitorImpl
 		semicolon( );
 	}
 
-	private void appendCollectionWithDelimiter( Iterable<? extends Object> set, String delimiter )
+	private void appendCollection( Iterable<? extends Object> set, String delimiter )
 	{
 		Iterator<? extends Object> iterator = set.iterator( );
 		if ( iterator.hasNext( ) )
@@ -187,7 +187,7 @@ public class ContractVisitor extends VisitorImpl
 		}
 	}
 
-	private void appendCollectionOfSolidityElementsWithDelimiter(
+	private void appendCollectionOfSolidityElements(
 		Iterable<? extends SolidityElement> elements,
 		String delimiter
 	)
@@ -199,6 +199,28 @@ public class ContractVisitor extends VisitorImpl
 			while ( iterator.hasNext( ) )
 			{
 				indent( );
+				nextElement.accept( this );
+				sb.append( delimiter );
+
+				nextElement = iterator.next( );
+			}
+
+			indent( );
+			nextElement.accept( this );
+		}
+	}
+
+	private void appendCollectionOfSolidityElementsInline(
+		Iterable<? extends SolidityElement> elements,
+		String delimiter
+	)
+	{
+		Iterator<? extends SolidityElement> iterator = elements.iterator( );
+		if ( iterator.hasNext( ) )
+		{
+			SolidityElement nextElement = iterator.next( );
+			while ( iterator.hasNext( ) )
+			{
 				nextElement.accept( this );
 				sb.append( delimiter );
 
