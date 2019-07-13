@@ -20,6 +20,11 @@ public class ParameterElement implements SolidityElement
 		this( builder.getDataType( ), builder.getName( ) );
 	}
 
+	ParameterElement( EventParameterElement.Builder builder )
+	{
+		this( builder.getDataType( ), builder.getName( ) );
+	}
+
 	private ParameterElement( DataTypeElement dataType, String name )
 	{
 		this.dataType = dataType;
@@ -70,6 +75,16 @@ public class ParameterElement implements SolidityElement
 		public DataLocationParameterElement.Builder inStorage( )
 		{
 			return new DataLocationParameterElement.Builder( this.dataType, this.name, Keywords.STORAGE );
+		}
+
+		public EventParameterElement.Builder isAnonymousEventParameter( )
+		{
+			return new EventParameterElement.Builder( this.dataType, this.name, Keywords.ANONYMOUS );
+		}
+
+		public EventParameterElement.Builder isIndexedEventParameter( )
+		{
+			return new EventParameterElement.Builder( this.dataType, this.name, Keywords.INDEXED );
 		}
 
 		public ParameterElement build( )

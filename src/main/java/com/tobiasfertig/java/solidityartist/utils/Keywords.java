@@ -5,6 +5,7 @@ import com.tobiasfertig.java.solidityartist.Writable;
 
 public enum Keywords implements Writable
 {
+	ANONYMOUS( "anonymous" ),
 	AS( "as" ),
 	CONTRACT( "contract" ),
 	CONSTRUCTOR( "constructor" ),
@@ -14,6 +15,7 @@ public enum Keywords implements Writable
 	FROM( "from" ),
 	FUNCTION( "function" ),
 	IMPORT( "import" ),
+	INDEXED( "indexed" ),
 	INTERFACE( "interface" ),
 	LIBRARY( "library" ),
 	MAPPING( "mapping" ),

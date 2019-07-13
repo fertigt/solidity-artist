@@ -9,6 +9,7 @@ import com.tobiasfertig.java.solidityartist.elements.files.InterfaceElement;
 import com.tobiasfertig.java.solidityartist.elements.files.LibraryElement;
 import com.tobiasfertig.java.solidityartist.elements.functions.*;
 import com.tobiasfertig.java.solidityartist.elements.parameters.DataLocationParameterElement;
+import com.tobiasfertig.java.solidityartist.elements.parameters.EventParameterElement;
 import com.tobiasfertig.java.solidityartist.elements.parameters.ParameterElement;
 import com.tobiasfertig.java.solidityartist.elements.statevariables.StateVariableElement;
 import com.tobiasfertig.java.solidityartist.elements.typedeclarations.EnumElement;
@@ -44,6 +45,19 @@ public class ContractVisitor extends VisitorImpl
 
 	}
 
+	@Override public void visit( DataLocationParameterElement element )
+	{
+		element.getDataType( ).accept( this );
+		space( );
+		sb.append( element.getDataLocation( ) );
+
+		if ( element.getName( ) != null )
+		{
+			space( );
+			sb.append( element.getName( ) );
+		}
+	}
+
 	@Override public void visit( DataTypeElement element )
 	{
 		sb.append( element.getTypeName( ) );
@@ -59,6 +73,19 @@ public class ContractVisitor extends VisitorImpl
 		openCurlyBraces( );
 		appendCollectionWithDelimiter( element.getValues( ), ",\n" );
 		closeCurlyBraces( );
+	}
+
+	@Override public void visit( EventParameterElement element )
+	{
+		element.getDataType( ).accept( this );
+		space( );
+		sb.append( element.getAttribute( ) );
+
+		if ( element.getName( ) != null )
+		{
+			space( );
+			sb.append( element.getName( ) );
+		}
 	}
 
 	@Override public void visit( EventElement element )
@@ -84,19 +111,6 @@ public class ContractVisitor extends VisitorImpl
 	@Override public void visit( LibraryElement element )
 	{
 
-	}
-
-	@Override public void visit( DataLocationParameterElement element )
-	{
-		element.getDataType( ).accept( this );
-		space( );
-		sb.append( element.getDataLocation( ) );
-
-		if ( element.getName( ) != null )
-		{
-			space( );
-			sb.append( element.getName( ) );
-		}
 	}
 
 	@Override public void visit( ModifierElement element )

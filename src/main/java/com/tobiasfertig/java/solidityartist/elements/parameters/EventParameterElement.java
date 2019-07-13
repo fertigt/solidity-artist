@@ -4,14 +4,14 @@ import com.tobiasfertig.java.solidityartist.elements.datatypes.DataTypeElement;
 import com.tobiasfertig.java.solidityartist.utils.Keywords;
 import com.tobiasfertig.java.solidityartist.visitors.Visitor;
 
-public class DataLocationParameterElement extends ParameterElement
+public class EventParameterElement extends ParameterElement
 {
-	private final String dataLocation;
+	private final String attribute;
 
-	private DataLocationParameterElement( Builder builder )
+	private EventParameterElement( Builder builder )
 	{
 		super( builder );
-		this.dataLocation = builder.dataLocation;
+		this.attribute = builder.attribute;
 	}
 
 	@Override public void accept( Visitor visitor )
@@ -19,22 +19,22 @@ public class DataLocationParameterElement extends ParameterElement
 		visitor.visit( this );
 	}
 
-	public String getDataLocation( )
+	public String getAttribute( )
 	{
-		return dataLocation;
+		return attribute;
 	}
 
 	public static final class Builder
 	{
 		private final DataTypeElement dataType;
 		private String name;
-		private String dataLocation;
+		private String attribute;
 
-		Builder( DataTypeElement dataType, String name, Keywords dataLocation )
+		Builder( DataTypeElement dataType, String name, Keywords attribute )
 		{
 			this.dataType = dataType;
 			this.name = name;
-			this.dataLocation = dataLocation.toString( );
+			this.attribute = attribute.toString( );
 		}
 
 		public Builder addName( String name )
@@ -43,9 +43,9 @@ public class DataLocationParameterElement extends ParameterElement
 			return this;
 		}
 
-		public DataLocationParameterElement build( )
+		public EventParameterElement build( )
 		{
-			return new DataLocationParameterElement( this );
+			return new EventParameterElement( this );
 		}
 
 		DataTypeElement getDataType( )

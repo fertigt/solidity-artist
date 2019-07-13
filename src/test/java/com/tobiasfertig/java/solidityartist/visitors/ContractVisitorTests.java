@@ -66,6 +66,54 @@ public class ContractVisitorTests
 	}
 
 	@Test
+	public void testVisitEventParameterElement_WithNameBeforeAnonymous_CorrectStringReturned( )
+	{
+		ParameterElement parameterElement = ParameterElement.builder( DataTypeElement.STRING )
+															.addName( "test" )
+															.isAnonymousEventParameter( )
+															.build( );
+
+		parameterElement.accept( this.visitor );
+		assertEquals( "Should be the same text", "string anonymous test", this.visitor.export( ) );
+	}
+
+	@Test
+	public void testVisitEventParameterElement_WithNameAfterAnonymous_CorrectStringReturned( )
+	{
+		ParameterElement parameterElement = ParameterElement.builder( DataTypeElement.STRING )
+															.isAnonymousEventParameter( )
+															.addName( "test" )
+															.build( );
+
+		parameterElement.accept( this.visitor );
+		assertEquals( "Should be the same text", "string anonymous test", this.visitor.export( ) );
+	}
+
+	@Test
+	public void testVisitEventParameterElement_WithNameBeforeIndexed_CorrectStringReturned( )
+	{
+		ParameterElement parameterElement = ParameterElement.builder( DataTypeElement.STRING )
+															.addName( "test" )
+															.isIndexedEventParameter( )
+															.build( );
+
+		parameterElement.accept( this.visitor );
+		assertEquals( "Should be the same text", "string indexed test", this.visitor.export( ) );
+	}
+
+	@Test
+	public void testVisitEventParameterElement_WithNameAfterIndexed_CorrectStringReturned( )
+	{
+		ParameterElement parameterElement = ParameterElement.builder( DataTypeElement.STRING )
+															.isIndexedEventParameter( )
+															.addName( "test" )
+															.build( );
+
+		parameterElement.accept( this.visitor );
+		assertEquals( "Should be the same text", "string indexed test", this.visitor.export( ) );
+	}
+
+	@Test
 	public void testVisitMemoryParameterElement_WithNameBeforeMemory_CorrectStringReturned( )
 	{
 		ParameterElement parameterElement = ParameterElement.builder( DataTypeElement.STRING )

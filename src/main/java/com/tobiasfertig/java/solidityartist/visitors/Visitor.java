@@ -8,6 +8,7 @@ import com.tobiasfertig.java.solidityartist.elements.files.InterfaceElement;
 import com.tobiasfertig.java.solidityartist.elements.files.LibraryElement;
 import com.tobiasfertig.java.solidityartist.elements.functions.*;
 import com.tobiasfertig.java.solidityartist.elements.parameters.DataLocationParameterElement;
+import com.tobiasfertig.java.solidityartist.elements.parameters.EventParameterElement;
 import com.tobiasfertig.java.solidityartist.elements.parameters.ParameterElement;
 import com.tobiasfertig.java.solidityartist.elements.statevariables.StateVariableElement;
 import com.tobiasfertig.java.solidityartist.elements.typedeclarations.EnumElement;
@@ -24,11 +25,15 @@ public interface Visitor
 
 	void visit( ContractElement element );
 
+	void visit( DataLocationParameterElement element );
+
 	void visit( DataTypeElement element );
 
 	void visit( EnumElement element );
 
 	void visit( EventElement element );
+
+	void visit( EventParameterElement element );
 
 	void visit( FunctionElement element );
 
@@ -37,8 +42,6 @@ public interface Visitor
 	void visit( InterfaceElement element );
 
 	void visit( LibraryElement element );
-
-	void visit( DataLocationParameterElement element );
 
 	void visit( ModifierElement element );
 
