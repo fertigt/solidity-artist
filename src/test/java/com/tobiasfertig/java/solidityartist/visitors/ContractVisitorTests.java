@@ -1,8 +1,9 @@
 package com.tobiasfertig.java.solidityartist.visitors;
 
 import com.tobiasfertig.java.solidityartist.elements.datatypes.DataTypeElement;
-import com.tobiasfertig.java.solidityartist.elements.functions.ParameterElement;
+import com.tobiasfertig.java.solidityartist.elements.parameters.ParameterElement;
 import com.tobiasfertig.java.solidityartist.elements.typedeclarations.EnumElement;
+import com.tobiasfertig.java.solidityartist.elements.typedeclarations.StructElement;
 import com.tobiasfertig.java.solidityartist.elements.typedeclarations.UsingForElement;
 import org.junit.Before;
 import org.junit.Test;
@@ -153,6 +154,25 @@ public class ContractVisitorTests
 
 		parameterElement.accept( this.visitor );
 		assertEquals( "Should be the same text", "string storage", this.visitor.export( ) );
+	}
+
+	@Test
+	public void testVisitStructElement_With1Member_CorrectStringReturned( )
+	{
+		ParameterElement addr = ParameterElement.builder( DataTypeElement.ADDRESS ).addName( "addr" ).build( );
+		ParameterElement amount = ParameterElement.builder( DataTypeElement.UINT ).addName( "amount" ).build( );
+		StructElement structElement = StructElement.builder( "Finder" )
+												   .addStructMember( addr )
+												   .addStructMember( amount )
+												   .build( );
+
+		structElement.accept( this.visitor );
+
+		String expected = "struct Finder {\n" +
+						  "    address addr;\n" +
+						  "    uint amount;\n" +
+						  "}";
+		assertEquals( "Should be the same object", expected, this.visitor.export( ) );
 	}
 
 	@Test

@@ -1,5 +1,6 @@
 package com.tobiasfertig.java.solidityartist.visitors;
 
+import com.tobiasfertig.java.solidityartist.elements.SolidityElement;
 import com.tobiasfertig.java.solidityartist.elements.datatypes.DataTypeElement;
 import com.tobiasfertig.java.solidityartist.elements.events.EventElement;
 import com.tobiasfertig.java.solidityartist.elements.files.ContractElement;
@@ -7,13 +8,16 @@ import com.tobiasfertig.java.solidityartist.elements.files.ImportElement;
 import com.tobiasfertig.java.solidityartist.elements.files.InterfaceElement;
 import com.tobiasfertig.java.solidityartist.elements.files.LibraryElement;
 import com.tobiasfertig.java.solidityartist.elements.functions.*;
+import com.tobiasfertig.java.solidityartist.elements.parameters.MemoryParameterElement;
+import com.tobiasfertig.java.solidityartist.elements.parameters.ParameterElement;
+import com.tobiasfertig.java.solidityartist.elements.parameters.StorageParameterElement;
 import com.tobiasfertig.java.solidityartist.elements.statevariables.StateVariableElement;
 import com.tobiasfertig.java.solidityartist.elements.typedeclarations.EnumElement;
+import com.tobiasfertig.java.solidityartist.elements.typedeclarations.StructElement;
 import com.tobiasfertig.java.solidityartist.elements.typedeclarations.UsingForElement;
 import com.tobiasfertig.java.solidityartist.utils.Keywords;
 
 import java.util.Iterator;
-import java.util.Set;
 
 public class ContractVisitor extends VisitorImpl
 {
@@ -130,6 +134,19 @@ public class ContractVisitor extends VisitorImpl
 		}
 	}
 
+	@Override public void visit( StructElement element )
+	{
+		indent( );
+		sb.append( Keywords.STRUCT );
+		space( );
+		sb.append( element.getName( ) );
+		space( );
+		openCurlyBraces( );
+		appendCollectionOfSolidityElementsWithDelimiter( element.getStructMembers( ), ";\n" );
+		semicolon( );
+		closeCurlyBraces( );
+	}
+
 	@Override public void visit( UsingForElement element )
 	{
 		indent( );
@@ -161,6 +178,29 @@ public class ContractVisitor extends VisitorImpl
 
 			indent( );
 			sb.append( nextValue );
+		}
+	}
+
+	private void appendCollectionOfSolidityElementsWithDelimiter(
+		Iterable<? extends SolidityElement> elements,
+		String delimiter
+	)
+	{
+		Iterator<? extends SolidityElement> iterator = elements.iterator( );
+		if ( iterator.hasNext( ) )
+		{
+			SolidityElement nextElement = iterator.next( );
+			while ( iterator.hasNext( ) )
+			{
+				indent( );
+				nextElement.accept( this );
+				sb.append( delimiter );
+
+				nextElement = iterator.next( );
+			}
+
+			indent( );
+			nextElement.accept( this );
 		}
 	}
 }

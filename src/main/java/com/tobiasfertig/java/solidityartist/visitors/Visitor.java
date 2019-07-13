@@ -7,8 +7,12 @@ import com.tobiasfertig.java.solidityartist.elements.files.ImportElement;
 import com.tobiasfertig.java.solidityartist.elements.files.InterfaceElement;
 import com.tobiasfertig.java.solidityartist.elements.files.LibraryElement;
 import com.tobiasfertig.java.solidityartist.elements.functions.*;
+import com.tobiasfertig.java.solidityartist.elements.parameters.MemoryParameterElement;
+import com.tobiasfertig.java.solidityartist.elements.parameters.ParameterElement;
+import com.tobiasfertig.java.solidityartist.elements.parameters.StorageParameterElement;
 import com.tobiasfertig.java.solidityartist.elements.statevariables.StateVariableElement;
 import com.tobiasfertig.java.solidityartist.elements.typedeclarations.EnumElement;
+import com.tobiasfertig.java.solidityartist.elements.typedeclarations.StructElement;
 import com.tobiasfertig.java.solidityartist.elements.typedeclarations.UsingForElement;
 
 public interface Visitor
@@ -44,6 +48,8 @@ public interface Visitor
 	void visit( StateVariableElement element );
 
 	void visit( StorageParameterElement element );
+
+	void visit( StructElement element );
 
 	void visit( UsingForElement element );
 }

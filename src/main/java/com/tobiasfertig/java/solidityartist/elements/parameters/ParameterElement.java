@@ -1,4 +1,4 @@
-package com.tobiasfertig.java.solidityartist.elements.functions;
+package com.tobiasfertig.java.solidityartist.elements.parameters;
 
 import com.tobiasfertig.java.solidityartist.elements.SolidityElement;
 import com.tobiasfertig.java.solidityartist.elements.datatypes.DataTypeElement;
