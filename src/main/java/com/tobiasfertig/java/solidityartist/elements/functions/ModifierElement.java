@@ -1,6 +1,5 @@
 package com.tobiasfertig.java.solidityartist.elements.functions;
 
-import com.tobiasfertig.java.solidityartist.ModifierName;
 import com.tobiasfertig.java.solidityartist.elements.SolidityElement;
 import com.tobiasfertig.java.solidityartist.elements.parameters.ParameterElement;
 import com.tobiasfertig.java.solidityartist.visitors.Visitor;
