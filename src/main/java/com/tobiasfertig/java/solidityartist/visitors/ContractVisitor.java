@@ -122,7 +122,17 @@ public class ContractVisitor extends VisitorImpl
 
 	@Override public void visit( ModifierElement element )
 	{
-
+		indent( );
+		sb.append( Keywords.MODIFIER );
+		space( );
+		sb.append( element.getName( ) );
+		openBraces( );
+		appendCollectionOfSolidityElementsInline( element.getParameters( ), ", " );
+		closeBraces( );
+		space( );
+		openCurlyBraces( );
+		element.getCode( ).accept( this );
+		closeCurlyBraces( );
 	}
 
 	@Override public void visit( ParameterElement element )

@@ -3,6 +3,7 @@ package com.tobiasfertig.java.solidityartist.visitors;
 import com.tobiasfertig.java.solidityartist.elements.datatypes.DataTypeElement;
 import com.tobiasfertig.java.solidityartist.elements.events.EventElement;
 import com.tobiasfertig.java.solidityartist.elements.functions.CodeElement;
+import com.tobiasfertig.java.solidityartist.elements.functions.ModifierElement;
 import com.tobiasfertig.java.solidityartist.elements.parameters.ParameterElement;
 import com.tobiasfertig.java.solidityartist.elements.statevariables.StateVariableElement;
 import com.tobiasfertig.java.solidityartist.elements.typedeclarations.EnumElement;
@@ -238,6 +239,109 @@ public class ContractVisitorTests
 
 		parameterElement.accept( this.visitor );
 		assertEquals( "Should be the same text", "string memory", this.visitor.export( ) );
+	}
+
+	@Test
+	public void testVisitModifierElement_WithoutCodeAndParameters_CorrectStringReturned( )
+	{
+		ModifierElement modifier = ModifierElement.builder( "onlyOwner" )
+												  .build( );
+
+		modifier.accept( this.visitor );
+
+		String expected = "modifier onlyOwner() {\n" +
+			"    _;\n" +
+			"}";
+		assertEquals( "Should be the same object", expected, this.visitor.export( ) );
+	}
+
+	@Test
+	public void testVisitModifierElement_WithCodeAndWithoutParametersAndUnderscore_CorrectStringReturned( )
+	{
+		CodeElement code = CodeElement.builder( )
+									  .addStatement( "require(owner = msg.sender)" )
+									  .build( );
+		ModifierElement modifier = ModifierElement.builder( "onlyOwner" )
+												  .addCodeWithoutUnderscoreStatement( code )
+												  .build( );
+
+		modifier.accept( this.visitor );
+
+		String expected = "modifier onlyOwner() {\n" +
+			"    require(owner = msg.sender);\n" +
+			"    _;\n" +
+			"}";
+		assertEquals( "Should be the same object", expected, this.visitor.export( ) );
+	}
+
+	@Test
+	public void testVisitModifierElement_WithCodeAndWithoutParameters_CorrectStringReturned( )
+	{
+		CodeElement code = CodeElement.builder( )
+									  .addStatement( "require(owner = msg.sender)" )
+									  .addStatement( "_" )
+									  .build( );
+		ModifierElement modifier = ModifierElement.builder( "onlyOwner" )
+												  .addCode( code )
+												  .build( );
+
+		modifier.accept( this.visitor );
+
+		String expected = "modifier onlyOwner() {\n" +
+			"    require(owner = msg.sender);\n" +
+			"    _;\n" +
+			"}";
+		assertEquals( "Should be the same object", expected, this.visitor.export( ) );
+	}
+
+	@Test
+	public void testVisitModifierElement_WithCodeAnd1Parameter_CorrectStringReturned( )
+	{
+		ParameterElement parameterElement = ParameterElement.builder( DataTypeElement.ADDRESS )
+															.addName( "test" )
+															.build( );
+		CodeElement code = CodeElement.builder( )
+									  .addStatement( "require(test = msg.sender)" )
+									  .build( );
+		ModifierElement modifier = ModifierElement.builder( "onlyOwner" )
+												  .addParameter( parameterElement )
+												  .addCodeWithoutUnderscoreStatement( code )
+												  .build( );
+
+		modifier.accept( this.visitor );
+
+		String expected = "modifier onlyOwner(address test) {\n" +
+			"    require(test = msg.sender);\n" +
+			"    _;\n" +
+			"}";
+		assertEquals( "Should be the same object", expected, this.visitor.export( ) );
+	}
+
+	@Test
+	public void testVisitModifierElement_WithCodeAnd2Parameters_CorrectStringReturned( )
+	{
+		ParameterElement parameterElement = ParameterElement.builder( DataTypeElement.ADDRESS )
+															.addName( "test" )
+															.build( );
+		ParameterElement parameterElement2 = ParameterElement.builder( DataTypeElement.ADDRESS )
+															.addName( "test2" )
+															.build( );
+		CodeElement code = CodeElement.builder( )
+									  .addStatement( "require(test = msg.sender)" )
+									  .build( );
+		ModifierElement modifier = ModifierElement.builder( "onlyOwner" )
+												  .addParameter( parameterElement )
+												  .addParameter( parameterElement2 )
+												  .addCodeWithoutUnderscoreStatement( code )
+												  .build( );
+
+		modifier.accept( this.visitor );
+
+		String expected = "modifier onlyOwner(address test, address test2) {\n" +
+			"    require(test = msg.sender);\n" +
+			"    _;\n" +
+			"}";
+		assertEquals( "Should be the same object", expected, this.visitor.export( ) );
 	}
 
 	@Test
