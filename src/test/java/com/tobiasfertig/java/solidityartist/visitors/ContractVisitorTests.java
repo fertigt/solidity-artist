@@ -1,6 +1,7 @@
 package com.tobiasfertig.java.solidityartist.visitors;
 
 import com.tobiasfertig.java.solidityartist.elements.datatypes.DataTypeElement;
+import com.tobiasfertig.java.solidityartist.elements.datatypes.FunctionTypeElement;
 import com.tobiasfertig.java.solidityartist.elements.events.EventElement;
 import com.tobiasfertig.java.solidityartist.elements.functions.CodeElement;
 import com.tobiasfertig.java.solidityartist.elements.functions.ConstructorElement;
@@ -567,6 +568,101 @@ public class ContractVisitorTests
 		String expected = "function payableFunction() public payable returns(string memory, address) {\n" +
 			"    x = 1;\n" +
 			"}";
+		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
+	}
+
+	@Test
+	public void testVisitFunctionTypeElement_WithoutParameters_CorrectStringReturned( )
+	{
+		FunctionTypeElement element = FunctionTypeElement.publicBuilder( ).build( );
+
+		element.accept( this.visitor );
+
+		String expected = "function() public";
+		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
+	}
+
+	@Test
+	public void testVisitFunctionTypeElement_With2Parameters_CorrectStringReturned( )
+	{
+		ParameterElement parameterElement = ParameterElement.builder( DataTypeElement.STRING )
+															.inMemory( )
+															.build( );
+		ParameterElement parameterElement2 = ParameterElement.builder( DataTypeElement.ADDRESS )
+															 .build( );
+		FunctionTypeElement element = FunctionTypeElement.publicBuilder( )
+														 .addParameter( parameterElement )
+														 .addParameter( parameterElement2 )
+														 .build( );
+
+		element.accept( this.visitor );
+
+		String expected = "function(string memory, address) public";
+		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
+	}
+
+	@Test
+	public void testVisitFunctionTypeElement_With1Parameter_CorrectStringReturned( )
+	{
+		ParameterElement parameterElement = ParameterElement.builder( DataTypeElement.STRING )
+															.inMemory( )
+															.build( );
+		FunctionTypeElement element = FunctionTypeElement.internalBuilder( )
+														 .addParameter( parameterElement )
+														 .build( );
+
+		element.accept( this.visitor );
+
+		String expected = "function(string memory) internal";
+		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
+	}
+
+	@Test
+	public void testVisitFunctionTypeElement_Pure_CorrectStringReturned( )
+	{
+		FunctionTypeElement element = FunctionTypeElement.publicBuilder( ).isPure( ).build( );
+
+		element.accept( this.visitor );
+
+		String expected = "function() public pure";
+		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
+	}
+
+	@Test
+	public void testVisitFunctionTypeElement_View_CorrectStringReturned( )
+	{
+		FunctionTypeElement element = FunctionTypeElement.publicBuilder( ).isView( ).build( );
+
+		element.accept( this.visitor );
+
+		String expected = "function() public view";
+		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
+	}
+
+	@Test
+	public void testVisitFunctionTypeElement_Payable_CorrectStringReturned( )
+	{
+		FunctionTypeElement element = FunctionTypeElement.publicBuilder( ).isPayable( ).build( );
+
+		element.accept( this.visitor );
+
+		String expected = "function() public payable";
+		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
+	}
+
+	@Test
+	public void testVisitFunctionTypeElement_WithReturnParameter_CorrectStringReturned( )
+	{
+		ParameterElement parameterElement = ParameterElement.builder( DataTypeElement.STRING )
+															.inMemory( )
+															.build( );
+		FunctionTypeElement element = FunctionTypeElement.publicBuilder( )
+														 .addReturnParameter( parameterElement )
+														 .build( );
+
+		element.accept( this.visitor );
+
+		String expected = "function() public returns(string memory)";
 		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
 	}
 

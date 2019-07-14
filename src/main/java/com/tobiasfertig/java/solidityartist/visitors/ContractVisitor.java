@@ -189,7 +189,27 @@ public class ContractVisitor extends VisitorImpl
 
 	@Override public void visit( FunctionTypeElement element )
 	{
+		sb.append( element.getTypeName( ) );
+		openBraces( );
+		appendCollectionOfSolidityElementsInline( element.getParameters( ), ", " );
+		closeBraces( );
+		space( );
+		sb.append( element.getVisibility( ) );
 
+		for ( Keywords modifier : element.getModifiers( ) )
+		{
+			space( );
+			sb.append( modifier );
+		}
+
+		if ( !element.getReturnParameters( ).isEmpty( ) )
+		{
+			space( );
+			sb.append( Keywords.RETURNS );
+			openBraces( );
+			appendCollectionOfSolidityElementsInline( element.getReturnParameters( ), ", " );
+			closeBraces( );
+		}
 	}
 
 	@Override public void visit( ImportElement element )
