@@ -2,6 +2,7 @@ package com.tobiasfertig.java.solidityartist.visitors;
 
 import com.tobiasfertig.java.solidityartist.elements.SolidityElement;
 import com.tobiasfertig.java.solidityartist.elements.datatypes.DataTypeElement;
+import com.tobiasfertig.java.solidityartist.elements.datatypes.FunctionTypeElement;
 import com.tobiasfertig.java.solidityartist.elements.events.EventElement;
 import com.tobiasfertig.java.solidityartist.elements.files.ContractElement;
 import com.tobiasfertig.java.solidityartist.elements.files.ImportElement;
@@ -101,6 +102,57 @@ public class ContractVisitor extends VisitorImpl
 	}
 
 	@Override public void visit( FunctionElement element )
+	{
+		indent( );
+		sb.append( Keywords.FUNCTION );
+
+		if ( !element.isFallback( ) )
+		{
+			space( );
+			sb.append( element.getName( ) );
+		}
+
+		openBraces( );
+		appendCollectionOfSolidityElementsInline( element.getParameters( ), ", " );
+		closeBraces( );
+		space( );
+		sb.append( element.getVisibility( ) );
+
+		for ( Keywords modifier : element.getModifiers( ) )
+		{
+			space( );
+			sb.append( modifier );
+		}
+
+		for ( String customModifier : element.getCustomModifiers( ) )
+		{
+			space( );
+			sb.append( customModifier );
+		}
+
+		if ( !element.getReturnParameters( ).isEmpty( ) )
+		{
+			space( );
+			sb.append( Keywords.RETURNS );
+			openBraces( );
+			appendCollectionOfSolidityElementsInline( element.getReturnParameters( ), ", " );
+			closeBraces( );
+		}
+
+		if ( element.isAbstract( ) )
+		{
+			semicolon( );
+		}
+		else
+		{
+			space( );
+			openCurlyBraces( );
+			element.getCode( ).accept( this );
+			closeCurlyBraces( );
+		}
+	}
+
+	@Override public void visit( FunctionTypeElement element )
 	{
 
 	}

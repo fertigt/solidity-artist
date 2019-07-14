@@ -1,6 +1,7 @@
 package com.tobiasfertig.java.solidityartist.visitors;
 
 import com.tobiasfertig.java.solidityartist.elements.datatypes.DataTypeElement;
+import com.tobiasfertig.java.solidityartist.elements.datatypes.FunctionTypeElement;
 import com.tobiasfertig.java.solidityartist.elements.events.EventElement;
 import com.tobiasfertig.java.solidityartist.elements.files.ContractElement;
 import com.tobiasfertig.java.solidityartist.elements.files.ImportElement;
@@ -36,6 +37,8 @@ public interface Visitor
 	void visit( EventParameterElement element );
 
 	void visit( FunctionElement element );
+
+	void visit( FunctionTypeElement element );
 
 	void visit( ImportElement element );
 

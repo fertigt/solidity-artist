@@ -24,12 +24,15 @@ public enum Keywords implements Writable
 	MAPPING( "mapping" ),
 	MEMORY( "memory" ),
 	MODIFIER( "modifier" ),
+	PAYABLE( "payable" ),
 	PRIVATE( "private" ),
 	PUBLIC( "public" ),
+	PURE( "pure" ),
 	RETURNS( "returns" ),
 	STORAGE( "storage" ),
 	STRUCT( "struct" ),
-	USING( "using" );
+	USING( "using" ),
+	VIEW( "view" );
 
 	private final String keyword;
 

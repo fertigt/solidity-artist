@@ -3,6 +3,7 @@ package com.tobiasfertig.java.solidityartist.visitors;
 import com.tobiasfertig.java.solidityartist.elements.datatypes.DataTypeElement;
 import com.tobiasfertig.java.solidityartist.elements.events.EventElement;
 import com.tobiasfertig.java.solidityartist.elements.functions.CodeElement;
+import com.tobiasfertig.java.solidityartist.elements.functions.FunctionElement;
 import com.tobiasfertig.java.solidityartist.elements.functions.ModifierElement;
 import com.tobiasfertig.java.solidityartist.elements.parameters.ParameterElement;
 import com.tobiasfertig.java.solidityartist.elements.statevariables.StateVariableElement;
@@ -204,6 +205,266 @@ public class ContractVisitorTests
 
 		parameterElement.accept( this.visitor );
 		assertEquals( "Should be the same text", "string indexed test", this.visitor.export( ) );
+	}
+
+	@Test
+	public void testVisitFunctionElement_FallbackFunction_CorrectStringReturned( )
+	{
+		CodeElement code = CodeElement.builder( ).addStatement( "x = 1" ).build( );
+		FunctionElement fallback = FunctionElement.fallbackBuilder( ).addCode( code ).build( );
+
+		fallback.accept( this.visitor );
+
+		String expected = "function() external {\n" +
+			"    x = 1;\n" +
+			"}";
+		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
+	}
+
+	@Test
+	public void testVisitFunctionElement_FallbackFunctionPayable_CorrectStringReturned( )
+	{
+		CodeElement code = CodeElement.builder( )
+									  .addStatement( "x = 1" )
+									  .build( );
+		FunctionElement fallback = FunctionElement.fallbackBuilder( )
+												  .isPayable( )
+												  .addCode( code )
+												  .build( );
+
+		fallback.accept( this.visitor );
+
+		String expected = "function() external payable {\n" +
+			"    x = 1;\n" +
+			"}";
+		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
+	}
+
+	@Test
+	public void testVisitFunctionElement_PureFunction_CorrectStringReturned( )
+	{
+		CodeElement code = CodeElement.builder( )
+									  .addStatement( "x = 1" )
+									  .build( );
+		FunctionElement fallback = FunctionElement.publicBuilder( "pureFunction" )
+												  .isPure( )
+												  .addCode( code )
+												  .build( );
+
+		fallback.accept( this.visitor );
+
+		String expected = "function pureFunction() public pure {\n" +
+			"    x = 1;\n" +
+			"}";
+		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
+	}
+
+	@Test
+	public void testVisitFunctionElement_ViewFunction_CorrectStringReturned( )
+	{
+		CodeElement code = CodeElement.builder( )
+									  .addStatement( "x = 1" )
+									  .build( );
+		FunctionElement fallback = FunctionElement.publicBuilder( "viewFunction" )
+												  .isView( )
+												  .addCode( code )
+												  .build( );
+
+		fallback.accept( this.visitor );
+
+		String expected = "function viewFunction() public view {\n" +
+			"    x = 1;\n" +
+			"}";
+		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
+	}
+
+	@Test
+	public void testVisitFunctionElement_AbstractFunction_CorrectStringReturned( )
+	{
+		CodeElement code = CodeElement.builder( )
+									  .addStatement( "x = 1" )
+									  .build( );
+		FunctionElement fallback = FunctionElement.publicBuilder( "abstractFunction" )
+												  .isAbstract( )
+												  .addCode( code )
+												  .build( );
+
+		fallback.accept( this.visitor );
+
+		String expected = "function abstractFunction() public;";
+		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
+	}
+
+	@Test
+	public void testVisitFunctionElement_PayableFunction_CorrectStringReturned( )
+	{
+		CodeElement code = CodeElement.builder( )
+									  .addStatement( "x = 1" )
+									  .build( );
+		FunctionElement fallback = FunctionElement.publicBuilder( "payableFunction" )
+												  .isPayable( )
+												  .addCode( code )
+												  .build( );
+
+		fallback.accept( this.visitor );
+
+		String expected = "function payableFunction() public payable {\n" +
+			"    x = 1;\n" +
+			"}";
+		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
+	}
+
+	@Test
+	public void testVisitFunctionElement_FunctionWith1Parameter_CorrectStringReturned( )
+	{
+		ParameterElement parameterElement = ParameterElement.builder( DataTypeElement.STRING )
+															.addName( "test" )
+															.inMemory( )
+															.build( );
+		CodeElement code = CodeElement.builder( )
+									  .addStatement( "x = 1" )
+									  .build( );
+		FunctionElement fallback = FunctionElement.publicBuilder( "payableFunction" )
+												  .addParameter( parameterElement )
+												  .isPayable( )
+												  .addCode( code )
+												  .build( );
+
+		fallback.accept( this.visitor );
+
+		String expected = "function payableFunction(string memory test) public payable {\n" +
+			"    x = 1;\n" +
+			"}";
+		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
+	}
+
+	@Test
+	public void testVisitFunctionElement_FunctionWith2Parameters_CorrectStringReturned( )
+	{
+		ParameterElement parameterElement = ParameterElement.builder( DataTypeElement.STRING )
+															.addName( "test" )
+															.inMemory( )
+															.build( );
+		ParameterElement parameterElement2 = ParameterElement.builder( DataTypeElement.ADDRESS )
+															 .addName( "test2" )
+															 .build( );
+		CodeElement code = CodeElement.builder( )
+									  .addStatement( "x = 1" )
+									  .build( );
+		FunctionElement fallback = FunctionElement.publicBuilder( "payableFunction" )
+												  .addParameter( parameterElement )
+												  .addParameter( parameterElement2 )
+												  .isPayable( )
+												  .addCode( code )
+												  .build( );
+
+		fallback.accept( this.visitor );
+
+		String expected = "function payableFunction(string memory test, address test2) public payable {\n" +
+			"    x = 1;\n" +
+			"}";
+		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
+	}
+
+	@Test
+	public void testVisitFunctionElement_FunctionWith1ReturnParameter_CorrectStringReturned( )
+	{
+		ParameterElement parameterElement = ParameterElement.builder( DataTypeElement.STRING )
+															.addName( "test" )
+															.inMemory( )
+															.build( );
+		CodeElement code = CodeElement.builder( )
+									  .addStatement( "x = 1" )
+									  .build( );
+		FunctionElement fallback = FunctionElement.publicBuilder( "payableFunction" )
+												  .addReturnParameter( parameterElement )
+												  .isPayable( )
+												  .addCode( code )
+												  .build( );
+
+		fallback.accept( this.visitor );
+
+		String expected = "function payableFunction() public payable returns(string memory test) {\n" +
+			"    x = 1;\n" +
+			"}";
+		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
+	}
+
+	@Test
+	public void testVisitFunctionElement_FunctionWith2ReturnParameters_CorrectStringReturned( )
+	{
+		ParameterElement parameterElement = ParameterElement.builder( DataTypeElement.STRING )
+															.addName( "test" )
+															.inMemory( )
+															.build( );
+		ParameterElement parameterElement2 = ParameterElement.builder( DataTypeElement.ADDRESS )
+															 .addName( "test2" )
+															 .build( );
+		CodeElement code = CodeElement.builder( )
+									  .addStatement( "x = 1" )
+									  .build( );
+		FunctionElement fallback = FunctionElement.publicBuilder( "payableFunction" )
+												  .addReturnParameter( parameterElement )
+												  .addReturnParameter( parameterElement2 )
+												  .isPayable( )
+												  .addCode( code )
+												  .build( );
+
+		fallback.accept( this.visitor );
+
+		String expected = "function payableFunction() public payable returns(string memory test, address test2) {\n" +
+			"    x = 1;\n" +
+			"}";
+		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
+	}
+
+	@Test
+	public void testVisitFunctionElement_FunctionWith1UnnamedReturnParameter_CorrectStringReturned( )
+	{
+		ParameterElement parameterElement = ParameterElement.builder( DataTypeElement.STRING )
+															.inMemory( )
+															.build( );
+		CodeElement code = CodeElement.builder( )
+									  .addStatement( "x = 1" )
+									  .build( );
+		FunctionElement fallback = FunctionElement.publicBuilder( "payableFunction" )
+												  .addReturnParameter( parameterElement )
+												  .isPayable( )
+												  .addCode( code )
+												  .build( );
+
+		fallback.accept( this.visitor );
+
+		String expected = "function payableFunction() public payable returns(string memory) {\n" +
+			"    x = 1;\n" +
+			"}";
+		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
+	}
+
+	@Test
+	public void testVisitFunctionElement_FunctionWith2UnnamedReturnParameters_CorrectStringReturned( )
+	{
+		ParameterElement parameterElement = ParameterElement.builder( DataTypeElement.STRING )
+															.inMemory( )
+															.build( );
+		ParameterElement parameterElement2 = ParameterElement.builder( DataTypeElement.ADDRESS )
+															 .build( );
+		CodeElement code = CodeElement.builder( )
+									  .addStatement( "x = 1" )
+									  .build( );
+		FunctionElement fallback = FunctionElement.publicBuilder( "payableFunction" )
+												  .addReturnParameter( parameterElement )
+												  .addReturnParameter( parameterElement2 )
+												  .isPayable( )
+												  .addCode( code )
+												  .build( );
+
+		fallback.accept( this.visitor );
+
+		String expected = "function payableFunction() public payable returns(string memory, address) {\n" +
+			"    x = 1;\n" +
+			"}";
+		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
 	}
 
 	@Test
