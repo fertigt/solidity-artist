@@ -20,6 +20,7 @@ public enum Keywords implements Writable
 	INDEXED( "indexed" ),
 	INTERFACE( "interface" ),
 	INTERNAL( "internal" ),
+	IS( "is" ),
 	LIBRARY( "library" ),
 	MAPPING( "mapping" ),
 	MEMORY( "memory" ),

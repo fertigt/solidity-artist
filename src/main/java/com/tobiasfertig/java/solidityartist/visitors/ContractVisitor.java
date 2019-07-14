@@ -38,7 +38,6 @@ public class ContractVisitor extends VisitorImpl
 
 	@Override public void visit( ConstructorElement element )
 	{
-		indent( );
 		sb.append( Keywords.CONSTRUCTOR );
 		openBraces( );
 		appendCollectionOfSolidityElementsInline( element.getParameters( ), ", " );
@@ -73,12 +72,114 @@ public class ContractVisitor extends VisitorImpl
 			element.getCode( ).accept( this );
 		}
 
+		newline( );
 		closeCurlyBraces( );
 	}
 
 	@Override public void visit( ContractElement element )
 	{
+		sb.append( Keywords.CONTRACT );
+		space( );
+		sb.append( element.getName( ) );
 
+		if ( !element.getInheritedContracts( ).isEmpty( ) )
+		{
+			space( );
+			sb.append( Keywords.IS );
+			space( );
+			appendCollectionInline( element.getInheritedContracts( ), ", " );
+		}
+
+		space( );
+		openCurlyBraces( );
+
+		if ( !element.getUsingForDeclarations( ).isEmpty( ) )
+		{
+			appendCollectionOfSolidityElements( element.getUsingForDeclarations( ), "\n" );
+			newline( );
+			newline( );
+		}
+
+		if ( !element.getEnumDeclarations( ).isEmpty( ) )
+		{
+			appendCollectionOfSolidityElements( element.getEnumDeclarations( ), "\n\n" );
+			newline( );
+			newline( );
+		}
+
+		if ( !element.getStructDeclarations( ).isEmpty( ) )
+		{
+			appendCollectionOfSolidityElements( element.getStructDeclarations( ), "\n\n" );
+			newline( );
+			newline( );
+		}
+
+		if ( !element.getStateVariables( ).isEmpty( ) )
+		{
+			appendCollectionOfSolidityElements( element.getStateVariables( ), "\n" );
+			newline( );
+			newline( );
+		}
+
+		if ( !element.getEventDeclarations( ).isEmpty( ) )
+		{
+			appendCollectionOfSolidityElements( element.getEventDeclarations( ), "\n" );
+			newline( );
+			newline( );
+		}
+
+		if ( !element.getModifierDeclarations( ).isEmpty( ) )
+		{
+			appendCollectionOfSolidityElements( element.getModifierDeclarations( ), "\n" );
+			newline( );
+			newline( );
+		}
+
+		if ( element.getConstructor( ) != null )
+		{
+			indent( );
+			element.getConstructor( ).accept( this );
+			newline( );
+			newline( );
+		}
+
+		if ( element.getFallbackFunction( ) != null )
+		{
+			indent( );
+			element.getFallbackFunction( ).accept( this );
+			newline( );
+			newline( );
+		}
+
+		if ( !element.getExternalFunctions( ).isEmpty( ) )
+		{
+			appendCollectionOfSolidityElements( element.getExternalFunctions( ), "\n" );
+			newline( );
+			newline( );
+		}
+
+		if ( !element.getPublicFunctions( ).isEmpty( ) )
+		{
+			appendCollectionOfSolidityElements( element.getPublicFunctions( ), "\n" );
+			newline( );
+			newline( );
+		}
+
+		if ( !element.getInternalFunctions( ).isEmpty( ) )
+		{
+			appendCollectionOfSolidityElements( element.getInternalFunctions( ), "\n" );
+			newline( );
+			newline( );
+		}
+
+		if ( !element.getPrivateFunctions( ).isEmpty( ) )
+		{
+			appendCollectionOfSolidityElements( element.getPrivateFunctions( ), "\n" );
+			newline( );
+			newline( );
+		}
+
+		closeCurlyBraces( );
 	}
 
 	@Override public void visit( DataLocationParameterElement element )
@@ -101,19 +202,18 @@ public class ContractVisitor extends VisitorImpl
 
 	@Override public void visit( EnumElement element )
 	{
-		indent( );
 		sb.append( Keywords.ENUM );
 		space( );
 		sb.append( element.getName( ) );
 		space( );
 		openCurlyBraces( );
 		appendCollection( element.getValues( ), ",\n" );
+		newline( );
 		closeCurlyBraces( );
 	}
 
 	@Override public void visit( EventElement element )
 	{
-		indent( );
 		sb.append( Keywords.EVENT );
 		space( );
 		sb.append( element.getName( ) );
@@ -138,7 +238,6 @@ public class ContractVisitor extends VisitorImpl
 
 	@Override public void visit( FunctionElement element )
 	{
-		indent( );
 		sb.append( Keywords.FUNCTION );
 
 		if ( !element.isFallback( ) )
@@ -183,6 +282,7 @@ public class ContractVisitor extends VisitorImpl
 			space( );
 			openCurlyBraces( );
 			element.getCode( ).accept( this );
+			newline( );
 			closeCurlyBraces( );
 		}
 	}
@@ -229,7 +329,6 @@ public class ContractVisitor extends VisitorImpl
 
 	@Override public void visit( ModifierElement element )
 	{
-		indent( );
 		sb.append( Keywords.MODIFIER );
 		space( );
 		sb.append( element.getName( ) );
@@ -239,6 +338,7 @@ public class ContractVisitor extends VisitorImpl
 		space( );
 		openCurlyBraces( );
 		element.getCode( ).accept( this );
+		newline( );
 		closeCurlyBraces( );
 	}
 
@@ -255,7 +355,6 @@ public class ContractVisitor extends VisitorImpl
 
 	@Override public void visit( StateVariableElement element )
 	{
-		indent( );
 		element.getDataType( ).accept( this );
 		space( );
 		sb.append( element.getVisibility( ) );
@@ -282,7 +381,6 @@ public class ContractVisitor extends VisitorImpl
 
 	@Override public void visit( StructElement element )
 	{
-		indent( );
 		sb.append( Keywords.STRUCT );
 		space( );
 		sb.append( element.getName( ) );
@@ -290,12 +388,12 @@ public class ContractVisitor extends VisitorImpl
 		openCurlyBraces( );
 		appendCollectionOfSolidityElements( element.getStructMembers( ), ";\n" );
 		semicolon( );
+		newline( );
 		closeCurlyBraces( );
 	}
 
 	@Override public void visit( UsingForElement element )
 	{
-		indent( );
 		sb.append( Keywords.USING );
 		space( );
 		element.getExtension( ).accept( this );
@@ -322,6 +420,24 @@ public class ContractVisitor extends VisitorImpl
 			}
 
 			indent( );
+			sb.append( nextValue );
+		}
+	}
+
+	private void appendCollectionInline( Iterable<? extends Object> set, String delimiter )
+	{
+		Iterator<? extends Object> iterator = set.iterator( );
+		if ( iterator.hasNext( ) )
+		{
+			Object nextValue = iterator.next( );
+			while ( iterator.hasNext( ) )
+			{
+				sb.append( nextValue.toString( ) );
+				sb.append( delimiter );
+
+				nextValue = iterator.next( );
+			}
+
 			sb.append( nextValue );
 		}
 	}
@@ -366,7 +482,6 @@ public class ContractVisitor extends VisitorImpl
 				nextElement = iterator.next( );
 			}
 
-			indent( );
 			nextElement.accept( this );
 		}
 	}

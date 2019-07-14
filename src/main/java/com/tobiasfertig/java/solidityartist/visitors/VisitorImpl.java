@@ -21,7 +21,6 @@ public abstract class VisitorImpl implements Visitor
 	void closeCurlyBraces( )
 	{
 		this.level--;
-		newline( );
 		indent( );
 		sb.append( "}" );
 	}

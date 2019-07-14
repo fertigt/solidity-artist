@@ -3,6 +3,7 @@ package com.tobiasfertig.java.solidityartist.visitors;
 import com.tobiasfertig.java.solidityartist.elements.datatypes.DataTypeElement;
 import com.tobiasfertig.java.solidityartist.elements.datatypes.FunctionTypeElement;
 import com.tobiasfertig.java.solidityartist.elements.events.EventElement;
+import com.tobiasfertig.java.solidityartist.elements.files.ContractElement;
 import com.tobiasfertig.java.solidityartist.elements.functions.CodeElement;
 import com.tobiasfertig.java.solidityartist.elements.functions.ConstructorElement;
 import com.tobiasfertig.java.solidityartist.elements.functions.FunctionElement;
@@ -166,6 +167,414 @@ public class ContractVisitorTests
 		constructor.accept( this.visitor );
 
 		String expected = "constructor(uint _y) Base(_y * _y) public {\n" +
+			"\n" +
+			"}";
+		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
+	}
+
+	@Test
+	public void testVisitContractElement_EmptyContract_CorrectStringReturned( )
+	{
+		ContractElement contract = ContractElement.builder( "ERC20" ).build( );
+
+		contract.accept( this.visitor );
+		String expected = "contract ERC20 {\n" +
+			"}";
+		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
+	}
+
+	@Test
+	public void testVisitContractElement_WithDefaultConstructor_CorrectStringReturned( )
+	{
+		ConstructorElement constructor = ConstructorElement.publicBuilder( ).build( );
+		ContractElement contract = ContractElement.builder( "ERC20" )
+												  .addConstructor( constructor )
+												  .build( );
+
+		contract.accept( this.visitor );
+		String expected = "contract ERC20 {\n" +
+			"    constructor() public {\n" +
+			"\n" +
+			"    }\n" +
+			"\n" +
+			"}";
+		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
+	}
+
+	@Test
+	public void testVisitContractElement_WithUsingFor_CorrectStringReturned( )
+	{
+		UsingForElement usingFor = UsingForElement.builder( "SafeMath", DataTypeElement.UINT256 ).build( );
+		ConstructorElement constructor = ConstructorElement.publicBuilder( ).build( );
+		ContractElement contract = ContractElement.builder( "ERC20" )
+												  .addUsingForDeclaration( usingFor )
+												  .addConstructor( constructor )
+												  .build( );
+
+		contract.accept( this.visitor );
+		String expected = "contract ERC20 {\n" +
+			"    using SafeMath for uint256;\n" +
+			"\n" +
+			"    constructor() public {\n" +
+			"\n" +
+			"    }\n" +
+			"\n" +
+			"}";
+		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
+	}
+
+	@Test
+	public void testVisitContractElement_WithStateVariables_CorrectStringReturned( )
+	{
+		UsingForElement usingFor = UsingForElement.builder( "SafeMath", DataTypeElement.UINT256 ).build( );
+		StateVariableElement totalSupply = StateVariableElement.builder( DataTypeElement.UINT256, "_totalSupply" )
+															   .isPrivate( )
+															   .build( );
+		ConstructorElement constructor = ConstructorElement.publicBuilder( ).build( );
+		ContractElement contract = ContractElement.builder( "ERC20" )
+												  .addUsingForDeclaration( usingFor )
+												  .addStateVariable( totalSupply )
+												  .addConstructor( constructor )
+												  .build( );
+
+		contract.accept( this.visitor );
+		String expected = "contract ERC20 {\n" +
+			"    using SafeMath for uint256;\n" +
+			"\n" +
+			"    uint256 private _totalSupply;\n" +
+			"\n" +
+			"    constructor() public {\n" +
+			"\n" +
+			"    }\n" +
+			"\n" +
+			"}";
+		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
+	}
+
+	@Test
+	public void testVisitContractElement_WithInheritedContracts_CorrectStringReturned( )
+	{
+		UsingForElement usingFor = UsingForElement.builder( "SafeMath", DataTypeElement.UINT256 ).build( );
+		StateVariableElement totalSupply = StateVariableElement.builder( DataTypeElement.UINT256, "_totalSupply" )
+															   .isPrivate( )
+															   .build( );
+		ConstructorElement constructor = ConstructorElement.publicBuilder( ).build( );
+		ContractElement contract = ContractElement.builder( "ERC20" )
+												  .addInheritedContract( "IERC20" )
+												  .addUsingForDeclaration( usingFor )
+												  .addStateVariable( totalSupply )
+												  .addConstructor( constructor )
+												  .build( );
+
+		contract.accept( this.visitor );
+		String expected = "contract ERC20 is IERC20 {\n" +
+			"    using SafeMath for uint256;\n" +
+			"\n" +
+			"    uint256 private _totalSupply;\n" +
+			"\n" +
+			"    constructor() public {\n" +
+			"\n" +
+			"    }\n" +
+			"\n" +
+			"}";
+		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
+	}
+
+	@Test
+	public void testVisitContractElement_WithFunction_CorrectStringReturned( )
+	{
+		UsingForElement usingFor = UsingForElement.builder( "SafeMath", DataTypeElement.UINT256 ).build( );
+		StateVariableElement _totalSupply = StateVariableElement.builder( DataTypeElement.UINT256, "_totalSupply" )
+															   .isPrivate( )
+															   .build( );
+		ConstructorElement constructor = ConstructorElement.publicBuilder( ).build( );
+		FunctionElement totalSupply = FunctionElement.publicBuilder( "totalSupply" )
+													 .isView( )
+													 .addReturnParameter( ParameterElement.builder( DataTypeElement.UINT256 )
+																						  .build( )
+													 )
+													 .addCode( CodeElement.builder( )
+																		  .addStatement( "return _totalSupply" )
+																		  .build( )
+													 )
+													 .build( );
+		ContractElement contract = ContractElement.builder( "ERC20" )
+												  .addInheritedContract( "IERC20" )
+												  .addUsingForDeclaration( usingFor )
+												  .addStateVariable( _totalSupply )
+												  .addConstructor( constructor )
+												  .addPublicFunction( totalSupply )
+												  .build( );
+
+		contract.accept( this.visitor );
+		String expected = "contract ERC20 is IERC20 {\n" +
+			"    using SafeMath for uint256;\n" +
+			"\n" +
+			"    uint256 private _totalSupply;\n" +
+			"\n" +
+			"    constructor() public {\n" +
+			"\n" +
+			"    }\n" +
+			"\n" +
+			"    function totalSupply() public view returns(uint256) {\n" +
+			"        return _totalSupply;\n" +
+			"    }\n" +
+			"\n" +
+			"}";
+		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
+	}
+
+	@Test
+	public void testVisitContractElement_WithInternalFunction_CorrectStringReturned( )
+	{
+		UsingForElement usingFor = UsingForElement.builder( "SafeMath", DataTypeElement.UINT256 ).build( );
+		StateVariableElement _totalSupply = StateVariableElement.builder( DataTypeElement.UINT256, "_totalSupply" )
+																.isPrivate( )
+																.build( );
+		ConstructorElement constructor = ConstructorElement.publicBuilder( ).build( );
+		FunctionElement totalSupply = FunctionElement.publicBuilder( "totalSupply" )
+													 .isView( )
+													 .addReturnParameter( ParameterElement.builder( DataTypeElement.UINT256 )
+																						  .build( )
+													 )
+													 .addCode( CodeElement.builder( )
+																		  .addStatement( "return _totalSupply" )
+																		  .build( )
+													 )
+													 .build( );
+		FunctionElement _transfer = FunctionElement.internalBuilder( "_transfer" )
+												   .addParameter( ParameterElement.builder( DataTypeElement.ADDRESS )
+																				  .addName( "sender" )
+																				  .build( ) )
+												   .addParameter( ParameterElement.builder( DataTypeElement.ADDRESS )
+																				  .addName( "recipient" )
+																				  .build( )
+												   )
+												   .addParameter( ParameterElement.builder( DataTypeElement.UINT256 )
+																				  .addName( "amount" )
+																				  .build( )
+												   )
+												   .addCode( CodeElement.builder( )
+																		.addStatement(
+																			"require(sender != address(0), \"ERC20: transfer from the zero address\")" )
+																		.addStatement(
+																			"require(recipient != address(0), \"ERC20: transfer to the zero address\")" )
+																		.addStatement( "_balances[sender] = " +
+																			"_balances[sender].sub(amount)" )
+																		.addStatement(
+																			"_balances[recipient] = _balances[recipient].add(amount)" )
+																		.addStatement(
+																			"emit Transfer(sender, recipient, amount)" )
+																		.build( )
+												   )
+												   .build( );
+		ContractElement contract = ContractElement.builder( "ERC20" )
+												  .addInheritedContract( "IERC20" )
+												  .addUsingForDeclaration( usingFor )
+												  .addStateVariable( _totalSupply )
+												  .addConstructor( constructor )
+												  .addPublicFunction( totalSupply )
+												  .addInternalFunction( _transfer )
+												  .build( );
+
+		contract.accept( this.visitor );
+		String expected = "contract ERC20 is IERC20 {\n" +
+			"    using SafeMath for uint256;\n" +
+			"\n" +
+			"    uint256 private _totalSupply;\n" +
+			"\n" +
+			"    constructor() public {\n" +
+			"\n" +
+			"    }\n" +
+			"\n" +
+			"    function totalSupply() public view returns(uint256) {\n" +
+			"        return _totalSupply;\n" +
+			"    }\n" +
+			"\n" +
+			"    function _transfer(address sender, address recipient, uint256 amount) internal {\n" +
+			"        require(sender != address(0), \"ERC20: transfer from the zero address\");\n" +
+			"        require(recipient != address(0), \"ERC20: transfer to the zero address\");\n" +
+			"        _balances[sender] = _balances[sender].sub(amount);\n" +
+			"        _balances[recipient] = _balances[recipient].add(amount);\n" +
+			"        emit Transfer(sender, recipient, amount);\n" +
+			"    }\n" +
+			"\n" +
+			"}";
+		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
+	}
+
+	@Test
+	public void testVisitContractElement_Complete_CorrectStringReturned( )
+	{
+		UsingForElement usingFor = UsingForElement.builder( "SafeMath", DataTypeElement.UINT256 ).build( );
+
+		EnumElement enumElement = EnumElement.builder( "Adtions" ).addValue( "X" ).addValue( "Y" ).build( );
+
+		StructElement struct =
+			StructElement.builder( "Funder" )
+						 .addStructMember(
+							 ParameterElement.builder( DataTypeElement.ADDRESS ).addName( "funder" ).build( ) )
+						 .addStructMember(
+							 ParameterElement.builder( DataTypeElement.UINT ).addName( "amount" ).build( ) ).build( );
+
+		StateVariableElement _totalSupply = StateVariableElement.builder( DataTypeElement.UINT256, "_totalSupply" )
+																.isPrivate( )
+																.build( );
+
+		EventElement event =
+			EventElement.builder( "Transfer" )
+						.addParameter( ParameterElement.builder( DataTypeElement.ADDRESS )
+													   .isIndexedEventParameter( )
+													   .addName( "sender" )
+													   .build( ) )
+						.addParameter( ParameterElement.builder( DataTypeElement.ADDRESS )
+													   .isIndexedEventParameter( )
+													   .addName( "recipient" )
+													   .build( )
+						)
+						.addParameter(
+							ParameterElement.builder( DataTypeElement.UINT256 ).addName( "amount" ).build( ) )
+						.build( );
+
+		ModifierElement modifier =
+			ModifierElement.builder( "onlyOwner" )
+						   .addCodeWithoutUnderscoreStatement(
+							   CodeElement.builder( ).addStatement( "require(owner == msg.sender)" ).build( ) )
+						   .build( );
+
+		ConstructorElement constructor = ConstructorElement.publicBuilder( ).build( );
+
+		FunctionElement fallbackFunction =
+			FunctionElement.fallbackBuilder( )
+						   .addCode( CodeElement.builder( ).addStatement( "owner = msg.sender" ).build( ) )
+						   .build( );
+
+		FunctionElement total = FunctionElement.externalBuilder( "total" )
+													 .isView( )
+													 .addReturnParameter( ParameterElement.builder( DataTypeElement.UINT256 )
+																						  .build( )
+													 )
+													 .addCode( CodeElement.builder( )
+																		  .addStatement( "return _totalSupply" )
+																		  .build( )
+													 )
+													 .build( );
+
+		FunctionElement totalSupply = FunctionElement.publicBuilder( "totalSupply" )
+													 .isView( )
+													 .addReturnParameter( ParameterElement.builder( DataTypeElement.UINT256 )
+																						  .build( )
+													 )
+													 .addCode( CodeElement.builder( )
+																		  .addStatement( "return _totalSupply" )
+																		  .build( )
+													 )
+													 .build( );
+
+		FunctionElement _transfer = FunctionElement.internalBuilder( "_transfer" )
+												   .addParameter( ParameterElement.builder( DataTypeElement.ADDRESS )
+																				  .addName( "sender" )
+																				  .build( ) )
+												   .addParameter( ParameterElement.builder( DataTypeElement.ADDRESS )
+																				  .addName( "recipient" )
+																				  .build( )
+												   )
+												   .addParameter( ParameterElement.builder( DataTypeElement.UINT256 )
+																				  .addName( "amount" )
+																				  .build( )
+												   )
+												   .addCode( CodeElement.builder( )
+																		.addStatement(
+																			"require(sender != address(0), \"ERC20: transfer from the zero address\")" )
+																		.addStatement(
+																			"require(recipient != address(0), \"ERC20: transfer to the zero address\")" )
+																		.addStatement( "_balances[sender] = " +
+																			"_balances[sender].sub(amount)" )
+																		.addStatement(
+																			"_balances[recipient] = _balances[recipient].add(amount)" )
+																		.addStatement(
+																			"emit Transfer(sender, recipient, amount)" )
+																		.build( )
+												   )
+												   .build( );
+
+		FunctionElement totally = FunctionElement.privateBuilder( "totally" )
+													 .isView( )
+													 .addReturnParameter( ParameterElement.builder( DataTypeElement.UINT256 )
+																						  .build( )
+													 )
+													 .addCode( CodeElement.builder( )
+																		  .addStatement( "return _totalSupply" )
+																		  .build( )
+													 )
+													 .build( );
+
+		ContractElement contract = ContractElement.builder( "ERC20" )
+												  .addInheritedContract( "IERC20" )
+												  .addUsingForDeclaration( usingFor )
+												  .addEnumDeclaration( enumElement )
+												  .addStructDeclaration( struct )
+												  .addStateVariable( _totalSupply )
+												  .addEventDeclaration( event )
+												  .addModifierDeclaration( modifier )
+												  .addConstructor( constructor )
+												  .addFallbackFunction( fallbackFunction )
+												  .addExternalFunction( total )
+												  .addPublicFunction( totalSupply )
+												  .addInternalFunction( _transfer )
+												  .addPrivateFunction( totally )
+												  .build( );
+
+		contract.accept( this.visitor );
+		String expected = "contract ERC20 is IERC20 {\n" +
+			"    using SafeMath for uint256;\n" +
+			"\n" +
+			"    enum Adtions {\n" +
+			"        X,\n" +
+			"        Y\n" +
+			"    }\n" +
+			"\n" +
+			"    struct Funder {\n" +
+			"        address funder;\n" +
+			"        uint amount;\n" +
+			"    }\n" +
+			"\n" +
+			"    uint256 private _totalSupply;\n" +
+			"\n" +
+			"    event Transfer(address indexed sender, address indexed recipient, uint256 amount);\n" +
+			"\n" +
+			"    modifier onlyOwner() {\n" +
+			"        require(owner == msg.sender);\n" +
+			"        _;\n" +
+			"    }\n" +
+			"\n" +
+			"    constructor() public {\n" +
+			"\n" +
+			"    }\n" +
+			"\n" +
+			"    function() external {\n" +
+			"        owner = msg.sender;\n" +
+			"    }\n" +
+			"\n" +
+			"    function total() external view returns(uint256) {\n" +
+			"        return _totalSupply;\n" +
+			"    }\n" +
+			"\n" +
+			"    function totalSupply() public view returns(uint256) {\n" +
+			"        return _totalSupply;\n" +
+			"    }\n" +
+			"\n" +
+			"    function _transfer(address sender, address recipient, uint256 amount) internal {\n" +
+			"        require(sender != address(0), \"ERC20: transfer from the zero address\");\n" +
+			"        require(recipient != address(0), \"ERC20: transfer to the zero address\");\n" +
+			"        _balances[sender] = _balances[sender].sub(amount);\n" +
+			"        _balances[recipient] = _balances[recipient].add(amount);\n" +
+			"        emit Transfer(sender, recipient, amount);\n" +
+			"    }\n" +
+			"\n" +
+			"    function totally() private view returns(uint256) {\n" +
+			"        return _totalSupply;\n" +
+			"    }\n" +
 			"\n" +
 			"}";
 		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
