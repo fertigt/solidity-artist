@@ -3,6 +3,7 @@ package com.tobiasfertig.java.solidityartist.visitors;
 import com.tobiasfertig.java.solidityartist.elements.datatypes.DataTypeElement;
 import com.tobiasfertig.java.solidityartist.elements.events.EventElement;
 import com.tobiasfertig.java.solidityartist.elements.functions.CodeElement;
+import com.tobiasfertig.java.solidityartist.elements.functions.ConstructorElement;
 import com.tobiasfertig.java.solidityartist.elements.functions.FunctionElement;
 import com.tobiasfertig.java.solidityartist.elements.functions.ModifierElement;
 import com.tobiasfertig.java.solidityartist.elements.parameters.ParameterElement;
@@ -65,6 +66,108 @@ public class ContractVisitorTests
 		CodeElement code = CodeElement.builder( ).build( );
 		code.accept( this.visitor );
 		assertEquals( "Should be the same text", "", this.visitor.export( ) );
+	}
+
+	@Test
+	public void testVisitConstructorElement_Default_CorrectStringReturned( )
+	{
+		ConstructorElement constructor = ConstructorElement.publicBuilder( ).build( );
+
+		constructor.accept( this.visitor );
+
+		String expected = "constructor() public {\n" +
+			"\n" +
+			"}";
+		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
+	}
+
+	@Test
+	public void testVisitConstructorElement_WithCode_CorrectStringReturned( )
+	{
+		CodeElement code = CodeElement.builder( ).addStatement( "a = _a" ).build( );
+		ConstructorElement constructor = ConstructorElement.publicBuilder( ).addCode( code ).build( );
+
+		constructor.accept( this.visitor );
+
+		String expected = "constructor() public {\n" +
+			"    a = _a;\n" +
+			"}";
+		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
+	}
+
+	@Test
+	public void testVisitConstructorElement_With1Parameter_CorrectStringReturned( )
+	{
+		ParameterElement parameter = ParameterElement.builder( DataTypeElement.UINT ).addName( "_y" ).build( );
+		ConstructorElement constructor = ConstructorElement.publicBuilder( ).addParameter( parameter ).build( );
+
+		constructor.accept( this.visitor );
+
+		String expected = "constructor(uint _y) public {\n" +
+			"\n" +
+			"}";
+		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
+	}
+
+	@Test
+	public void testVisitConstructorElement_With2Parameters_CorrectStringReturned( )
+	{
+		ParameterElement parameter = ParameterElement.builder( DataTypeElement.UINT ).addName( "_y" ).build( );
+		ParameterElement parameter2 = ParameterElement.builder( DataTypeElement.UINT ).addName( "_x" ).build( );
+		ConstructorElement constructor = ConstructorElement.publicBuilder( )
+														   .addParameter( parameter )
+														   .addParameter( parameter2 )
+														   .build( );
+
+		constructor.accept( this.visitor );
+
+		String expected = "constructor(uint _y, uint _x) public {\n" +
+			"\n" +
+			"}";
+		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
+	}
+
+	@Test
+	public void testVisitConstructorElement_Payable_CorrectStringReturned( )
+	{
+		ConstructorElement constructor = ConstructorElement.publicBuilder( ).isPayable( ).build( );
+
+		constructor.accept( this.visitor );
+
+		String expected = "constructor() public payable {\n" +
+			"\n" +
+			"}";
+		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
+	}
+
+	@Test
+	public void testVisitConstructorElement_Abstract_CorrectStringReturned( )
+	{
+		ConstructorElement constructor = ConstructorElement.internalBuilder( ).build( );
+
+		constructor.accept( this.visitor );
+
+		String expected = "constructor() internal {\n" +
+			"\n" +
+			"}";
+		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
+	}
+
+	@Test
+	public void testVisitConstructorElement_WithInheritanceModifiers_CorrectStringReturned( )
+	{
+		ParameterElement parameter = ParameterElement.builder( DataTypeElement.UINT ).addName( "_y" ).build( );
+		ConstructorElement constructor = ConstructorElement.publicBuilder( )
+														   .addInheritanceModifier( "Base(_y * _y)" )
+														   .addParameter( parameter )
+														   .build( );
+
+		constructor.accept( this.visitor );
+
+		String expected = "constructor(uint _y) Base(_y * _y) public {\n" +
+			"\n" +
+			"}";
+		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
 	}
 
 	@Test

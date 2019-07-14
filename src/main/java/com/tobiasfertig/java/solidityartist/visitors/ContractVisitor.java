@@ -38,7 +38,42 @@ public class ContractVisitor extends VisitorImpl
 
 	@Override public void visit( ConstructorElement element )
 	{
+		indent( );
+		sb.append( Keywords.CONSTRUCTOR );
+		openBraces( );
+		appendCollectionOfSolidityElementsInline( element.getParameters( ), ", " );
+		closeBraces( );
 
+		for ( String inheritanceModifier : element.getInheritanceModifiers( ) )
+		{
+			space( );
+			sb.append( inheritanceModifier );
+		}
+
+		space( );
+		sb.append( element.getVisibility( ) );
+
+		for ( Keywords modifier : element.getModifiers( ) )
+		{
+			space( );
+			sb.append( modifier );
+		}
+
+		for ( String customModifier : element.getCustomModifiers( ) )
+		{
+			space( );
+			sb.append( customModifier );
+		}
+
+		space( );
+		openCurlyBraces( );
+
+		if(element.getCode() != null)
+		{
+			element.getCode( ).accept( this );
+		}
+
+		closeCurlyBraces( );
 	}
 
 	@Override public void visit( ContractElement element )
