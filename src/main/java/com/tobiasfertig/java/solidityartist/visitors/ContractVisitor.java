@@ -3,6 +3,7 @@ package com.tobiasfertig.java.solidityartist.visitors;
 import com.tobiasfertig.java.solidityartist.elements.SolidityElement;
 import com.tobiasfertig.java.solidityartist.elements.datatypes.DataTypeElement;
 import com.tobiasfertig.java.solidityartist.elements.datatypes.FunctionTypeElement;
+import com.tobiasfertig.java.solidityartist.elements.datatypes.MappingElement;
 import com.tobiasfertig.java.solidityartist.elements.events.EventElement;
 import com.tobiasfertig.java.solidityartist.elements.files.ContractElement;
 import com.tobiasfertig.java.solidityartist.elements.files.ImportElement;
@@ -325,6 +326,18 @@ public class ContractVisitor extends VisitorImpl
 	@Override public void visit( LibraryElement element )
 	{
 
+	}
+
+	@Override public void visit( MappingElement element )
+	{
+		sb.append( element.getTypeName( ) );
+		openBraces( );
+		element.getKeyType( ).accept( this );
+		space( );
+		sb.append( "=>" );
+		space( );
+		element.getValueType( ).accept( this );
+		closeBraces( );
 	}
 
 	@Override public void visit( ModifierElement element )

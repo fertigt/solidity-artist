@@ -2,6 +2,7 @@ package com.tobiasfertig.java.solidityartist.visitors;
 
 import com.tobiasfertig.java.solidityartist.elements.datatypes.DataTypeElement;
 import com.tobiasfertig.java.solidityartist.elements.datatypes.FunctionTypeElement;
+import com.tobiasfertig.java.solidityartist.elements.datatypes.MappingElement;
 import com.tobiasfertig.java.solidityartist.elements.events.EventElement;
 import com.tobiasfertig.java.solidityartist.elements.files.ContractElement;
 import com.tobiasfertig.java.solidityartist.elements.functions.CodeElement;
@@ -1072,6 +1073,29 @@ public class ContractVisitorTests
 		element.accept( this.visitor );
 
 		String expected = "function() public returns(string memory)";
+		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
+	}
+
+	@Test
+	public void testVisitMappingElement_WithKeyAndValue_CorrectStringReturned( )
+	{
+		MappingElement mapping = new MappingElement( DataTypeElement.ADDRESS, DataTypeElement.UINT256 );
+
+		mapping.accept( this.visitor );
+
+		String expected = "mapping(address => uint256)";
+		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
+	}
+
+	@Test
+	public void testVisitMappingElement_WithMappingAsValue_CorrectStringReturned( )
+	{
+		MappingElement mapping = new MappingElement( DataTypeElement.ADDRESS,
+			new MappingElement( DataTypeElement.ADDRESS, DataTypeElement.UINT256 ) );
+
+		mapping.accept( this.visitor );
+
+		String expected = "mapping(address => mapping(address => uint256))";
 		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
 	}
 
