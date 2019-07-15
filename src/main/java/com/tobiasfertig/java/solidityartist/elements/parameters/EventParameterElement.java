@@ -1,7 +1,7 @@
 package com.tobiasfertig.java.solidityartist.elements.parameters;
 
 import com.tobiasfertig.java.solidityartist.elements.datatypes.DataTypeElement;
-import com.tobiasfertig.java.solidityartist.utils.Keywords;
+import com.tobiasfertig.java.solidityartist.utils.Keyword;
 import com.tobiasfertig.java.solidityartist.visitors.Visitor;
 
 public class EventParameterElement extends ParameterElement
@@ -30,7 +30,7 @@ public class EventParameterElement extends ParameterElement
 		private String name;
 		private String attribute;
 
-		Builder( DataTypeElement dataType, String name, Keywords attribute )
+		Builder( DataTypeElement dataType, String name, Keyword attribute )
 		{
 			this.dataType = dataType;
 			this.name = name;

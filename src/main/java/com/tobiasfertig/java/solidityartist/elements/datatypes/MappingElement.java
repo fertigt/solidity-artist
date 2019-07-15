@@ -1,6 +1,6 @@
 package com.tobiasfertig.java.solidityartist.elements.datatypes;
 
-import com.tobiasfertig.java.solidityartist.utils.Keywords;
+import com.tobiasfertig.java.solidityartist.utils.Keyword;
 import com.tobiasfertig.java.solidityartist.visitors.Visitor;
 
 public class MappingElement extends DataTypeElement
@@ -10,7 +10,7 @@ public class MappingElement extends DataTypeElement
 
 	public MappingElement( DataTypeElement keyType, DataTypeElement valueType )
 	{
-		super( Keywords.MAPPING.toString( ) );
+		super( Keyword.MAPPING.toString( ) );
 		this.keyType = keyType;
 		this.valueType = valueType;
 	}

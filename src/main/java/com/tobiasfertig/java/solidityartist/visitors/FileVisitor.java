@@ -16,7 +16,7 @@ import com.tobiasfertig.java.solidityartist.elements.statevariables.StateVariabl
 import com.tobiasfertig.java.solidityartist.elements.typedeclarations.EnumElement;
 import com.tobiasfertig.java.solidityartist.elements.typedeclarations.StructElement;
 import com.tobiasfertig.java.solidityartist.elements.typedeclarations.UsingForElement;
-import com.tobiasfertig.java.solidityartist.utils.Keywords;
+import com.tobiasfertig.java.solidityartist.utils.Keyword;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -145,7 +145,7 @@ public class FileVisitor extends VisitorImpl
 
 	@Override public void visit( ImportElement element )
 	{
-		sb.append( Keywords.IMPORT );
+		sb.append( Keyword.IMPORT );
 		space( );
 
 		if ( !element.getSymbolMap( ).isEmpty( ) )
@@ -160,7 +160,7 @@ public class FileVisitor extends VisitorImpl
 			}
 
 			space( );
-			sb.append( Keywords.FROM );
+			sb.append( Keyword.FROM );
 			space( );
 		}
 
@@ -171,7 +171,7 @@ public class FileVisitor extends VisitorImpl
 		if ( !element.getFileNameAlias( ).isEmpty( ) )
 		{
 			space( );
-			sb.append( Keywords.AS );
+			sb.append( Keyword.AS );
 			space( );
 			sb.append( element.getFileNameAlias( ) );
 		}
@@ -183,7 +183,7 @@ public class FileVisitor extends VisitorImpl
 	{
 		sb.append( ImportElement.ASTERISK );
 		space( );
-		sb.append( Keywords.AS );
+		sb.append( Keyword.AS );
 		space( );
 		sb.append( symbolMap.get( ImportElement.ASTERISK ) );
 	}
@@ -211,7 +211,7 @@ public class FileVisitor extends VisitorImpl
 			{
 				sb.append( nextEntry.getKey( ) );
 				space( );
-				sb.append( Keywords.AS );
+				sb.append( Keyword.AS );
 				space( );
 				sb.append( nextEntry.getValue( ) )
 				  .append( "," );
@@ -229,7 +229,7 @@ public class FileVisitor extends VisitorImpl
 		{
 			sb.append( nextEntry.getKey( ) );
 			space( );
-			sb.append( Keywords.AS );
+			sb.append( Keyword.AS );
 			space( );
 			sb.append( nextEntry.getValue( ) );
 		}
@@ -272,7 +272,7 @@ public class FileVisitor extends VisitorImpl
 
 	@Override public void visit( PragmaElement element )
 	{
-		sb.append( Keywords.PRAGMA );
+		sb.append( Keyword.PRAGMA );
 		space( );
 		sb.append( element.getPragmaType( ) );
 		space( );

@@ -2,7 +2,7 @@ package com.tobiasfertig.java.solidityartist.elements.parameters;
 
 import com.tobiasfertig.java.solidityartist.elements.SolidityElement;
 import com.tobiasfertig.java.solidityartist.elements.datatypes.DataTypeElement;
-import com.tobiasfertig.java.solidityartist.utils.Keywords;
+import com.tobiasfertig.java.solidityartist.utils.Keyword;
 import com.tobiasfertig.java.solidityartist.visitors.Visitor;
 
 public class ParameterElement implements SolidityElement
@@ -69,22 +69,22 @@ public class ParameterElement implements SolidityElement
 
 		public DataLocationParameterElement.Builder inMemory( )
 		{
-			return new DataLocationParameterElement.Builder( this.dataType, this.name, Keywords.MEMORY );
+			return new DataLocationParameterElement.Builder( this.dataType, this.name, Keyword.MEMORY );
 		}
 
 		public DataLocationParameterElement.Builder inStorage( )
 		{
-			return new DataLocationParameterElement.Builder( this.dataType, this.name, Keywords.STORAGE );
+			return new DataLocationParameterElement.Builder( this.dataType, this.name, Keyword.STORAGE );
 		}
 
 		public EventParameterElement.Builder isAnonymousEventParameter( )
 		{
-			return new EventParameterElement.Builder( this.dataType, this.name, Keywords.ANONYMOUS );
+			return new EventParameterElement.Builder( this.dataType, this.name, Keyword.ANONYMOUS );
 		}
 
 		public EventParameterElement.Builder isIndexedEventParameter( )
 		{
-			return new EventParameterElement.Builder( this.dataType, this.name, Keywords.INDEXED );
+			return new EventParameterElement.Builder( this.dataType, this.name, Keyword.INDEXED );
 		}
 
 		public ParameterElement build( )

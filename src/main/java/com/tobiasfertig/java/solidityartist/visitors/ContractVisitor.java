@@ -13,7 +13,7 @@ import com.tobiasfertig.java.solidityartist.elements.statevariables.StateVariabl
 import com.tobiasfertig.java.solidityartist.elements.typedeclarations.EnumElement;
 import com.tobiasfertig.java.solidityartist.elements.typedeclarations.StructElement;
 import com.tobiasfertig.java.solidityartist.elements.typedeclarations.UsingForElement;
-import com.tobiasfertig.java.solidityartist.utils.Keywords;
+import com.tobiasfertig.java.solidityartist.utils.Keyword;
 
 public class ContractVisitor extends VisitorImpl
 {
@@ -33,7 +33,7 @@ public class ContractVisitor extends VisitorImpl
 
 	@Override public void visit( ConstructorElement element )
 	{
-		sb.append( Keywords.CONSTRUCTOR );
+		sb.append( Keyword.CONSTRUCTOR );
 		openBraces( );
 		appendCollectionOfSolidityElementsInline( element.getParameters( ), ", " );
 		closeBraces( );
@@ -47,7 +47,7 @@ public class ContractVisitor extends VisitorImpl
 		space( );
 		sb.append( element.getVisibility( ) );
 
-		for ( Keywords modifier : element.getModifiers( ) )
+		for ( Keyword modifier : element.getModifiers( ) )
 		{
 			space( );
 			sb.append( modifier );
@@ -73,14 +73,14 @@ public class ContractVisitor extends VisitorImpl
 
 	@Override public void visit( ContractElement element )
 	{
-		sb.append( Keywords.CONTRACT );
+		sb.append( Keyword.CONTRACT );
 		space( );
 		sb.append( element.getName( ) );
 
 		if ( !element.getInheritedContracts( ).isEmpty( ) )
 		{
 			space( );
-			sb.append( Keywords.IS );
+			sb.append( Keyword.IS );
 			space( );
 			appendCollectionInline( element.getInheritedContracts( ), ", " );
 		}
@@ -197,7 +197,7 @@ public class ContractVisitor extends VisitorImpl
 
 	@Override public void visit( EnumElement element )
 	{
-		sb.append( Keywords.ENUM );
+		sb.append( Keyword.ENUM );
 		space( );
 		sb.append( element.getName( ) );
 		space( );
@@ -209,7 +209,7 @@ public class ContractVisitor extends VisitorImpl
 
 	@Override public void visit( EventElement element )
 	{
-		sb.append( Keywords.EVENT );
+		sb.append( Keyword.EVENT );
 		space( );
 		sb.append( element.getName( ) );
 		openBraces( );
@@ -238,7 +238,7 @@ public class ContractVisitor extends VisitorImpl
 
 	@Override public void visit( FunctionElement element )
 	{
-		sb.append( Keywords.FUNCTION );
+		sb.append( Keyword.FUNCTION );
 
 		if ( !element.isFallback( ) )
 		{
@@ -252,7 +252,7 @@ public class ContractVisitor extends VisitorImpl
 		space( );
 		sb.append( element.getVisibility( ) );
 
-		for ( Keywords modifier : element.getModifiers( ) )
+		for ( Keyword modifier : element.getModifiers( ) )
 		{
 			space( );
 			sb.append( modifier );
@@ -267,7 +267,7 @@ public class ContractVisitor extends VisitorImpl
 		if ( !element.getReturnParameters( ).isEmpty( ) )
 		{
 			space( );
-			sb.append( Keywords.RETURNS );
+			sb.append( Keyword.RETURNS );
 			openBraces( );
 			appendCollectionOfSolidityElementsInline( element.getReturnParameters( ), ", " );
 			closeBraces( );
@@ -296,7 +296,7 @@ public class ContractVisitor extends VisitorImpl
 		space( );
 		sb.append( element.getVisibility( ) );
 
-		for ( Keywords modifier : element.getModifiers( ) )
+		for ( Keyword modifier : element.getModifiers( ) )
 		{
 			space( );
 			sb.append( modifier );
@@ -305,7 +305,7 @@ public class ContractVisitor extends VisitorImpl
 		if ( !element.getReturnParameters( ).isEmpty( ) )
 		{
 			space( );
-			sb.append( Keywords.RETURNS );
+			sb.append( Keyword.RETURNS );
 			openBraces( );
 			appendCollectionOfSolidityElementsInline( element.getReturnParameters( ), ", " );
 			closeBraces( );
@@ -341,7 +341,7 @@ public class ContractVisitor extends VisitorImpl
 
 	@Override public void visit( ModifierElement element )
 	{
-		sb.append( Keywords.MODIFIER );
+		sb.append( Keyword.MODIFIER );
 		space( );
 		sb.append( element.getName( ) );
 		openBraces( );
@@ -379,7 +379,7 @@ public class ContractVisitor extends VisitorImpl
 
 		if ( element.isConstant( ) )
 		{
-			sb.append( Keywords.CONSTANT );
+			sb.append( Keyword.CONSTANT );
 			space( );
 		}
 
@@ -398,7 +398,7 @@ public class ContractVisitor extends VisitorImpl
 
 	@Override public void visit( StructElement element )
 	{
-		sb.append( Keywords.STRUCT );
+		sb.append( Keyword.STRUCT );
 		space( );
 		sb.append( element.getName( ) );
 		space( );
@@ -411,11 +411,11 @@ public class ContractVisitor extends VisitorImpl
 
 	@Override public void visit( UsingForElement element )
 	{
-		sb.append( Keywords.USING );
+		sb.append( Keyword.USING );
 		space( );
 		element.getExtension( ).accept( this );
 		space( );
-		sb.append( Keywords.FOR );
+		sb.append( Keyword.FOR );
 		space( );
 		element.getSource( ).accept( this );
 		semicolon( );

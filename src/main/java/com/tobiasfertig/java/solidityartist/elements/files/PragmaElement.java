@@ -1,12 +1,12 @@
 package com.tobiasfertig.java.solidityartist.elements.files;
 
 import com.tobiasfertig.java.solidityartist.elements.SolidityElement;
-import com.tobiasfertig.java.solidityartist.utils.Keywords;
+import com.tobiasfertig.java.solidityartist.utils.Keyword;
 import com.tobiasfertig.java.solidityartist.visitors.Visitor;
 
 public class PragmaElement implements SolidityElement
 {
-	private final Keywords pragmaType;
+	private final Keyword pragmaType;
 	private final String content;
 
 	private PragmaElement( ExperimentalBuilder builder )
@@ -26,7 +26,7 @@ public class PragmaElement implements SolidityElement
 		visitor.visit( this );
 	}
 
-	public Keywords getPragmaType( )
+	public Keyword getPragmaType( )
 	{
 		return pragmaType;
 	}
@@ -38,20 +38,20 @@ public class PragmaElement implements SolidityElement
 
 	public static ExperimentalBuilder experimentalBuilder( )
 	{
-		return new ExperimentalBuilder( Keywords.EXPERIMENTAL );
+		return new ExperimentalBuilder( Keyword.EXPERIMENTAL );
 	}
 
 	public static VersionBuilder versionBuilder( )
 	{
-		return new VersionBuilder( Keywords.SOLIDITY );
+		return new VersionBuilder( Keyword.SOLIDITY );
 	}
 
 	public static final class ExperimentalBuilder
 	{
-		private final Keywords pragmaType;
+		private final Keyword pragmaType;
 		private String content;
 
-		private ExperimentalBuilder( Keywords pragmaType )
+		private ExperimentalBuilder( Keyword pragmaType )
 		{
 			this.pragmaType = pragmaType;
 		}
@@ -76,10 +76,10 @@ public class PragmaElement implements SolidityElement
 
 	public static final class VersionBuilder
 	{
-		private final Keywords pragmaType;
+		private final Keyword pragmaType;
 		private String content;
 
-		private VersionBuilder( Keywords pragmaType )
+		private VersionBuilder( Keyword pragmaType )
 		{
 			this.pragmaType = pragmaType;
 		}

@@ -1,6 +1,6 @@
 package com.tobiasfertig.java.solidityartist.utils;
 
-public enum Keywords
+public enum Keyword
 {
 	ANONYMOUS( "anonymous" ),
 	AS( "as" ),
@@ -37,7 +37,7 @@ public enum Keywords
 
 	private final String keyword;
 
-	Keywords( String keyword )
+	Keyword( String keyword )
 	{
 		this.keyword = keyword;
 	}

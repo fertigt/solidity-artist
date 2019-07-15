@@ -2,7 +2,7 @@ package com.tobiasfertig.java.solidityartist.elements.statevariables;
 
 import com.tobiasfertig.java.solidityartist.elements.SolidityElement;
 import com.tobiasfertig.java.solidityartist.elements.datatypes.DataTypeElement;
-import com.tobiasfertig.java.solidityartist.utils.Keywords;
+import com.tobiasfertig.java.solidityartist.utils.Keyword;
 import com.tobiasfertig.java.solidityartist.visitors.Visitor;
 
 public class StateVariableElement implements SolidityElement
@@ -70,31 +70,31 @@ public class StateVariableElement implements SolidityElement
 			this.dataType = dataType;
 			this.name = name;
 			this.isConstant = false;
-			this.visibility = Keywords.INTERNAL.toString( );
+			this.visibility = Keyword.INTERNAL.toString( );
 			this.initialization = "";
 		}
 
 		public Builder isExternal( )
 		{
-			this.visibility = Keywords.EXTERNAL.toString( );
+			this.visibility = Keyword.EXTERNAL.toString( );
 			return this;
 		}
 
 		public Builder isInternal( )
 		{
-			this.visibility = Keywords.INTERNAL.toString( );
+			this.visibility = Keyword.INTERNAL.toString( );
 			return this;
 		}
 
 		public Builder isPrivate( )
 		{
-			this.visibility = Keywords.PRIVATE.toString( );
+			this.visibility = Keyword.PRIVATE.toString( );
 			return this;
 		}
 
 		public Builder isPublic( )
 		{
-			this.visibility = Keywords.PUBLIC.toString( );
+			this.visibility = Keyword.PUBLIC.toString( );
 			return this;
 		}
 
