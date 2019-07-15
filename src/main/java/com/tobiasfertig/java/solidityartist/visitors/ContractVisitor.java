@@ -4,10 +4,7 @@ import com.tobiasfertig.java.solidityartist.elements.datatypes.DataTypeElement;
 import com.tobiasfertig.java.solidityartist.elements.datatypes.FunctionTypeElement;
 import com.tobiasfertig.java.solidityartist.elements.datatypes.MappingElement;
 import com.tobiasfertig.java.solidityartist.elements.events.EventElement;
-import com.tobiasfertig.java.solidityartist.elements.files.ContractElement;
-import com.tobiasfertig.java.solidityartist.elements.files.ImportElement;
-import com.tobiasfertig.java.solidityartist.elements.files.InterfaceElement;
-import com.tobiasfertig.java.solidityartist.elements.files.LibraryElement;
+import com.tobiasfertig.java.solidityartist.elements.files.*;
 import com.tobiasfertig.java.solidityartist.elements.functions.*;
 import com.tobiasfertig.java.solidityartist.elements.parameters.DataLocationParameterElement;
 import com.tobiasfertig.java.solidityartist.elements.parameters.EventParameterElement;
@@ -234,6 +231,11 @@ public class ContractVisitor extends VisitorImpl
 		}
 	}
 
+	@Override public void visit( FileElement element )
+	{
+
+	}
+
 	@Override public void visit( FunctionElement element )
 	{
 		sb.append( Keywords.FUNCTION );
@@ -361,6 +363,11 @@ public class ContractVisitor extends VisitorImpl
 			space( );
 			sb.append( element.getName( ) );
 		}
+	}
+
+	@Override public void visit( PragmaElement element )
+	{
+
 	}
 
 	@Override public void visit( StateVariableElement element )
