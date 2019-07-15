@@ -409,7 +409,7 @@ public class ContractVisitorTests
 	{
 		UsingForElement usingFor = UsingForElement.builder( "SafeMath", DataTypeElement.UINT256 ).build( );
 
-		EnumElement enumElement = EnumElement.builder( "Adtions" ).addValue( "X" ).addValue( "Y" ).build( );
+		EnumElement enumElement = EnumElement.builder( "Actions" ).addValue( "X" ).addValue( "Y" ).build( );
 
 		StructElement struct =
 			StructElement.builder( "Funder" )
@@ -530,7 +530,7 @@ public class ContractVisitorTests
 		String expected = "contract ERC20 is IERC20 {\n" +
 			"    using SafeMath for uint256;\n" +
 			"\n" +
-			"    enum Adtions {\n" +
+			"    enum Actions {\n" +
 			"        X,\n" +
 			"        Y\n" +
 			"    }\n" +
