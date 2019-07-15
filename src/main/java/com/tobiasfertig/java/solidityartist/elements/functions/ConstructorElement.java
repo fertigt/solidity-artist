@@ -12,8 +12,8 @@ public class ConstructorElement implements SolidityElement
 {
 	private final Set<ParameterElement> parameters;
 	private final Set<String> inheritanceModifiers;
-	private final Keyword visibility;
-	private final Set<Keyword> modifiers;
+	private final Keyword.Visibility visibility;
+	private final Set<Keyword.Modifier> modifiers;
 	private final Set<String> customModifiers;
 	private final CodeElement code;
 
@@ -42,12 +42,12 @@ public class ConstructorElement implements SolidityElement
 		return inheritanceModifiers;
 	}
 
-	public Keyword getVisibility( )
+	public Keyword.Visibility getVisibility( )
 	{
 		return visibility;
 	}
 
-	public Set<Keyword> getModifiers( )
+	public Set<Keyword.Modifier> getModifiers( )
 	{
 		return modifiers;
 	}
@@ -64,24 +64,24 @@ public class ConstructorElement implements SolidityElement
 
 	public static Builder publicBuilder( )
 	{
-		return new Builder( Keyword.PUBLIC );
+		return new Builder( Keyword.Visibility.PUBLIC );
 	}
 
 	public static Builder internalBuilder( )
 	{
-		return new Builder( Keyword.INTERNAL );
+		return new Builder( Keyword.Visibility.INTERNAL );
 	}
 
 	public static final class Builder
 	{
 		private final Set<ParameterElement> parameters = new LinkedHashSet<>( );
 		private final Set<String> inheritanceModifiers = new LinkedHashSet<>( );
-		private final Keyword visibility;
-		private final Set<Keyword> modifiers = new LinkedHashSet<>( );
+		private final Keyword.Visibility visibility;
+		private final Set<Keyword.Modifier> modifiers = new LinkedHashSet<>( );
 		private final Set<String> customModifiers = new LinkedHashSet<>( );
 		private CodeElement code;
 
-		private Builder( Keyword visibility )
+		private Builder( Keyword.Visibility visibility )
 		{
 			this.visibility = visibility;
 		}
@@ -110,7 +110,7 @@ public class ConstructorElement implements SolidityElement
 
 		public Builder isPayable( )
 		{
-			this.modifiers.add( Keyword.PAYABLE );
+			this.modifiers.add( Keyword.Modifier.PAYABLE );
 			return this;
 		}
 

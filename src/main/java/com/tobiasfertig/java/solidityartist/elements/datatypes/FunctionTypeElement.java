@@ -10,8 +10,8 @@ import java.util.Set;
 public class FunctionTypeElement extends DataTypeElement
 {
 	private final Set<ParameterElement> parameters;
-	private final Keyword visibility;
-	private final Set<Keyword> modifiers;
+	private final Keyword.Visibility visibility;
+	private final Set<Keyword.Modifier> modifiers;
 	private final Set<ParameterElement> returnParameters;
 
 	private FunctionTypeElement( Builder builder )
@@ -33,12 +33,12 @@ public class FunctionTypeElement extends DataTypeElement
 		return parameters;
 	}
 
-	public Keyword getVisibility( )
+	public Keyword.Visibility getVisibility( )
 	{
 		return visibility;
 	}
 
-	public Set<Keyword> getModifiers( )
+	public Set<Keyword.Modifier> getModifiers( )
 	{
 		return modifiers;
 	}
@@ -50,22 +50,22 @@ public class FunctionTypeElement extends DataTypeElement
 
 	public static Builder internalBuilder( )
 	{
-		return new Builder( Keyword.INTERNAL );
+		return new Builder( Keyword.Visibility.INTERNAL );
 	}
 
 	public static Builder publicBuilder( )
 	{
-		return new Builder( Keyword.PUBLIC );
+		return new Builder( Keyword.Visibility.PUBLIC );
 	}
 
 	public static final class Builder
 	{
 		private final Set<ParameterElement> parameters = new LinkedHashSet<>( );
-		private final Keyword visibility;
-		private final Set<Keyword> modifiers = new LinkedHashSet<>( );
+		private final Keyword.Visibility visibility;
+		private final Set<Keyword.Modifier> modifiers = new LinkedHashSet<>( );
 		private final Set<ParameterElement> returnParameters = new LinkedHashSet<>( );
 
-		private Builder( Keyword visibility )
+		private Builder( Keyword.Visibility visibility )
 		{
 			this.visibility = visibility;
 		}
@@ -88,19 +88,19 @@ public class FunctionTypeElement extends DataTypeElement
 
 		public Builder isPure( )
 		{
-			this.modifiers.add( Keyword.PURE );
+			this.modifiers.add( Keyword.Modifier.PURE );
 			return this;
 		}
 
 		public Builder isView( )
 		{
-			this.modifiers.add( Keyword.VIEW );
+			this.modifiers.add( Keyword.Modifier.VIEW );
 			return this;
 		}
 
 		public Builder isPayable( )
 		{
-			this.modifiers.add( Keyword.PAYABLE );
+			this.modifiers.add( Keyword.Modifier.PAYABLE );
 			return this;
 		}
 

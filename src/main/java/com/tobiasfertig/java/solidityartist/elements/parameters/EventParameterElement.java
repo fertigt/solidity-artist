@@ -30,7 +30,7 @@ public class EventParameterElement extends ParameterElement
 		private String name;
 		private String attribute;
 
-		Builder( DataTypeElement dataType, String name, Keyword attribute )
+		Builder( DataTypeElement dataType, String name, Keyword.EventParameterModifier attribute )
 		{
 			this.dataType = dataType;
 			this.name = name;

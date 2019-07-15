@@ -70,31 +70,31 @@ public class StateVariableElement implements SolidityElement
 			this.dataType = dataType;
 			this.name = name;
 			this.isConstant = false;
-			this.visibility = Keyword.INTERNAL.toString( );
+			this.visibility = Keyword.Visibility.INTERNAL.toString( );
 			this.initialization = "";
 		}
 
 		public Builder isExternal( )
 		{
-			this.visibility = Keyword.EXTERNAL.toString( );
+			this.visibility = Keyword.Visibility.EXTERNAL.toString( );
 			return this;
 		}
 
 		public Builder isInternal( )
 		{
-			this.visibility = Keyword.INTERNAL.toString( );
+			this.visibility = Keyword.Visibility.INTERNAL.toString( );
 			return this;
 		}
 
 		public Builder isPrivate( )
 		{
-			this.visibility = Keyword.PRIVATE.toString( );
+			this.visibility = Keyword.Visibility.PRIVATE.toString( );
 			return this;
 		}
 
 		public Builder isPublic( )
 		{
-			this.visibility = Keyword.PUBLIC.toString( );
+			this.visibility = Keyword.Visibility.PUBLIC.toString( );
 			return this;
 		}
 

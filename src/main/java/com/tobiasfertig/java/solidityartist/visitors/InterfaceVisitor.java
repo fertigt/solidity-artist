@@ -117,9 +117,9 @@ public class InterfaceVisitor extends VisitorImpl
 		appendCollectionOfSolidityElementsInline( element.getParameters( ), ", " );
 		closeBraces( );
 		space( );
-		sb.append( Keyword.EXTERNAL );
+		sb.append( Keyword.Visibility.EXTERNAL );
 
-		for ( Keyword modifier : element.getModifiers( ) )
+		for ( Keyword.Modifier modifier : element.getModifiers( ) )
 		{
 			space( );
 			sb.append( modifier );
@@ -146,7 +146,7 @@ public class InterfaceVisitor extends VisitorImpl
 		space( );
 		sb.append( element.getVisibility( ) );
 
-		for ( Keyword modifier : element.getModifiers( ) )
+		for ( Keyword.Modifier modifier : element.getModifiers( ) )
 		{
 			space( );
 			sb.append( modifier );

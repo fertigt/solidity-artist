@@ -30,7 +30,7 @@ public class DataLocationParameterElement extends ParameterElement
 		private String name;
 		private String dataLocation;
 
-		Builder( DataTypeElement dataType, String name, Keyword dataLocation )
+		Builder( DataTypeElement dataType, String name, Keyword.DataLocation dataLocation )
 		{
 			this.dataType = dataType;
 			this.name = name;

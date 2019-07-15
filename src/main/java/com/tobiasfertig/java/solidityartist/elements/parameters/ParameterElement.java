@@ -69,22 +69,22 @@ public class ParameterElement implements SolidityElement
 
 		public DataLocationParameterElement.Builder inMemory( )
 		{
-			return new DataLocationParameterElement.Builder( this.dataType, this.name, Keyword.MEMORY );
+			return new DataLocationParameterElement.Builder( this.dataType, this.name, Keyword.DataLocation.MEMORY );
 		}
 
 		public DataLocationParameterElement.Builder inStorage( )
 		{
-			return new DataLocationParameterElement.Builder( this.dataType, this.name, Keyword.STORAGE );
+			return new DataLocationParameterElement.Builder( this.dataType, this.name, Keyword.DataLocation.STORAGE );
 		}
 
 		public EventParameterElement.Builder isAnonymousEventParameter( )
 		{
-			return new EventParameterElement.Builder( this.dataType, this.name, Keyword.ANONYMOUS );
+			return new EventParameterElement.Builder( this.dataType, this.name, Keyword.EventParameterModifier.ANONYMOUS );
 		}
 
 		public EventParameterElement.Builder isIndexedEventParameter( )
 		{
-			return new EventParameterElement.Builder( this.dataType, this.name, Keyword.INDEXED );
+			return new EventParameterElement.Builder( this.dataType, this.name, Keyword.EventParameterModifier.INDEXED );
 		}
 
 		public ParameterElement build( )

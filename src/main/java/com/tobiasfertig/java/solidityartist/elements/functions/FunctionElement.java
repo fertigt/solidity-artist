@@ -15,8 +15,8 @@ public class FunctionElement implements SolidityElement
 	private final boolean isFallback;
 	private final String name;
 	private final Set<ParameterElement> parameters;
-	private final Keyword visibility;
-	private final Set<Keyword> modifiers;
+	private final Keyword.Visibility visibility;
+	private final Set<Keyword.Modifier> modifiers;
 	private final Set<String> customModifiers;
 	private final List<ParameterElement> returnParameters;
 	private final boolean isAbstract;
@@ -56,12 +56,12 @@ public class FunctionElement implements SolidityElement
 		return parameters;
 	}
 
-	public Keyword getVisibility( )
+	public Keyword.Visibility getVisibility( )
 	{
 		return visibility;
 	}
 
-	public Set<Keyword> getModifiers( )
+	public Set<Keyword.Modifier> getModifiers( )
 	{
 		return modifiers;
 	}
@@ -88,27 +88,27 @@ public class FunctionElement implements SolidityElement
 
 	public static Builder externalBuilder( String name )
 	{
-		return new Builder( Keyword.EXTERNAL, false, name );
+		return new Builder( Keyword.Visibility.EXTERNAL, false, name );
 	}
 
 	public static Builder internalBuilder( String name )
 	{
-		return new Builder( Keyword.INTERNAL, false, name );
+		return new Builder( Keyword.Visibility.INTERNAL, false, name );
 	}
 
 	public static Builder privateBuilder( String name )
 	{
-		return new Builder( Keyword.PRIVATE, false, name );
+		return new Builder( Keyword.Visibility.PRIVATE, false, name );
 	}
 
 	public static Builder publicBuilder( String name )
 	{
-		return new Builder( Keyword.PUBLIC, false, name );
+		return new Builder( Keyword.Visibility.PUBLIC, false, name );
 	}
 
 	public static Builder fallbackBuilder( )
 	{
-		return new Builder( Keyword.EXTERNAL, true, "" );
+		return new Builder( Keyword.Visibility.EXTERNAL, true, "" );
 	}
 
 	public static final class Builder
@@ -116,14 +116,14 @@ public class FunctionElement implements SolidityElement
 		private final boolean isFallback;
 		private final String name;
 		private final Set<ParameterElement> parameters = new LinkedHashSet<>( );
-		private final Keyword visibility;
-		private final Set<Keyword> modifiers = new LinkedHashSet<>( );
+		private final Keyword.Visibility visibility;
+		private final Set<Keyword.Modifier> modifiers = new LinkedHashSet<>( );
 		private final Set<String> customModifiers = new LinkedHashSet<>( );
 		private final List<ParameterElement> returnParameters = new ArrayList<>( );
 		private boolean isAbstract;
 		private CodeElement code;
 
-		private Builder( Keyword visibility, boolean isFallback, String name )
+		private Builder( Keyword.Visibility visibility, boolean isFallback, String name )
 		{
 			this.visibility = visibility;
 			this.isFallback = isFallback;
@@ -148,19 +148,19 @@ public class FunctionElement implements SolidityElement
 
 		public Builder isPure( )
 		{
-			this.modifiers.add( Keyword.PURE );
+			this.modifiers.add( Keyword.Modifier.PURE );
 			return this;
 		}
 
 		public Builder isView( )
 		{
-			this.modifiers.add( Keyword.VIEW );
+			this.modifiers.add( Keyword.Modifier.VIEW );
 			return this;
 		}
 
 		public Builder isPayable( )
 		{
-			this.modifiers.add( Keyword.PAYABLE );
+			this.modifiers.add( Keyword.Modifier.PAYABLE );
 			return this;
 		}
 

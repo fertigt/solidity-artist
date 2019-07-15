@@ -2,7 +2,6 @@ package com.tobiasfertig.java.solidityartist.utils;
 
 public enum Keyword
 {
-	ANONYMOUS( "anonymous" ),
 	AS( "as" ),
 	CONTRACT( "contract" ),
 	CONSTANT( "constant" ),
@@ -10,30 +9,95 @@ public enum Keyword
 	ENUM( "enum" ),
 	EVENT( "event" ),
 	EXPERIMENTAL( "experimental" ),
-	EXTERNAL( "external" ),
 	FOR( "for" ),
 	FROM( "from" ),
 	FUNCTION( "function" ),
 	IMPORT( "import" ),
-	INDEXED( "indexed" ),
 	INTERFACE( "interface" ),
-	INTERNAL( "internal" ),
 	IS( "is" ),
 	LIBRARY( "library" ),
 	MAPPING( "mapping" ),
-	MEMORY( "memory" ),
 	MODIFIER( "modifier" ),
-	PAYABLE( "payable" ),
 	PRAGMA( "pragma" ),
-	PRIVATE( "private" ),
-	PUBLIC( "public" ),
-	PURE( "pure" ),
 	RETURNS( "returns" ),
 	SOLIDITY( "solidity" ),
-	STORAGE( "storage" ),
 	STRUCT( "struct" ),
-	USING( "using" ),
-	VIEW( "view" );
+	USING( "using" );
+
+	public enum DataLocation
+	{
+		MEMORY( "memory" ),
+		STORAGE( "storage" );
+
+		private final String keyword;
+
+		DataLocation( String keyword )
+		{
+			this.keyword = keyword;
+		}
+
+		@Override public String toString( )
+		{
+			return this.keyword;
+		}
+	}
+
+	public enum EventParameterModifier
+	{
+		ANONYMOUS( "anonymous" ),
+		INDEXED( "indexed" );
+
+		private final String keyword;
+
+		EventParameterModifier( String keyword )
+		{
+			this.keyword = keyword;
+		}
+
+		@Override public String toString( )
+		{
+			return this.keyword;
+		}
+	}
+
+	public enum Modifier
+	{
+		PAYABLE( "payable" ),
+		PURE( "pure" ),
+		VIEW( "view" );
+
+		private final String keyword;
+
+		Modifier( String keyword )
+		{
+			this.keyword = keyword;
+		}
+
+		@Override public String toString( )
+		{
+			return this.keyword;
+		}
+	}
+
+	public enum Visibility
+	{
+		EXTERNAL( "external" ),
+		PUBLIC( "public" ),
+		INTERNAL( "internal" ),
+		PRIVATE("private");
+
+		private final String keyword;
+
+		Visibility( String keyword )
+		{
+			this.keyword = keyword;
+		}
+
+		@Override public String toString( )
+		{
+			return this.keyword;
+		}
+	}
 
 	private final String keyword;
 
