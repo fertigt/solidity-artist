@@ -1,9 +1,6 @@
 package com.tobiasfertig.java.solidityartist.utils;
 
-import com.tobiasfertig.java.solidityartist.CodeWriter;
-import com.tobiasfertig.java.solidityartist.Writable;
-
-public enum Keywords implements Writable
+public enum Keywords
 {
 	ANONYMOUS( "anonymous" ),
 	AS( "as" ),
@@ -48,10 +45,5 @@ public enum Keywords implements Writable
 	@Override public String toString( )
 	{
 		return this.keyword;
-	}
-
-	@Override public void write( CodeWriter writer )
-	{
-		writer.write( keyword );
 	}
 }
