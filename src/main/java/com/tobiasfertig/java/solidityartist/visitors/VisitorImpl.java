@@ -8,7 +8,7 @@ import java.util.Iterator;
 
 public abstract class VisitorImpl implements Visitor
 {
-	private static final String INDENTATION = "    ";
+	public static final String INDENTATION = "    ";
 
 	private int level = 0;
 

@@ -2,6 +2,7 @@ package com.tobiasfertig.java.solidityartist.elements.functions;
 
 import com.tobiasfertig.java.solidityartist.elements.SolidityElement;
 import com.tobiasfertig.java.solidityartist.visitors.Visitor;
+import com.tobiasfertig.java.solidityartist.visitors.VisitorImpl;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -9,6 +10,8 @@ import java.util.List;
 
 public class CodeElement implements SolidityElement
 {
+	public static final String INDENTATION_PLACEHOLDER = "$>";
+
 	private final List<String> lines;
 
 	private CodeElement( Builder builder )
@@ -42,14 +45,19 @@ public class CodeElement implements SolidityElement
 
 		public Builder addStatement( String line )
 		{
-			this.lines.add( line + ";" );
+			String tmp = line.replace( INDENTATION_PLACEHOLDER, VisitorImpl.INDENTATION );
+			this.lines.add( tmp + ";" );
 			return this;
 		}
 
 		public Builder addCode( String code )
 		{
 			String[] lines = code.split( "\n" );
-			this.lines.addAll( Arrays.asList( lines ) );
+			for ( String line : lines )
+			{
+				String tmp = line.replace( INDENTATION_PLACEHOLDER, VisitorImpl.INDENTATION );
+				this.lines.add( tmp );
+			}
 			return this;
 		}
 

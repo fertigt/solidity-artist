@@ -1101,6 +1101,83 @@ public class ContractVisitorTests
 	}
 
 	@Test
+	public void testVisitFunctionElement_FunctionWithInternalIndentation_CorrectStringReturned( )
+	{
+		NatSpecElement comment = NatSpecElement.builder( )
+											   .isMultiLineComment( )
+											   .addTagAtDev(
+												   "Internal function to invoke `onERC721Received` on a target address." )
+											   .addLine(
+												   "The call is not executed if the target address is not a contract." )
+											   .addLine( "" )
+											   .addLine( "This function is deprecated." )
+											   .addTagAtParam( "from address representing the previous owner of the " +
+												   "given token ID" )
+											   .addTagAtParam( "to target address that will receive the tokens" )
+											   .addTagAtParam( "tokenId uint256 ID of the token to be transferred" )
+											   .addTagAtParam( "_data bytes optional data to send along with the call" )
+											   .addTagAtReturn(
+												   "bool whether the call correctly returned the expected magic value" )
+											   .build( );
+
+		ParameterElement from = ParameterElement.builder( DataTypeElement.ADDRESS ).addName( "from" ).build( );
+
+		ParameterElement to = ParameterElement.builder( DataTypeElement.ADDRESS ).addName( "to" ).build( );
+
+		ParameterElement tokenId = ParameterElement.builder( DataTypeElement.UINT256 ).addName( "tokenId" ).build( );
+
+		ParameterElement _data = ParameterElement.builder( DataTypeElement.BYTES )
+												 .addName( "_data" )
+												 .inMemory( )
+												 .build( );
+
+		ParameterElement returnBool = ParameterElement.builder( DataTypeElement.BOOL ).build( );
+
+		CodeElement code = CodeElement.builder( )
+									  .addCode( "if(!to.isContract()) {" )
+									  .addCode( "$>return true;" )
+									  .addCode( "}" )
+									  .addCode( "" )
+									  .addCode( "bytes4 retval = IERC721Receiver(to).onERC721Received(msg.sender, " +
+										  "from, tokenId, _data);" )
+									  .addCode( "return (retval == _ERC721_RECEIVED);" )
+									  .build( );
+
+		FunctionElement functionElement = FunctionElement.internalBuilder( "_checkOnERC721Received" )
+														 .addNatSpec( comment )
+														 .addParameter( from )
+														 .addParameter( to )
+														 .addParameter( tokenId )
+														 .addParameter( _data )
+														 .addReturnParameter( returnBool )
+														 .addCode( code )
+														 .build( );
+
+		functionElement.accept( this.visitor );
+
+		String expected = "/**\n" +
+			" * @dev Internal function to invoke `onERC721Received` on a target address.\n" +
+			" * The call is not executed if the target address is not a contract.\n" +
+			" * \n" +
+			" * This function is deprecated.\n" +
+			" * @param from address representing the previous owner of the given token ID\n" +
+			" * @param to target address that will receive the tokens\n" +
+			" * @param tokenId uint256 ID of the token to be transferred\n" +
+			" * @param _data bytes optional data to send along with the call\n" +
+			" * @return bool whether the call correctly returned the expected magic value\n" +
+			" */\n" +
+			"function _checkOnERC721Received(address from, address to, uint256 tokenId, bytes memory _data) internal returns(bool) {\n" +
+			"    if(!to.isContract()) {\n" +
+			"        return true;\n" +
+			"    }\n" +
+			"    \n" +
+			"    bytes4 retval = IERC721Receiver(to).onERC721Received(msg.sender, from, tokenId, _data);\n" +
+			"    return (retval == _ERC721_RECEIVED);\n" +
+			"}";
+		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
+	}
+
+	@Test
 	public void testVisitFunctionTypeElement_WithoutParameters_CorrectStringReturned( )
 	{
 		FunctionTypeElement element = FunctionTypeElement.externalBuilder( ).build( );
