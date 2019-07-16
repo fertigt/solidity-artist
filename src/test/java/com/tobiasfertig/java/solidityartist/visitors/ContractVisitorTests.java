@@ -226,6 +226,38 @@ public class ContractVisitorTests
 	}
 
 	@Test
+	public void testVisitContractElement_WithComment_CorrectStringReturned( )
+	{
+		NatSpecElement comment = NatSpecElement.builder( )
+											   .addTagAtTitle( "An ERC20 Token Contract" )
+											   .addTagAtAuthor( "Tobias Fertig" )
+											   .isMultiLineComment( )
+											   .build( );
+		UsingForElement usingFor = UsingForElement.builder( "SafeMath", DataTypeElement.UINT256 ).build( );
+		ConstructorElement constructor = ConstructorElement.publicBuilder( ).build( );
+		ContractElement contract = ContractElement.builder( "ERC20" )
+												  .addNatSpec( comment )
+												  .addUsingForDeclaration( usingFor )
+												  .addConstructor( constructor )
+												  .build( );
+
+		contract.accept( this.visitor );
+		String expected = "/**\n" +
+			" * @title An ERC20 Token Contract\n" +
+			" * @author Tobias Fertig\n" +
+			" */\n" +
+			"contract ERC20 {\n" +
+			"    using SafeMath for uint256;\n" +
+			"\n" +
+			"    constructor() public {\n" +
+			"\n" +
+			"    }\n" +
+			"\n" +
+			"}";
+		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
+	}
+
+	@Test
 	public void testVisitContractElement_WithStateVariables_CorrectStringReturned( )
 	{
 		UsingForElement usingFor = UsingForElement.builder( "SafeMath", DataTypeElement.UINT256 ).build( );

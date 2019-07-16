@@ -172,6 +172,12 @@ public class InterfaceVisitor extends VisitorImpl
 
 	@Override public void visit( InterfaceElement element )
 	{
+		if ( element.getComment( ) != null )
+		{
+			element.getComment( ).accept( this );
+			newline( );
+		}
+
 		sb.append( Keyword.INTERFACE );
 		space( );
 		sb.append( element.getName( ) );

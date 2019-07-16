@@ -1,6 +1,7 @@
 package com.tobiasfertig.java.solidityartist.elements.files;
 
 import com.tobiasfertig.java.solidityartist.elements.SolidityElement;
+import com.tobiasfertig.java.solidityartist.elements.comments.NatSpecElement;
 import com.tobiasfertig.java.solidityartist.elements.events.EventElement;
 import com.tobiasfertig.java.solidityartist.elements.functions.ConstructorElement;
 import com.tobiasfertig.java.solidityartist.elements.functions.FunctionElement;
@@ -16,6 +17,7 @@ import java.util.Set;
 
 public class ContractElement implements SolidityElement
 {
+	private final NatSpecElement comment;
 	private final String name;
 	private final Set<String> inheritedContracts;
 	private final Set<UsingForElement> usingForDeclarations;
@@ -33,6 +35,7 @@ public class ContractElement implements SolidityElement
 
 	private ContractElement( Builder builder )
 	{
+		this.comment = builder.comment;
 		this.name = builder.name;
 		this.inheritedContracts = builder.inheritedContracts;
 		this.usingForDeclarations = builder.usingForDeclarations;
@@ -52,6 +55,11 @@ public class ContractElement implements SolidityElement
 	@Override public void accept( Visitor visitor )
 	{
 		visitor.visit( this );
+	}
+
+	public NatSpecElement getComment( )
+	{
+		return comment;
 	}
 
 	public String getName( )
@@ -131,6 +139,7 @@ public class ContractElement implements SolidityElement
 
 	public static final class Builder
 	{
+		private NatSpecElement comment;
 		private final String name;
 		private final Set<String> inheritedContracts = new LinkedHashSet<>( );
 		private final Set<UsingForElement> usingForDeclarations = new LinkedHashSet<>( );
@@ -149,6 +158,12 @@ public class ContractElement implements SolidityElement
 		private Builder( String name )
 		{
 			this.name = name;
+		}
+
+		public Builder addNatSpec( NatSpecElement comment )
+		{
+			this.comment = comment;
+			return this;
 		}
 
 		public Builder addInheritedContract( String name )

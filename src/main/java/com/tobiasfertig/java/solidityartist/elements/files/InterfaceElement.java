@@ -1,6 +1,7 @@
 package com.tobiasfertig.java.solidityartist.elements.files;
 
 import com.tobiasfertig.java.solidityartist.elements.SolidityElement;
+import com.tobiasfertig.java.solidityartist.elements.comments.NatSpecElement;
 import com.tobiasfertig.java.solidityartist.elements.events.EventElement;
 import com.tobiasfertig.java.solidityartist.elements.functions.FunctionElement;
 import com.tobiasfertig.java.solidityartist.elements.functions.ModifierElement;
@@ -14,6 +15,7 @@ import java.util.Set;
 
 public class InterfaceElement implements SolidityElement
 {
+	private final NatSpecElement comment;
 	private final String name;
 	private final Set<UsingForElement> usingForDeclarations;
 	private final Set<EnumElement> enumDeclarations;
@@ -25,6 +27,7 @@ public class InterfaceElement implements SolidityElement
 
 	private InterfaceElement( Builder builder )
 	{
+		this.comment = builder.comment;
 		this.name = builder.name;
 		this.usingForDeclarations = builder.usingForDeclarations;
 		this.enumDeclarations = builder.enumDeclarations;
@@ -38,6 +41,11 @@ public class InterfaceElement implements SolidityElement
 	@Override public void accept( Visitor visitor )
 	{
 		visitor.visit( this );
+	}
+
+	public NatSpecElement getComment( )
+	{
+		return comment;
 	}
 
 	public String getName( )
@@ -87,6 +95,7 @@ public class InterfaceElement implements SolidityElement
 
 	public static final class Builder
 	{
+		private NatSpecElement comment;
 		private final String name;
 		private final Set<UsingForElement> usingForDeclarations = new LinkedHashSet<>( );
 		private final Set<EnumElement> enumDeclarations = new LinkedHashSet<>( );
@@ -99,6 +108,12 @@ public class InterfaceElement implements SolidityElement
 		private Builder( String name )
 		{
 			this.name = name;
+		}
+
+		public Builder addNatSpec( NatSpecElement comment )
+		{
+			this.comment = comment;
+			return this;
 		}
 
 		public Builder addUsingForDeclaration( UsingForElement usingForElement )

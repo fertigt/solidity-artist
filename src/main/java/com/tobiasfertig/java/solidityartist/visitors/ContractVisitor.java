@@ -76,6 +76,12 @@ public class ContractVisitor extends VisitorImpl
 
 	@Override public void visit( ContractElement element )
 	{
+		if ( element.getComment( ) != null )
+		{
+			element.getComment( ).accept( this );
+			newline( );
+		}
+
 		sb.append( Keyword.CONTRACT );
 		space( );
 		sb.append( element.getName( ) );

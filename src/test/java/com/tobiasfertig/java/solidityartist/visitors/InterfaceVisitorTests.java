@@ -497,6 +497,29 @@ public class InterfaceVisitorTests
 	}
 
 	@Test
+	public void testVisitInterfaceElement_WithComment_CorrectStringReturned( )
+	{
+		NatSpecElement comment = NatSpecElement.builder( )
+											   .addTagAtTitle( "An ERC20 Token Contract" )
+											   .addTagAtAuthor( "Tobias Fertig" )
+											   .isMultiLineComment( )
+											   .build( );
+		InterfaceElement interfaceElement = InterfaceElement.builder( "IERC20" )
+															.addNatSpec( comment )
+															.build( );
+
+		interfaceElement.accept( this.visitor );
+
+		String expected = "/**\n" +
+			" * @title An ERC20 Token Contract\n" +
+			" * @author Tobias Fertig\n" +
+			" */\n" +
+			"interface IERC20 {\n" +
+			"}";
+		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
+	}
+
+	@Test
 	public void testVisitInterfaceElement_Complete_CorrectStringReturned( )
 	{
 		UsingForElement usingFor = UsingForElement.builder( "SafeMath", DataTypeElement.UINT256 ).build( );

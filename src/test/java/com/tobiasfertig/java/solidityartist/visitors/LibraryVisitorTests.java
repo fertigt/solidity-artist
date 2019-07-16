@@ -569,6 +569,28 @@ public class LibraryVisitorTests
 	@Test
 	public void testVisitLibraryElement_Empty_CorrectStringReturned( )
 	{
+		NatSpecElement comment = NatSpecElement.builder( )
+											   .addTagAtTitle( "An ERC20 Token Contract" )
+											   .addTagAtAuthor( "Tobias Fertig" )
+											   .isMultiLineComment( )
+											   .build( );
+		LibraryElement libraryElement = LibraryElement.builder( "Test" )
+													  .addNatSpec( comment )
+													  .build( );
+
+		libraryElement.accept( this.visitor );
+		String expected = "/**\n" +
+			" * @title An ERC20 Token Contract\n" +
+			" * @author Tobias Fertig\n" +
+			" */\n" +
+			"library Test {\n" +
+			"}";
+		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
+	}
+
+	@Test
+	public void testVisitLibraryElement_WithComment_CorrectStringReturned( )
+	{
 		LibraryElement libraryElement = LibraryElement.builder( "Test" ).build( );
 
 		libraryElement.accept( this.visitor );

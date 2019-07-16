@@ -194,6 +194,12 @@ public class LibraryVisitor extends VisitorImpl
 
 	@Override public void visit( LibraryElement element )
 	{
+		if ( element.getComment( ) != null )
+		{
+			element.getComment( ).accept( this );
+			newline( );
+		}
+
 		sb.append( Keyword.LIBRARY );
 		space( );
 		sb.append( element.getName( ) );
