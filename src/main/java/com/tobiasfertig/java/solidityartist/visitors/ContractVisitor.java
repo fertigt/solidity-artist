@@ -36,12 +36,7 @@ public class ContractVisitor extends VisitorImpl
 
 	@Override public void visit( ConstructorElement element )
 	{
-		if ( element.getComment( ) != null )
-		{
-			element.getComment( ).accept( this );
-			newline( );
-		}
-
+		checkAndAppendComment( element.getComment( ) );
 		indent( );
 		sb.append( Keyword.CONSTRUCTOR );
 		openBraces( );
@@ -83,12 +78,7 @@ public class ContractVisitor extends VisitorImpl
 
 	@Override public void visit( ContractElement element )
 	{
-		if ( element.getComment( ) != null )
-		{
-			element.getComment( ).accept( this );
-			newline( );
-		}
-
+		checkAndAppendComment( element.getComment( ) );
 		sb.append( Keyword.CONTRACT );
 		space( );
 		sb.append( element.getName( ) );
@@ -105,141 +95,18 @@ public class ContractVisitor extends VisitorImpl
 		openCurlyBraces( );
 
 		boolean isNotFirstElement = false;
-		if ( !element.getUsingForDeclarations( ).isEmpty( ) )
-		{
-			appendCollectionOfSolidityElements( element.getUsingForDeclarations( ), "\n" );
-			isNotFirstElement = true;
-		}
-
-		if ( !element.getEnumDeclarations( ).isEmpty( ) )
-		{
-			if ( isNotFirstElement )
-			{
-				newline( );
-				newline( );
-			}
-
-			appendCollectionOfSolidityElements( element.getEnumDeclarations( ), "\n\n" );
-			isNotFirstElement = true;
-		}
-
-		if ( !element.getStructDeclarations( ).isEmpty( ) )
-		{
-			if ( isNotFirstElement )
-			{
-				newline( );
-				newline( );
-			}
-
-			appendCollectionOfSolidityElements( element.getStructDeclarations( ), "\n\n" );
-			isNotFirstElement = true;
-		}
-
-		if ( !element.getStateVariables( ).isEmpty( ) )
-		{
-			if ( isNotFirstElement )
-			{
-				newline( );
-				newline( );
-			}
-
-			appendCollectionOfSolidityElements( element.getStateVariables( ), "\n" );
-			isNotFirstElement = true;
-		}
-
-		if ( !element.getEventDeclarations( ).isEmpty( ) )
-		{
-			if ( isNotFirstElement )
-			{
-				newline( );
-				newline( );
-			}
-
-			appendCollectionOfSolidityElements( element.getEventDeclarations( ), "\n" );
-			isNotFirstElement = true;
-		}
-
-		if ( !element.getModifierDeclarations( ).isEmpty( ) )
-		{
-			if ( isNotFirstElement )
-			{
-				newline( );
-				newline( );
-			}
-			appendCollectionOfSolidityElements( element.getModifierDeclarations( ), "\n" );
-			isNotFirstElement = true;
-		}
-
-		if ( element.getConstructor( ) != null )
-		{
-			if ( isNotFirstElement )
-			{
-				newline( );
-				newline( );
-			}
-
-			element.getConstructor( ).accept( this );
-			isNotFirstElement = true;
-		}
-
-		if ( element.getFallbackFunction( ) != null )
-		{
-			if ( isNotFirstElement )
-			{
-				newline( );
-				newline( );
-			}
-
-			element.getFallbackFunction( ).accept( this );
-			isNotFirstElement = true;
-		}
-
-		if ( !element.getExternalFunctions( ).isEmpty( ) )
-		{
-			if ( isNotFirstElement )
-			{
-				newline( );
-				newline( );
-			}
-
-			appendCollectionOfSolidityElements( element.getExternalFunctions( ), "\n\n" );
-			isNotFirstElement = true;
-		}
-
-		if ( !element.getPublicFunctions( ).isEmpty( ) )
-		{
-			if ( isNotFirstElement )
-			{
-				newline( );
-				newline( );
-			}
-
-			appendCollectionOfSolidityElements( element.getPublicFunctions( ), "\n\n" );
-			isNotFirstElement = true;
-		}
-
-		if ( !element.getInternalFunctions( ).isEmpty( ) )
-		{
-			if ( isNotFirstElement )
-			{
-				newline( );
-				newline( );
-			}
-
-			appendCollectionOfSolidityElements( element.getInternalFunctions( ), "\n\n" );
-			isNotFirstElement = true;
-		}
-
-		if ( !element.getPrivateFunctions( ).isEmpty( ) )
-		{
-			if ( isNotFirstElement )
-			{
-				newline( );
-				newline( );
-			}
-
-			appendCollectionOfSolidityElements( element.getPrivateFunctions( ), "\n\n" );
-		}
+		isNotFirstElement = checkAndAppend( element.getUsingForDeclarations( ), isNotFirstElement, "\n" );
+		isNotFirstElement = checkAndAppend( element.getEnumDeclarations( ), isNotFirstElement, "\n\n" );
+		isNotFirstElement = checkAndAppend( element.getStructDeclarations( ), isNotFirstElement, "\n\n" );
+		isNotFirstElement = checkAndAppend( element.getStateVariables( ), isNotFirstElement, "\n\n" );
+		isNotFirstElement = checkAndAppend( element.getEventDeclarations( ), isNotFirstElement, "\n\n" );
+		isNotFirstElement = checkAndAppend( element.getModifierDeclarations( ), isNotFirstElement, "\n\n" );
+		isNotFirstElement = checkAndAppend( element.getConstructor( ), isNotFirstElement );
+		isNotFirstElement = checkAndAppend( element.getFallbackFunction( ), isNotFirstElement );
+		isNotFirstElement = checkAndAppend( element.getExternalFunctions( ), isNotFirstElement, "\n\n" );
+		isNotFirstElement = checkAndAppend( element.getPublicFunctions( ), isNotFirstElement, "\n\n" );
+		isNotFirstElement = checkAndAppend( element.getInternalFunctions( ), isNotFirstElement, "\n\n" );
+		checkAndAppend( element.getPrivateFunctions( ), isNotFirstElement, "\n\n" );
 
 		newline( );
 		closeCurlyBraces( );
@@ -308,12 +175,7 @@ public class ContractVisitor extends VisitorImpl
 
 	@Override public void visit( FunctionElement element )
 	{
-		if ( element.getComment( ) != null )
-		{
-			element.getComment( ).accept( this );
-			newline( );
-		}
-
+		checkAndAppendComment( element.getComment( ) );
 		indent( );
 		sb.append( Keyword.FUNCTION );
 
@@ -418,12 +280,7 @@ public class ContractVisitor extends VisitorImpl
 
 	@Override public void visit( ModifierElement element )
 	{
-		if ( element.getComment( ) != null )
-		{
-			element.getComment( ).accept( this );
-			newline( );
-		}
-
+		checkAndAppendComment( element.getComment( ) );
 		indent( );
 		sb.append( Keyword.MODIFIER );
 		space( );

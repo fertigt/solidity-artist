@@ -1,7 +1,9 @@
 package com.tobiasfertig.java.solidityartist.visitors;
 
 import com.tobiasfertig.java.solidityartist.elements.SolidityElement;
+import com.tobiasfertig.java.solidityartist.elements.comments.NatSpecElement;
 
+import java.util.Collection;
 import java.util.Iterator;
 
 public abstract class VisitorImpl implements Visitor
@@ -139,6 +141,55 @@ public abstract class VisitorImpl implements Visitor
 
 			indent( );
 			nextElement.accept( this );
+		}
+	}
+
+	boolean checkAndAppend(
+		Collection<? extends SolidityElement> elements,
+		boolean isNotFirstCollection,
+		String delimiter
+	)
+	{
+		boolean result = isNotFirstCollection;
+		if ( !elements.isEmpty( ) )
+		{
+			if ( isNotFirstCollection )
+			{
+				newline( );
+				newline( );
+			}
+
+			appendCollectionOfSolidityElements( elements, delimiter );
+			result = true;
+		}
+
+		return result;
+	}
+
+	boolean checkAndAppend( SolidityElement element, boolean isNotFirstElement )
+	{
+		boolean result = isNotFirstElement;
+		if ( element != null )
+		{
+			if ( isNotFirstElement )
+			{
+				newline( );
+				newline( );
+			}
+
+			element.accept( this );
+			result = true;
+		}
+
+		return result;
+	}
+
+	void checkAndAppendComment( NatSpecElement element )
+	{
+		if ( element != null )
+		{
+			element.accept( this );
+			newline( );
 		}
 	}
 

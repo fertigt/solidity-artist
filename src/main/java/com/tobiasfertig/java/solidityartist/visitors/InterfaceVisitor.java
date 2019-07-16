@@ -110,12 +110,7 @@ public class InterfaceVisitor extends VisitorImpl
 
 	@Override public void visit( FunctionElement element )
 	{
-		if ( element.getComment( ) != null )
-		{
-			element.getComment( ).accept( this );
-			newline( );
-		}
-
+		checkAndAppendComment( element.getComment( ) );
 		indent( );
 		sb.append( Keyword.FUNCTION );
 
@@ -181,12 +176,7 @@ public class InterfaceVisitor extends VisitorImpl
 
 	@Override public void visit( InterfaceElement element )
 	{
-		if ( element.getComment( ) != null )
-		{
-			element.getComment( ).accept( this );
-			newline( );
-		}
-
+		checkAndAppendComment( element.getComment( ) );
 		sb.append( Keyword.INTERFACE );
 		space( );
 		sb.append( element.getName( ) );
@@ -194,82 +184,13 @@ public class InterfaceVisitor extends VisitorImpl
 		openCurlyBraces( );
 
 		boolean isNotFirstElement = false;
-		if ( !element.getUsingForDeclarations( ).isEmpty( ) )
-		{
-			appendCollectionOfSolidityElements( element.getUsingForDeclarations( ), "\n" );
-			isNotFirstElement = true;
-		}
-
-		if ( !element.getEnumDeclarations( ).isEmpty( ) )
-		{
-			if ( isNotFirstElement )
-			{
-				newline( );
-				newline( );
-			}
-
-			appendCollectionOfSolidityElements( element.getEnumDeclarations( ), "\n\n" );
-			isNotFirstElement = true;
-		}
-
-		if ( !element.getStructDeclarations( ).isEmpty( ) )
-		{
-			if ( isNotFirstElement )
-			{
-				newline( );
-				newline( );
-			}
-
-			appendCollectionOfSolidityElements( element.getStructDeclarations( ), "\n\n" );
-			isNotFirstElement = true;
-		}
-
-		if ( !element.getEventDeclarations( ).isEmpty( ) )
-		{
-			if ( isNotFirstElement )
-			{
-				newline( );
-				newline( );
-			}
-
-			appendCollectionOfSolidityElements( element.getEventDeclarations( ), "\n" );
-			isNotFirstElement = true;
-		}
-
-		if ( !element.getModifierDeclarations( ).isEmpty( ) )
-		{
-			if ( isNotFirstElement )
-			{
-				newline( );
-				newline( );
-			}
-
-			appendCollectionOfSolidityElements( element.getModifierDeclarations( ), "\n" );
-			isNotFirstElement = true;
-		}
-
-		if ( element.getFallbackFunction( ) != null )
-		{
-			if ( isNotFirstElement )
-			{
-				newline( );
-				newline( );
-			}
-
-			element.getFallbackFunction( ).accept( this );
-			isNotFirstElement = true;
-		}
-
-		if ( !element.getExternalFunctions( ).isEmpty( ) )
-		{
-			if ( isNotFirstElement )
-			{
-				newline( );
-				newline( );
-			}
-
-			appendCollectionOfSolidityElements( element.getExternalFunctions( ), "\n" );
-		}
+		isNotFirstElement = checkAndAppend( element.getUsingForDeclarations( ), isNotFirstElement, "\n" );
+		isNotFirstElement = checkAndAppend( element.getEnumDeclarations( ), isNotFirstElement, "\n\n" );
+		isNotFirstElement = checkAndAppend( element.getStructDeclarations( ), isNotFirstElement, "\n\n" );
+		isNotFirstElement = checkAndAppend( element.getEventDeclarations( ), isNotFirstElement, "\n\n" );
+		isNotFirstElement = checkAndAppend( element.getModifierDeclarations( ), isNotFirstElement, "\n\n" );
+		isNotFirstElement = checkAndAppend( element.getFallbackFunction( ), isNotFirstElement );
+		checkAndAppend( element.getExternalFunctions( ), isNotFirstElement, "\n\n" );
 
 		newline( );
 		closeCurlyBraces( );
@@ -294,12 +215,7 @@ public class InterfaceVisitor extends VisitorImpl
 
 	@Override public void visit( ModifierElement element )
 	{
-		if ( element.getComment( ) != null )
-		{
-			element.getComment( ).accept( this );
-			newline( );
-		}
-
+		checkAndAppendComment( element.getComment( ) );
 		indent( );
 		sb.append( Keyword.MODIFIER );
 		space( );
