@@ -109,6 +109,27 @@ public abstract class VisitorImpl implements Visitor
 			SolidityElement nextElement = iterator.next( );
 			while ( iterator.hasNext( ) )
 			{
+				nextElement.accept( this );
+				sb.append( delimiter );
+
+				nextElement = iterator.next( );
+			}
+
+			nextElement.accept( this );
+		}
+	}
+
+	void appendCollectionOfSolidityElementsIndented(
+		Iterable<? extends SolidityElement> elements,
+		String delimiter
+	)
+	{
+		Iterator<? extends SolidityElement> iterator = elements.iterator( );
+		if ( iterator.hasNext( ) )
+		{
+			SolidityElement nextElement = iterator.next( );
+			while ( iterator.hasNext( ) )
+			{
 				indent( );
 				nextElement.accept( this );
 				sb.append( delimiter );

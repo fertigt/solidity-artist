@@ -67,6 +67,7 @@ public class LibraryVisitor extends VisitorImpl
 
 	@Override public void visit( EnumElement element )
 	{
+		indent( );
 		sb.append( Keyword.ENUM );
 		space( );
 		sb.append( element.getName( ) );
@@ -79,6 +80,7 @@ public class LibraryVisitor extends VisitorImpl
 
 	@Override public void visit( EventElement element )
 	{
+		indent( );
 		sb.append( Keyword.EVENT );
 		space( );
 		sb.append( element.getName( ) );
@@ -108,6 +110,7 @@ public class LibraryVisitor extends VisitorImpl
 
 	@Override public void visit( FunctionElement element )
 	{
+		indent( );
 		sb.append( Keyword.FUNCTION );
 
 		if ( !element.isFallback( ) )
@@ -293,6 +296,13 @@ public class LibraryVisitor extends VisitorImpl
 
 	@Override public void visit( ModifierElement element )
 	{
+		if ( element.getComment( ) != null )
+		{
+			element.getComment( ).accept( this );
+			newline( );
+		}
+
+		indent( );
 		sb.append( Keyword.MODIFIER );
 		space( );
 		sb.append( element.getName( ) );
@@ -379,6 +389,7 @@ public class LibraryVisitor extends VisitorImpl
 
 	@Override public void visit( StateVariableElement element )
 	{
+		indent( );
 		element.getDataType( ).accept( this );
 		space( );
 		sb.append( element.getVisibility( ) );
@@ -395,12 +406,13 @@ public class LibraryVisitor extends VisitorImpl
 
 	@Override public void visit( StructElement element )
 	{
+		indent( );
 		sb.append( Keyword.STRUCT );
 		space( );
 		sb.append( element.getName( ) );
 		space( );
 		openCurlyBraces( );
-		appendCollectionOfSolidityElements( element.getStructMembers( ), ";\n" );
+		appendCollectionOfSolidityElementsIndented( element.getStructMembers( ), ";\n" );
 		semicolon( );
 		newline( );
 		closeCurlyBraces( );
@@ -408,6 +420,7 @@ public class LibraryVisitor extends VisitorImpl
 
 	@Override public void visit( UsingForElement element )
 	{
+		indent( );
 		sb.append( Keyword.USING );
 		space( );
 		element.getExtension( ).accept( this );

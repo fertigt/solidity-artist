@@ -696,6 +696,36 @@ public class InterfaceVisitorTests
 	}
 
 	@Test
+	public void testVisitModifierElement_WithComment_CorrectStringReturned( )
+	{
+		NatSpecElement comment = NatSpecElement.builder( )
+											   .addTagAtNotice(
+												   "This modifier checks if the sender of a transaction is the " +
+													   "contract owner." )
+											   .isMultiLineComment( )
+											   .build( );
+
+		CodeElement code = CodeElement.builder( )
+									  .addStatement( "require(owner = msg.sender)" )
+									  .build( );
+		ModifierElement modifier = ModifierElement.builder( "onlyOwner" )
+												  .addNatSpec( comment )
+												  .addCodeWithoutUnderscoreStatement( code )
+												  .build( );
+
+		modifier.accept( this.visitor );
+
+		String expected = "/**\n" +
+			" * @notice This modifier checks if the sender of a transaction is the contract owner.\n" +
+			" */\n" +
+			"modifier onlyOwner() {\n" +
+			"    require(owner = msg.sender);\n" +
+			"    _;\n" +
+			"}";
+		assertEquals( "Should be the same object", expected, this.visitor.export( ) );
+	}
+
+	@Test
 	public void testVisitModifierElement_WithCodeAndWithoutParameters_CorrectStringReturned( )
 	{
 		CodeElement code = CodeElement.builder( )

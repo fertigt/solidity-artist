@@ -1,6 +1,7 @@
 package com.tobiasfertig.java.solidityartist.elements.functions;
 
 import com.tobiasfertig.java.solidityartist.elements.SolidityElement;
+import com.tobiasfertig.java.solidityartist.elements.comments.NatSpecElement;
 import com.tobiasfertig.java.solidityartist.elements.parameters.ParameterElement;
 import com.tobiasfertig.java.solidityartist.visitors.Visitor;
 
@@ -9,12 +10,14 @@ import java.util.Set;
 
 public class ModifierElement implements SolidityElement
 {
+	private final NatSpecElement comment;
 	private final String name;
 	private final Set<ParameterElement> parameters;
 	private final CodeElement code;
 
 	private ModifierElement( Builder builder )
 	{
+		this.comment = builder.comment;
 		this.name = builder.name;
 		this.parameters = builder.parameters;
 		this.code = builder.code;
@@ -23,6 +26,11 @@ public class ModifierElement implements SolidityElement
 	@Override public void accept( Visitor visitor )
 	{
 		visitor.visit( this );
+	}
+
+	public NatSpecElement getComment( )
+	{
+		return comment;
 	}
 
 	public String getName( )
@@ -47,6 +55,7 @@ public class ModifierElement implements SolidityElement
 
 	public static final class Builder
 	{
+		private NatSpecElement comment;
 		private final String name;
 		private final Set<ParameterElement> parameters = new LinkedHashSet<>( );
 		private CodeElement code;
@@ -54,6 +63,12 @@ public class ModifierElement implements SolidityElement
 		private Builder( String name )
 		{
 			this.name = name;
+		}
+
+		public Builder addNatSpec( NatSpecElement comment )
+		{
+			this.comment = comment;
+			return this;
 		}
 
 		public Builder addParameters( Iterable<ParameterElement> parameters )

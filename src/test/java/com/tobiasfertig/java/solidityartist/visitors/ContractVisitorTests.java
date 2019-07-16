@@ -491,8 +491,16 @@ public class ContractVisitorTests
 							ParameterElement.builder( DataTypeElement.UINT256 ).addName( "amount" ).build( ) )
 						.build( );
 
+		NatSpecElement modifierComment = NatSpecElement.builder( )
+											   .addTagAtNotice(
+												   "This modifier checks if the sender of a transaction is the " +
+													   "contract owner." )
+											   .isMultiLineComment( )
+											   .build( );
+
 		ModifierElement modifier =
 			ModifierElement.builder( "onlyOwner" )
+						   .addNatSpec( modifierComment )
 						   .addCodeWithoutUnderscoreStatement(
 							   CodeElement.builder( ).addStatement( "require(owner == msg.sender)" ).build( ) )
 						   .build( );
@@ -607,6 +615,9 @@ public class ContractVisitorTests
 			"\n" +
 			"    event Transfer(address indexed sender, address indexed recipient, uint256 amount);\n" +
 			"\n" +
+			"    /**\n" +
+			"     * @notice This modifier checks if the sender of a transaction is the contract owner.\n" +
+			"     */\n" +
 			"    modifier onlyOwner() {\n" +
 			"        require(owner == msg.sender);\n" +
 			"        _;\n" +
@@ -1227,6 +1238,36 @@ public class ContractVisitorTests
 		modifier.accept( this.visitor );
 
 		String expected = "modifier onlyOwner() {\n" +
+			"    require(owner = msg.sender);\n" +
+			"    _;\n" +
+			"}";
+		assertEquals( "Should be the same object", expected, this.visitor.export( ) );
+	}
+
+	@Test
+	public void testVisitModifierElement_WithCodeAndComment_CorrectStringReturned( )
+	{
+		NatSpecElement comment = NatSpecElement.builder( )
+											   .addTagAtNotice(
+												   "This modifier checks if the sender of a transaction is the " +
+													   "contract owner." )
+											   .isMultiLineComment( )
+											   .build( );
+
+		CodeElement code = CodeElement.builder( )
+									  .addStatement( "require(owner = msg.sender)" )
+									  .build( );
+		ModifierElement modifier = ModifierElement.builder( "onlyOwner" )
+												  .addNatSpec( comment )
+												  .addCodeWithoutUnderscoreStatement( code )
+												  .build( );
+
+		modifier.accept( this.visitor );
+
+		String expected = "/**\n" +
+			" * @notice This modifier checks if the sender of a transaction is the contract owner.\n" +
+			" */\n" +
+			"modifier onlyOwner() {\n" +
 			"    require(owner = msg.sender);\n" +
 			"    _;\n" +
 			"}";
