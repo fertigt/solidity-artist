@@ -1,5 +1,6 @@
 package com.tobiasfertig.java.solidityartist.visitors;
 
+import com.tobiasfertig.java.solidityartist.elements.comments.NatSpecElement;
 import com.tobiasfertig.java.solidityartist.elements.datatypes.DataTypeElement;
 import com.tobiasfertig.java.solidityartist.elements.datatypes.FunctionTypeElement;
 import com.tobiasfertig.java.solidityartist.elements.datatypes.MappingElement;
@@ -894,6 +895,41 @@ public class LibraryVisitorTests
 			"    require(test = msg.sender);\n" +
 			"    _;\n" +
 			"}";
+		assertEquals( "Should be the same object", expected, this.visitor.export( ) );
+	}
+
+	@Test
+	public void testVisitNatSpecElement_SingleLine_CorrectStringReturned( )
+	{
+		NatSpecElement comment = NatSpecElement.builder( )
+											   .addTagAtTitle( "NatSpec Example" )
+											   .addLine( "" )
+											   .addTagAtAuthor( "Tobias Fertig" )
+											   .build( );
+
+		comment.accept( this.visitor );
+		String expected = "/// @title NatSpec Example\n" +
+			"/// \n" +
+			"/// @author Tobias Fertig";
+		assertEquals( "Should be the same object", expected, this.visitor.export( ) );
+	}
+
+	@Test
+	public void testVisitNatSpecElement_MultiLine_CorrectStringReturned( )
+	{
+		NatSpecElement comment = NatSpecElement.builder( )
+											   .addTagAtTitle( "NatSpec Example" )
+											   .addLine( "" )
+											   .addTagAtAuthor( "Tobias Fertig" )
+											   .isMultiLineComment( )
+											   .build( );
+
+		comment.accept( this.visitor );
+		String expected = "/**\n" +
+			" * @title NatSpec Example\n" +
+			" * \n" +
+			" * @author Tobias Fertig\n" +
+			" */";
 		assertEquals( "Should be the same object", expected, this.visitor.export( ) );
 	}
 

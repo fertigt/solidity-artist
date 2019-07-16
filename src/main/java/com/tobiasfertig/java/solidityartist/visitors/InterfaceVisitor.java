@@ -1,5 +1,6 @@
 package com.tobiasfertig.java.solidityartist.visitors;
 
+import com.tobiasfertig.java.solidityartist.elements.comments.NatSpecElement;
 import com.tobiasfertig.java.solidityartist.elements.datatypes.DataTypeElement;
 import com.tobiasfertig.java.solidityartist.elements.datatypes.FunctionTypeElement;
 import com.tobiasfertig.java.solidityartist.elements.datatypes.MappingElement;
@@ -17,6 +18,8 @@ import com.tobiasfertig.java.solidityartist.elements.typedeclarations.EnumElemen
 import com.tobiasfertig.java.solidityartist.elements.typedeclarations.StructElement;
 import com.tobiasfertig.java.solidityartist.elements.typedeclarations.UsingForElement;
 import com.tobiasfertig.java.solidityartist.utils.Keyword;
+
+import java.util.Iterator;
 
 public class InterfaceVisitor extends VisitorImpl
 {
@@ -258,6 +261,61 @@ public class InterfaceVisitor extends VisitorImpl
 		element.getCode( ).accept( this );
 		newline( );
 		closeCurlyBraces( );
+	}
+
+	@Override public void visit( NatSpecElement element )
+	{
+		if ( element.isMultiLineComment( ) )
+		{
+			appendAsMultiLineComment( element );
+		}
+		else
+		{
+			appendAsSingleLineComment( element );
+		}
+	}
+
+	private void appendAsMultiLineComment( NatSpecElement element )
+	{
+		indent( );
+		sb.append( "/**" );
+		newline( );
+
+		for ( String line : element.getLines( ) )
+		{
+			indent( );
+			sb.append( " *" );
+			space( );
+			sb.append( line );
+			newline( );
+		}
+
+		indent( );
+		sb.append( " */" );
+	}
+
+	private void appendAsSingleLineComment( NatSpecElement element )
+	{
+		Iterator<String> iterator = element.getLines( ).iterator( );
+		if ( iterator.hasNext( ) )
+		{
+			String nextLine = iterator.next( );
+			while ( iterator.hasNext( ) )
+			{
+				indent( );
+				sb.append( "///" );
+				space( );
+				sb.append( nextLine );
+				newline( );
+
+				nextLine = iterator.next( );
+			}
+
+			indent( );
+			sb.append( "///" );
+			space( );
+			sb.append( nextLine );
+		}
 	}
 
 	@Override public void visit( ParameterElement element )

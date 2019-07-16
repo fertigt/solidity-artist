@@ -1,5 +1,6 @@
 package com.tobiasfertig.java.solidityartist.visitors;
 
+import com.tobiasfertig.java.solidityartist.elements.comments.NatSpecElement;
 import com.tobiasfertig.java.solidityartist.elements.datatypes.DataTypeElement;
 import com.tobiasfertig.java.solidityartist.elements.datatypes.FunctionTypeElement;
 import com.tobiasfertig.java.solidityartist.elements.datatypes.MappingElement;
@@ -261,6 +262,11 @@ public class FileVisitor extends VisitorImpl
 	}
 
 	@Override public void visit( ModifierElement element )
+	{
+
+	}
+
+	@Override public void visit( NatSpecElement element )
 	{
 
 	}

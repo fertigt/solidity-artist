@@ -1,5 +1,6 @@
 package com.tobiasfertig.java.solidityartist.visitors;
 
+import com.tobiasfertig.java.solidityartist.elements.comments.NatSpecElement;
 import com.tobiasfertig.java.solidityartist.elements.datatypes.DataTypeElement;
 import com.tobiasfertig.java.solidityartist.elements.datatypes.FunctionTypeElement;
 import com.tobiasfertig.java.solidityartist.elements.datatypes.MappingElement;
@@ -13,8 +14,6 @@ import com.tobiasfertig.java.solidityartist.elements.statevariables.StateVariabl
 import com.tobiasfertig.java.solidityartist.elements.typedeclarations.EnumElement;
 import com.tobiasfertig.java.solidityartist.elements.typedeclarations.StructElement;
 import com.tobiasfertig.java.solidityartist.elements.typedeclarations.UsingForElement;
-
-import java.util.Map;
 
 public interface Visitor
 {
@@ -51,6 +50,8 @@ public interface Visitor
 	void visit( MappingElement element );
 
 	void visit( ModifierElement element );
+
+	void visit( NatSpecElement element );
 
 	void visit( ParameterElement element );
 
