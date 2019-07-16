@@ -202,6 +202,7 @@ public class ContractVisitorTests
 
 		contract.accept( this.visitor );
 		String expected = "contract ERC20 {\n" +
+			"\n" +
 			"}";
 		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
 	}
@@ -219,7 +220,6 @@ public class ContractVisitorTests
 			"    constructor() public {\n" +
 			"\n" +
 			"    }\n" +
-			"\n" +
 			"}";
 		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
 	}
@@ -241,7 +241,6 @@ public class ContractVisitorTests
 			"    constructor() public {\n" +
 			"\n" +
 			"    }\n" +
-			"\n" +
 			"}";
 		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
 	}
@@ -273,7 +272,6 @@ public class ContractVisitorTests
 			"    constructor() public {\n" +
 			"\n" +
 			"    }\n" +
-			"\n" +
 			"}";
 		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
 	}
@@ -301,7 +299,6 @@ public class ContractVisitorTests
 			"    constructor() public {\n" +
 			"\n" +
 			"    }\n" +
-			"\n" +
 			"}";
 		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
 	}
@@ -330,7 +327,6 @@ public class ContractVisitorTests
 			"    constructor() public {\n" +
 			"\n" +
 			"    }\n" +
-			"\n" +
 			"}";
 		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
 	}
@@ -374,7 +370,6 @@ public class ContractVisitorTests
 			"    function totalSupply() public view returns(uint256) {\n" +
 			"        return _totalSupply;\n" +
 			"    }\n" +
-			"\n" +
 			"}";
 		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
 	}
@@ -453,7 +448,6 @@ public class ContractVisitorTests
 			"        _balances[recipient] = _balances[recipient].add(amount);\n" +
 			"        emit Transfer(sender, recipient, amount);\n" +
 			"    }\n" +
-			"\n" +
 			"}";
 		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
 	}
@@ -665,7 +659,6 @@ public class ContractVisitorTests
 			"    function totally() private view returns(uint256) {\n" +
 			"        return _totalSupply;\n" +
 			"    }\n" +
-			"\n" +
 			"}";
 		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
 	}

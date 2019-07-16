@@ -199,7 +199,6 @@ public class FileVisitorTests
 			"    function totally() private view returns(uint256) {\n" +
 			"        return _totalSupply;\n" +
 			"    }\n" +
-			"\n" +
 			"}";
 		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
 	}
@@ -256,7 +255,6 @@ public class FileVisitorTests
 			"    function totalSupply() public view returns(uint256) {\n" +
 			"        return _totalSupply;\n" +
 			"    }\n" +
-			"\n" +
 			"}";
 		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
 	}
@@ -354,7 +352,6 @@ public class FileVisitorTests
 			"    function() external;\n" +
 			"\n" +
 			"    function total() external view returns(uint256);\n" +
-			"\n" +
 			"}";
 		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
 	}
@@ -527,7 +524,6 @@ public class FileVisitorTests
 			"    function totally() private view returns(uint256) {\n" +
 			"        return _totalSupply;\n" +
 			"    }\n" +
-			"\n" +
 			"}";
 		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
 	}
@@ -569,25 +565,28 @@ public class FileVisitorTests
 			"import \"./IERC20.sol\";\n" +
 			"\n" +
 			"interface IA {\n" +
+			"\n" +
 			"}\n" +
 			"\n" +
 			"\n" +
 			"interface IB {\n" +
+			"\n" +
 			"}\n" +
 			"\n" +
 			"\n" +
 			"library LA {\n" +
+			"\n" +
 			"}\n" +
 			"\n" +
 			"\n" +
 			"library LB {\n" +
+			"\n" +
 			"}\n" +
 			"\n" +
 			"\n" +
 			"contract A is IA, IB {\n" +
 			"    using LA for uint256;\n" +
 			"    using LB for address;\n" +
-			"\n" +
 			"}";
 		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
 	}
@@ -715,7 +714,6 @@ public class FileVisitorTests
 			"    function() external;\n" +
 			"\n" +
 			"    function total() external view returns(uint256);\n" +
-			"\n" +
 			"}";
 		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
 	}
@@ -875,7 +873,6 @@ public class FileVisitorTests
 			"    function totally() private view returns(uint256) {\n" +
 			"        return _totalSupply;\n" +
 			"    }\n" +
-			"\n" +
 			"}";
 		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
 	}

@@ -104,90 +104,144 @@ public class ContractVisitor extends VisitorImpl
 		space( );
 		openCurlyBraces( );
 
+		boolean isNotFirstElement = false;
 		if ( !element.getUsingForDeclarations( ).isEmpty( ) )
 		{
 			appendCollectionOfSolidityElements( element.getUsingForDeclarations( ), "\n" );
-			newline( );
-			newline( );
+			isNotFirstElement = true;
 		}
 
 		if ( !element.getEnumDeclarations( ).isEmpty( ) )
 		{
+			if ( isNotFirstElement )
+			{
+				newline( );
+				newline( );
+			}
+
 			appendCollectionOfSolidityElements( element.getEnumDeclarations( ), "\n\n" );
-			newline( );
-			newline( );
+			isNotFirstElement = true;
 		}
 
 		if ( !element.getStructDeclarations( ).isEmpty( ) )
 		{
+			if ( isNotFirstElement )
+			{
+				newline( );
+				newline( );
+			}
+
 			appendCollectionOfSolidityElements( element.getStructDeclarations( ), "\n\n" );
-			newline( );
-			newline( );
+			isNotFirstElement = true;
 		}
 
 		if ( !element.getStateVariables( ).isEmpty( ) )
 		{
+			if ( isNotFirstElement )
+			{
+				newline( );
+				newline( );
+			}
+
 			appendCollectionOfSolidityElements( element.getStateVariables( ), "\n" );
-			newline( );
-			newline( );
+			isNotFirstElement = true;
 		}
 
 		if ( !element.getEventDeclarations( ).isEmpty( ) )
 		{
+			if ( isNotFirstElement )
+			{
+				newline( );
+				newline( );
+			}
+
 			appendCollectionOfSolidityElements( element.getEventDeclarations( ), "\n" );
-			newline( );
-			newline( );
+			isNotFirstElement = true;
 		}
 
 		if ( !element.getModifierDeclarations( ).isEmpty( ) )
 		{
+			if ( isNotFirstElement )
+			{
+				newline( );
+				newline( );
+			}
 			appendCollectionOfSolidityElements( element.getModifierDeclarations( ), "\n" );
-			newline( );
-			newline( );
+			isNotFirstElement = true;
 		}
 
 		if ( element.getConstructor( ) != null )
 		{
+			if ( isNotFirstElement )
+			{
+				newline( );
+				newline( );
+			}
+
 			element.getConstructor( ).accept( this );
-			newline( );
-			newline( );
+			isNotFirstElement = true;
 		}
 
 		if ( element.getFallbackFunction( ) != null )
 		{
+			if ( isNotFirstElement )
+			{
+				newline( );
+				newline( );
+			}
+
 			element.getFallbackFunction( ).accept( this );
-			newline( );
-			newline( );
+			isNotFirstElement = true;
 		}
 
 		if ( !element.getExternalFunctions( ).isEmpty( ) )
 		{
+			if ( isNotFirstElement )
+			{
+				newline( );
+				newline( );
+			}
+
 			appendCollectionOfSolidityElements( element.getExternalFunctions( ), "\n\n" );
-			newline( );
-			newline( );
+			isNotFirstElement = true;
 		}
 
 		if ( !element.getPublicFunctions( ).isEmpty( ) )
 		{
+			if ( isNotFirstElement )
+			{
+				newline( );
+				newline( );
+			}
+
 			appendCollectionOfSolidityElements( element.getPublicFunctions( ), "\n\n" );
-			newline( );
-			newline( );
+			isNotFirstElement = true;
 		}
 
 		if ( !element.getInternalFunctions( ).isEmpty( ) )
 		{
+			if ( isNotFirstElement )
+			{
+				newline( );
+				newline( );
+			}
+
 			appendCollectionOfSolidityElements( element.getInternalFunctions( ), "\n\n" );
-			newline( );
-			newline( );
+			isNotFirstElement = true;
 		}
 
 		if ( !element.getPrivateFunctions( ).isEmpty( ) )
 		{
+			if ( isNotFirstElement )
+			{
+				newline( );
+				newline( );
+			}
+
 			appendCollectionOfSolidityElements( element.getPrivateFunctions( ), "\n\n" );
-			newline( );
-			newline( );
 		}
 
+		newline( );
 		closeCurlyBraces( );
 	}
 

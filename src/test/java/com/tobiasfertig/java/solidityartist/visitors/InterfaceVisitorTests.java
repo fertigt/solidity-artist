@@ -525,6 +525,7 @@ public class InterfaceVisitorTests
 		interfaceElement.accept( this.visitor );
 
 		String expected = "interface IERC20 {\n" +
+			"\n" +
 			"}";
 		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
 	}
@@ -548,6 +549,7 @@ public class InterfaceVisitorTests
 			" * @author Tobias Fertig\n" +
 			" */\n" +
 			"interface IERC20 {\n" +
+			"\n" +
 			"}";
 		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
 	}
@@ -644,7 +646,6 @@ public class InterfaceVisitorTests
 			"     * @return uint256 is the total supply of token.\n" +
 			"     */\n" +
 			"    function total() external view returns(uint256);\n" +
-			"\n" +
 			"}";
 		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
 	}

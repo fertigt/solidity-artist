@@ -619,6 +619,7 @@ public class LibraryVisitorTests
 			" * @author Tobias Fertig\n" +
 			" */\n" +
 			"library Test {\n" +
+			"\n" +
 			"}";
 		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
 	}
@@ -630,6 +631,7 @@ public class LibraryVisitorTests
 
 		libraryElement.accept( this.visitor );
 		String expected = "library Test {\n" +
+			"\n" +
 			"}";
 		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
 	}
@@ -812,7 +814,6 @@ public class LibraryVisitorTests
 			"    function totally() private view returns(uint256) {\n" +
 			"        return _totalSupply;\n" +
 			"    }\n" +
-			"\n" +
 			"}";
 		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
 	}
