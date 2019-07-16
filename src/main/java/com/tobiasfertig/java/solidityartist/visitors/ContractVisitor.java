@@ -36,6 +36,13 @@ public class ContractVisitor extends VisitorImpl
 
 	@Override public void visit( ConstructorElement element )
 	{
+		if ( element.getComment( ) != null )
+		{
+			element.getComment( ).accept( this );
+			newline( );
+		}
+
+		indent( );
 		sb.append( Keyword.CONSTRUCTOR );
 		openBraces( );
 		appendCollectionOfSolidityElementsInline( element.getParameters( ), ", " );
@@ -141,7 +148,6 @@ public class ContractVisitor extends VisitorImpl
 
 		if ( element.getConstructor( ) != null )
 		{
-			indent( );
 			element.getConstructor( ).accept( this );
 			newline( );
 			newline( );

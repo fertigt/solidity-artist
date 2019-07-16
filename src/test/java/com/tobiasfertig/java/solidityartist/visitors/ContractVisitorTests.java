@@ -100,6 +100,27 @@ public class ContractVisitorTests
 	}
 
 	@Test
+	public void testVisitConstructorElement_WithComment_CorrectStringReturned( )
+	{
+		NatSpecElement comment = NatSpecElement.builder( )
+											   .addTagAtNotice( "This constructor is only called at creation." )
+											   .build( );
+		CodeElement code = CodeElement.builder( ).addStatement( "a = _a" ).build( );
+		ConstructorElement constructor = ConstructorElement.publicBuilder( )
+														   .addNatSpec( comment )
+														   .addCode( code )
+														   .build( );
+
+		constructor.accept( this.visitor );
+
+		String expected = "/// @notice This constructor is only called at creation.\n" +
+			"constructor() public {\n" +
+			"    a = _a;\n" +
+			"}";
+		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
+	}
+
+	@Test
 	public void testVisitConstructorElement_With1Parameter_CorrectStringReturned( )
 	{
 		ParameterElement parameter = ParameterElement.builder( DataTypeElement.UINT ).addName( "_y" ).build( );
@@ -476,7 +497,16 @@ public class ContractVisitorTests
 							   CodeElement.builder( ).addStatement( "require(owner == msg.sender)" ).build( ) )
 						   .build( );
 
-		ConstructorElement constructor = ConstructorElement.publicBuilder( ).build( );
+		NatSpecElement constructorComment = NatSpecElement.builder( )
+														  .addTagAtNotice(
+															  "This constructor is only called at creation." )
+														  .addLine( "" )
+														  .addLine( "This constructor is empty." )
+														  .build( );
+
+		ConstructorElement constructor = ConstructorElement.publicBuilder( )
+														   .addNatSpec( constructorComment )
+														   .build( );
 
 		FunctionElement fallbackFunction =
 			FunctionElement.fallbackBuilder( )
@@ -582,6 +612,9 @@ public class ContractVisitorTests
 			"        _;\n" +
 			"    }\n" +
 			"\n" +
+			"    /// @notice This constructor is only called at creation.\n" +
+			"    /// \n" +
+			"    /// This constructor is empty.\n" +
 			"    constructor() public {\n" +
 			"\n" +
 			"    }\n" +

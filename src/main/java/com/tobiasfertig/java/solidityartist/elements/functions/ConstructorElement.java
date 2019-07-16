@@ -1,6 +1,8 @@
 package com.tobiasfertig.java.solidityartist.elements.functions;
 
 import com.tobiasfertig.java.solidityartist.elements.SolidityElement;
+import com.tobiasfertig.java.solidityartist.elements.comments.NatSpecElement;
+import com.tobiasfertig.java.solidityartist.elements.files.ContractElement;
 import com.tobiasfertig.java.solidityartist.elements.parameters.ParameterElement;
 import com.tobiasfertig.java.solidityartist.utils.Keyword;
 import com.tobiasfertig.java.solidityartist.visitors.Visitor;
@@ -10,6 +12,7 @@ import java.util.Set;
 
 public class ConstructorElement implements SolidityElement
 {
+	private final NatSpecElement comment;
 	private final Set<ParameterElement> parameters;
 	private final Set<String> inheritanceModifiers;
 	private final Keyword.Visibility visibility;
@@ -19,6 +22,7 @@ public class ConstructorElement implements SolidityElement
 
 	private ConstructorElement( Builder builder )
 	{
+		this.comment = builder.comment;
 		this.parameters = builder.parameters;
 		this.inheritanceModifiers = builder.inheritanceModifiers;
 		this.visibility = builder.visibility;
@@ -30,6 +34,11 @@ public class ConstructorElement implements SolidityElement
 	@Override public void accept( Visitor visitor )
 	{
 		visitor.visit( this );
+	}
+
+	public NatSpecElement getComment( )
+	{
+		return comment;
 	}
 
 	public Set<ParameterElement> getParameters( )
@@ -74,6 +83,7 @@ public class ConstructorElement implements SolidityElement
 
 	public static final class Builder
 	{
+		private NatSpecElement comment;
 		private final Set<ParameterElement> parameters = new LinkedHashSet<>( );
 		private final Set<String> inheritanceModifiers = new LinkedHashSet<>( );
 		private final Keyword.Visibility visibility;
@@ -84,6 +94,12 @@ public class ConstructorElement implements SolidityElement
 		private Builder( Keyword.Visibility visibility )
 		{
 			this.visibility = visibility;
+		}
+
+		public Builder addNatSpec( NatSpecElement comment )
+		{
+			this.comment = comment;
+			return this;
 		}
 
 		public Builder addParameters( Iterable<ParameterElement> parameterSpecs )
