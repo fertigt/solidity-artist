@@ -3,9 +3,11 @@ package com.tobiasfertig.java.solidityartist.elements.datatypes;
 import com.tobiasfertig.java.solidityartist.elements.SolidityElement;
 import com.tobiasfertig.java.solidityartist.visitors.Visitor;
 
+import java.sql.SQLOutput;
+
 public class DataTypeElement implements SolidityElement
 {
-	public static final DataTypeElement BOOLEAN = new DataTypeElement( "bool" );
+	public static final DataTypeElement BOOL = new DataTypeElement( "bool" );
 	public static final DataTypeElement ADDRESS = new DataTypeElement( "address" );
 	public static final DataTypeElement ADDRESS_PAYABLE = new DataTypeElement( "address payable" );
 	public static final DataTypeElement BYTE = new DataTypeElement( "byte" );
@@ -42,6 +44,7 @@ public class DataTypeElement implements SolidityElement
 	public static final DataTypeElement BYTES30 = new DataTypeElement( "bytes30" );
 	public static final DataTypeElement BYTES31 = new DataTypeElement( "bytes31" );
 	public static final DataTypeElement BYTES32 = new DataTypeElement( "bytes32" );
+	public static final DataTypeElement FIXED = new DataTypeElement( "fixed" );
 	public static final DataTypeElement INT = new DataTypeElement( "int" );
 	public static final DataTypeElement INT8 = new DataTypeElement( "int8" );
 	public static final DataTypeElement INT16 = new DataTypeElement( "int16" );
@@ -76,6 +79,7 @@ public class DataTypeElement implements SolidityElement
 	public static final DataTypeElement INT248 = new DataTypeElement( "int248" );
 	public static final DataTypeElement INT256 = new DataTypeElement( "int256" );
 	public static final DataTypeElement STRING = new DataTypeElement( "string" );
+	public static final DataTypeElement UFIXED = new DataTypeElement( "ufixed" );
 	public static final DataTypeElement UINT = new DataTypeElement( "uint" );
 	public static final DataTypeElement UINT8 = new DataTypeElement( "uint8" );
 	public static final DataTypeElement UINT16 = new DataTypeElement( "uint16" );

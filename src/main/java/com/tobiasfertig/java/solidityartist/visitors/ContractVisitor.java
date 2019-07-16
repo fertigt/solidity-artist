@@ -148,28 +148,28 @@ public class ContractVisitor extends VisitorImpl
 
 		if ( !element.getExternalFunctions( ).isEmpty( ) )
 		{
-			appendCollectionOfSolidityElements( element.getExternalFunctions( ), "\n\n\n" );
+			appendCollectionOfSolidityElements( element.getExternalFunctions( ), "\n\n" );
 			newline( );
 			newline( );
 		}
 
 		if ( !element.getPublicFunctions( ).isEmpty( ) )
 		{
-			appendCollectionOfSolidityElements( element.getPublicFunctions( ), "\n\n\n" );
+			appendCollectionOfSolidityElements( element.getPublicFunctions( ), "\n\n" );
 			newline( );
 			newline( );
 		}
 
 		if ( !element.getInternalFunctions( ).isEmpty( ) )
 		{
-			appendCollectionOfSolidityElements( element.getInternalFunctions( ), "\n\n\n" );
+			appendCollectionOfSolidityElements( element.getInternalFunctions( ), "\n\n" );
 			newline( );
 			newline( );
 		}
 
 		if ( !element.getPrivateFunctions( ).isEmpty( ) )
 		{
-			appendCollectionOfSolidityElements( element.getPrivateFunctions( ), "\n\n\n" );
+			appendCollectionOfSolidityElements( element.getPrivateFunctions( ), "\n\n" );
 			newline( );
 			newline( );
 		}
