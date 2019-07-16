@@ -366,6 +366,39 @@ public class InterfaceVisitorTests
 	}
 
 	@Test
+	public void testVisitFunctionElement_FunctionWithComment_CorrectStringReturned( )
+	{
+		NatSpecElement comment = NatSpecElement.builder( )
+											   .addTagAtNotice( "This function is payable, but the ether is lost if " +
+												   "you send it." )
+											   .addTagAtReturn( "string is a nice string." )
+											   .isMultiLineComment( )
+											   .build( );
+
+		ParameterElement parameterElement = ParameterElement.builder( DataTypeElement.STRING )
+															.inMemory( )
+															.build( );
+		CodeElement code = CodeElement.builder( )
+									  .addStatement( "x = 1" )
+									  .build( );
+		FunctionElement fallback = FunctionElement.externalBuilder( "payableFunction" )
+												  .addNatSpec( comment )
+												  .addReturnParameter( parameterElement )
+												  .isPayable( )
+												  .addCode( code )
+												  .build( );
+
+		fallback.accept( this.visitor );
+
+		String expected = "/**\n" +
+			" * @notice This function is payable, but the ether is lost if you send it.\n" +
+			" * @return string is a nice string.\n" +
+			" */\n" +
+			"function payableFunction() external payable returns(string memory);";
+		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
+	}
+
+	@Test
 	public void testVisitFunctionElement_FunctionWith2UnnamedReturnParameters_CorrectStringReturned( )
 	{
 		ParameterElement parameterElement = ParameterElement.builder( DataTypeElement.STRING )
@@ -558,7 +591,15 @@ public class InterfaceVisitorTests
 						   .addCode( CodeElement.builder( ).addStatement( "owner = msg.sender" ).build( ) )
 						   .build( );
 
+		NatSpecElement totalComment = NatSpecElement.builder( )
+													.addTagAtNotice( "This function is a view and returns the total " +
+														"supply of token.")
+													.addTagAtReturn( "uint256 is the total supply of token." )
+													.isMultiLineComment( )
+													.build( );
+
 		FunctionElement total = FunctionElement.externalBuilder( "total" )
+											   .addNatSpec( totalComment )
 											   .isView( )
 											   .addReturnParameter( ParameterElement.builder( DataTypeElement.UINT256 )
 																					.build( )
@@ -598,6 +639,10 @@ public class InterfaceVisitorTests
 			"\n" +
 			"    function() external;\n" +
 			"\n" +
+			"    /**\n" +
+			"     * @notice This function is a view and returns the total supply of token.\n" +
+			"     * @return uint256 is the total supply of token.\n" +
+			"     */\n" +
 			"    function total() external view returns(uint256);\n" +
 			"\n" +
 			"}";

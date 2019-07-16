@@ -254,6 +254,12 @@ public class ContractVisitor extends VisitorImpl
 
 	@Override public void visit( FunctionElement element )
 	{
+		if ( element.getComment( ) != null )
+		{
+			element.getComment( ).accept( this );
+			newline( );
+		}
+
 		indent( );
 		sb.append( Keyword.FUNCTION );
 

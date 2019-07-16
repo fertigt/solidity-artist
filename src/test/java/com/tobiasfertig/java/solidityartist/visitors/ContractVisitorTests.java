@@ -521,16 +521,24 @@ public class ContractVisitorTests
 						   .addCode( CodeElement.builder( ).addStatement( "owner = msg.sender" ).build( ) )
 						   .build( );
 
+		NatSpecElement totalComment = NatSpecElement.builder( )
+											   .addTagAtNotice( "This function is a view and returns the total " +
+												   "supply of token.")
+											   .addTagAtReturn( "uint256 is the total supply of token." )
+											   .isMultiLineComment( )
+											   .build( );
+
 		FunctionElement total = FunctionElement.externalBuilder( "total" )
-													 .isView( )
-													 .addReturnParameter( ParameterElement.builder( DataTypeElement.UINT256 )
-																						  .build( )
-													 )
-													 .addCode( CodeElement.builder( )
-																		  .addStatement( "return _totalSupply" )
-																		  .build( )
-													 )
-													 .build( );
+											   .addNatSpec( totalComment )
+											   .isView( )
+											   .addReturnParameter( ParameterElement.builder( DataTypeElement.UINT256 )
+																					.build( )
+											   )
+											   .addCode( CodeElement.builder( )
+																	.addStatement( "return _totalSupply" )
+																	.build( )
+											   )
+											   .build( );
 
 		FunctionElement totalSupply = FunctionElement.publicBuilder( "totalSupply" )
 													 .isView( )
@@ -634,6 +642,10 @@ public class ContractVisitorTests
 			"        owner = msg.sender;\n" +
 			"    }\n" +
 			"\n" +
+			"    /**\n" +
+			"     * @notice This function is a view and returns the total supply of token.\n" +
+			"     * @return uint256 is the total supply of token.\n" +
+			"     */\n" +
 			"    function total() external view returns(uint256) {\n" +
 			"        return _totalSupply;\n" +
 			"    }\n" +
@@ -837,12 +849,12 @@ public class ContractVisitorTests
 		CodeElement code = CodeElement.builder( )
 									  .addStatement( "x = 1" )
 									  .build( );
-		FunctionElement fallback = FunctionElement.publicBuilder( "pureFunction" )
+		FunctionElement function = FunctionElement.publicBuilder( "pureFunction" )
 												  .isPure( )
 												  .addCode( code )
 												  .build( );
 
-		fallback.accept( this.visitor );
+		function.accept( this.visitor );
 
 		String expected = "function pureFunction() public pure {\n" +
 			"    x = 1;\n" +
@@ -856,12 +868,12 @@ public class ContractVisitorTests
 		CodeElement code = CodeElement.builder( )
 									  .addStatement( "x = 1" )
 									  .build( );
-		FunctionElement fallback = FunctionElement.publicBuilder( "viewFunction" )
+		FunctionElement function = FunctionElement.publicBuilder( "viewFunction" )
 												  .isView( )
 												  .addCode( code )
 												  .build( );
 
-		fallback.accept( this.visitor );
+		function.accept( this.visitor );
 
 		String expected = "function viewFunction() public view {\n" +
 			"    x = 1;\n" +
@@ -875,12 +887,12 @@ public class ContractVisitorTests
 		CodeElement code = CodeElement.builder( )
 									  .addStatement( "x = 1" )
 									  .build( );
-		FunctionElement fallback = FunctionElement.publicBuilder( "abstractFunction" )
+		FunctionElement function = FunctionElement.publicBuilder( "abstractFunction" )
 												  .isAbstract( )
 												  .addCode( code )
 												  .build( );
 
-		fallback.accept( this.visitor );
+		function.accept( this.visitor );
 
 		String expected = "function abstractFunction() public;";
 		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
@@ -892,12 +904,12 @@ public class ContractVisitorTests
 		CodeElement code = CodeElement.builder( )
 									  .addStatement( "x = 1" )
 									  .build( );
-		FunctionElement fallback = FunctionElement.publicBuilder( "payableFunction" )
+		FunctionElement function = FunctionElement.publicBuilder( "payableFunction" )
 												  .isPayable( )
 												  .addCode( code )
 												  .build( );
 
-		fallback.accept( this.visitor );
+		function.accept( this.visitor );
 
 		String expected = "function payableFunction() public payable {\n" +
 			"    x = 1;\n" +
@@ -915,13 +927,13 @@ public class ContractVisitorTests
 		CodeElement code = CodeElement.builder( )
 									  .addStatement( "x = 1" )
 									  .build( );
-		FunctionElement fallback = FunctionElement.publicBuilder( "payableFunction" )
+		FunctionElement function = FunctionElement.publicBuilder( "payableFunction" )
 												  .addParameter( parameterElement )
 												  .isPayable( )
 												  .addCode( code )
 												  .build( );
 
-		fallback.accept( this.visitor );
+		function.accept( this.visitor );
 
 		String expected = "function payableFunction(string memory test) public payable {\n" +
 			"    x = 1;\n" +
@@ -942,14 +954,14 @@ public class ContractVisitorTests
 		CodeElement code = CodeElement.builder( )
 									  .addStatement( "x = 1" )
 									  .build( );
-		FunctionElement fallback = FunctionElement.publicBuilder( "payableFunction" )
+		FunctionElement function = FunctionElement.publicBuilder( "payableFunction" )
 												  .addParameter( parameterElement )
 												  .addParameter( parameterElement2 )
 												  .isPayable( )
 												  .addCode( code )
 												  .build( );
 
-		fallback.accept( this.visitor );
+		function.accept( this.visitor );
 
 		String expected = "function payableFunction(string memory test, address test2) public payable {\n" +
 			"    x = 1;\n" +
@@ -967,13 +979,13 @@ public class ContractVisitorTests
 		CodeElement code = CodeElement.builder( )
 									  .addStatement( "x = 1" )
 									  .build( );
-		FunctionElement fallback = FunctionElement.publicBuilder( "payableFunction" )
+		FunctionElement function = FunctionElement.publicBuilder( "payableFunction" )
 												  .addReturnParameter( parameterElement )
 												  .isPayable( )
 												  .addCode( code )
 												  .build( );
 
-		fallback.accept( this.visitor );
+		function.accept( this.visitor );
 
 		String expected = "function payableFunction() public payable returns(string memory test) {\n" +
 			"    x = 1;\n" +
@@ -994,14 +1006,14 @@ public class ContractVisitorTests
 		CodeElement code = CodeElement.builder( )
 									  .addStatement( "x = 1" )
 									  .build( );
-		FunctionElement fallback = FunctionElement.publicBuilder( "payableFunction" )
+		FunctionElement function = FunctionElement.publicBuilder( "payableFunction" )
 												  .addReturnParameter( parameterElement )
 												  .addReturnParameter( parameterElement2 )
 												  .isPayable( )
 												  .addCode( code )
 												  .build( );
 
-		fallback.accept( this.visitor );
+		function.accept( this.visitor );
 
 		String expected = "function payableFunction() public payable returns(string memory test, address test2) {\n" +
 			"    x = 1;\n" +
@@ -1018,15 +1030,52 @@ public class ContractVisitorTests
 		CodeElement code = CodeElement.builder( )
 									  .addStatement( "x = 1" )
 									  .build( );
-		FunctionElement fallback = FunctionElement.publicBuilder( "payableFunction" )
+		FunctionElement function = FunctionElement.publicBuilder( "payableFunction" )
 												  .addReturnParameter( parameterElement )
 												  .isPayable( )
 												  .addCode( code )
 												  .build( );
 
-		fallback.accept( this.visitor );
+		function.accept( this.visitor );
 
 		String expected = "function payableFunction() public payable returns(string memory) {\n" +
+			"    x = 1;\n" +
+			"}";
+		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
+	}
+
+	@Test
+	public void testVisitFunctionElement_FunctionWithComment_CorrectStringReturned( )
+	{
+		NatSpecElement comment = NatSpecElement.builder( )
+											   .addTagAtNotice( "This function is payable, but the ether is lost if " +
+												   "you send it." )
+											   .addTagAtReturn( "string is a nice string." )
+											   .isMultiLineComment( )
+											   .build( );
+
+		ParameterElement parameterElement = ParameterElement.builder( DataTypeElement.STRING )
+															.inMemory( )
+															.build( );
+
+		CodeElement code = CodeElement.builder( )
+									  .addStatement( "x = 1" )
+									  .build( );
+
+		FunctionElement function = FunctionElement.publicBuilder( "payableFunction" )
+												  .addNatSpec( comment )
+												  .addReturnParameter( parameterElement )
+												  .isPayable( )
+												  .addCode( code )
+												  .build( );
+
+		function.accept( this.visitor );
+
+		String expected = "/**\n" +
+			" * @notice This function is payable, but the ether is lost if you send it.\n" +
+			" * @return string is a nice string.\n" +
+			" */\n" +
+			"function payableFunction() public payable returns(string memory) {\n" +
 			"    x = 1;\n" +
 			"}";
 		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
@@ -1043,14 +1092,14 @@ public class ContractVisitorTests
 		CodeElement code = CodeElement.builder( )
 									  .addStatement( "x = 1" )
 									  .build( );
-		FunctionElement fallback = FunctionElement.publicBuilder( "payableFunction" )
+		FunctionElement function = FunctionElement.publicBuilder( "payableFunction" )
 												  .addReturnParameter( parameterElement )
 												  .addReturnParameter( parameterElement2 )
 												  .isPayable( )
 												  .addCode( code )
 												  .build( );
 
-		fallback.accept( this.visitor );
+		function.accept( this.visitor );
 
 		String expected = "function payableFunction() public payable returns(string memory, address) {\n" +
 			"    x = 1;\n" +

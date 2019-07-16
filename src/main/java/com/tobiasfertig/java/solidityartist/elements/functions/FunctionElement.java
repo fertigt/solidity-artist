@@ -1,6 +1,7 @@
 package com.tobiasfertig.java.solidityartist.elements.functions;
 
 import com.tobiasfertig.java.solidityartist.elements.SolidityElement;
+import com.tobiasfertig.java.solidityartist.elements.comments.NatSpecElement;
 import com.tobiasfertig.java.solidityartist.elements.parameters.ParameterElement;
 import com.tobiasfertig.java.solidityartist.utils.Keyword;
 import com.tobiasfertig.java.solidityartist.visitors.Visitor;
@@ -12,6 +13,7 @@ import java.util.Set;
 
 public class FunctionElement implements SolidityElement
 {
+	private final NatSpecElement comment;
 	private final boolean isFallback;
 	private final String name;
 	private final Set<ParameterElement> parameters;
@@ -24,6 +26,7 @@ public class FunctionElement implements SolidityElement
 
 	private FunctionElement( Builder builder )
 	{
+		this.comment = builder.comment;
 		this.isFallback = builder.isFallback;
 		this.name = builder.name;
 		this.parameters = builder.parameters;
@@ -39,6 +42,11 @@ public class FunctionElement implements SolidityElement
 	public void accept( Visitor visitor )
 	{
 		visitor.visit( this );
+	}
+
+	public NatSpecElement getComment( )
+	{
+		return comment;
 	}
 
 	public boolean isFallback( )
@@ -113,6 +121,7 @@ public class FunctionElement implements SolidityElement
 
 	public static final class Builder
 	{
+		private NatSpecElement comment;
 		private final boolean isFallback;
 		private final String name;
 		private final Set<ParameterElement> parameters = new LinkedHashSet<>( );
@@ -128,6 +137,12 @@ public class FunctionElement implements SolidityElement
 			this.visibility = visibility;
 			this.isFallback = isFallback;
 			this.name = name;
+		}
+
+		public Builder addNatSpec( NatSpecElement comment )
+		{
+			this.comment = comment;
+			return this;
 		}
 
 		public Builder addParameters( Iterable<ParameterElement> parameterSpecs )
