@@ -34,7 +34,7 @@ public class InterfaceVisitor extends VisitorImpl
 
 	@Override public void visit( CodeElement element )
 	{
-		appendCollection( element.getLines( ), "\n" );
+		appendCollectionIndented( element.getLines( ), "\n" );
 	}
 
 	@Override public void visit( ConstructorElement element )
@@ -73,7 +73,7 @@ public class InterfaceVisitor extends VisitorImpl
 		sb.append( element.getName( ) );
 		space( );
 		openCurlyBraces( );
-		appendCollection( element.getValues( ), ",\n" );
+		appendCollectionIndented( element.getValues( ), ",\n" );
 		newline( );
 		closeCurlyBraces( );
 	}
@@ -85,7 +85,7 @@ public class InterfaceVisitor extends VisitorImpl
 		space( );
 		sb.append( element.getName( ) );
 		openBraces( );
-		appendCollectionOfSolidityElementsInline( element.getParameters( ), ", " );
+		appendCollectionOfSolidityElements( element.getParameters( ), ", " );
 		closeBraces( );
 		semicolon( );
 	}
@@ -126,7 +126,7 @@ public class InterfaceVisitor extends VisitorImpl
 		}
 
 		openBraces( );
-		appendCollectionOfSolidityElementsInline( element.getParameters( ), ", " );
+		appendCollectionOfSolidityElements( element.getParameters( ), ", " );
 		closeBraces( );
 		space( );
 		sb.append( Keyword.Visibility.EXTERNAL );
@@ -142,7 +142,7 @@ public class InterfaceVisitor extends VisitorImpl
 			space( );
 			sb.append( Keyword.RETURNS );
 			openBraces( );
-			appendCollectionOfSolidityElementsInline( element.getReturnParameters( ), ", " );
+			appendCollectionOfSolidityElements( element.getReturnParameters( ), ", " );
 			closeBraces( );
 		}
 
@@ -153,7 +153,7 @@ public class InterfaceVisitor extends VisitorImpl
 	{
 		sb.append( element.getTypeName( ) );
 		openBraces( );
-		appendCollectionOfSolidityElementsInline( element.getParameters( ), ", " );
+		appendCollectionOfSolidityElements( element.getParameters( ), ", " );
 		closeBraces( );
 		space( );
 		sb.append( element.getVisibility( ) );
@@ -169,7 +169,7 @@ public class InterfaceVisitor extends VisitorImpl
 			space( );
 			sb.append( Keyword.RETURNS );
 			openBraces( );
-			appendCollectionOfSolidityElementsInline( element.getReturnParameters( ), ", " );
+			appendCollectionOfSolidityElements( element.getReturnParameters( ), ", " );
 			closeBraces( );
 		}
 	}
@@ -275,7 +275,7 @@ public class InterfaceVisitor extends VisitorImpl
 		space( );
 		sb.append( element.getName( ) );
 		openBraces( );
-		appendCollectionOfSolidityElementsInline( element.getParameters( ), ", " );
+		appendCollectionOfSolidityElements( element.getParameters( ), ", " );
 		closeBraces( );
 		space( );
 		openCurlyBraces( );

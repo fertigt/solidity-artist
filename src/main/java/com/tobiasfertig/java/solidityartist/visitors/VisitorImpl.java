@@ -60,7 +60,7 @@ public abstract class VisitorImpl implements Visitor
 		sb.append( " " );
 	}
 
-	void appendCollection( Iterable<? extends Object> set, String delimiter )
+	void appendCollectionIndented( Iterable<? extends Object> set, String delimiter )
 	{
 		Iterator<? extends Object> iterator = set.iterator( );
 		if ( iterator.hasNext( ) )
@@ -138,27 +138,6 @@ public abstract class VisitorImpl implements Visitor
 			}
 
 			indent( );
-			nextElement.accept( this );
-		}
-	}
-
-	void appendCollectionOfSolidityElementsInline(
-		Iterable<? extends SolidityElement> elements,
-		String delimiter
-	)
-	{
-		Iterator<? extends SolidityElement> iterator = elements.iterator( );
-		if ( iterator.hasNext( ) )
-		{
-			SolidityElement nextElement = iterator.next( );
-			while ( iterator.hasNext( ) )
-			{
-				nextElement.accept( this );
-				sb.append( delimiter );
-
-				nextElement = iterator.next( );
-			}
-
 			nextElement.accept( this );
 		}
 	}
