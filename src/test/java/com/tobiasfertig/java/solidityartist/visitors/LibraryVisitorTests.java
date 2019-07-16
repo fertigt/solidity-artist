@@ -473,11 +473,11 @@ public class LibraryVisitorTests
 	@Test
 	public void testVisitFunctionTypeElement_WithoutParameters_CorrectStringReturned( )
 	{
-		FunctionTypeElement element = FunctionTypeElement.publicBuilder( ).build( );
+		FunctionTypeElement element = FunctionTypeElement.externalBuilder( ).build( );
 
 		element.accept( this.visitor );
 
-		String expected = "function() public";
+		String expected = "function() external";
 		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
 	}
 
@@ -489,14 +489,14 @@ public class LibraryVisitorTests
 															.build( );
 		ParameterElement parameterElement2 = ParameterElement.builder( DataTypeElement.ADDRESS )
 															 .build( );
-		FunctionTypeElement element = FunctionTypeElement.publicBuilder( )
+		FunctionTypeElement element = FunctionTypeElement.externalBuilder( )
 														 .addParameter( parameterElement )
 														 .addParameter( parameterElement2 )
 														 .build( );
 
 		element.accept( this.visitor );
 
-		String expected = "function(string memory, address) public";
+		String expected = "function(string memory, address) external";
 		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
 	}
 
@@ -519,33 +519,33 @@ public class LibraryVisitorTests
 	@Test
 	public void testVisitFunctionTypeElement_Pure_CorrectStringReturned( )
 	{
-		FunctionTypeElement element = FunctionTypeElement.publicBuilder( ).isPure( ).build( );
+		FunctionTypeElement element = FunctionTypeElement.externalBuilder( ).isPure( ).build( );
 
 		element.accept( this.visitor );
 
-		String expected = "function() public pure";
+		String expected = "function() external pure";
 		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
 	}
 
 	@Test
 	public void testVisitFunctionTypeElement_View_CorrectStringReturned( )
 	{
-		FunctionTypeElement element = FunctionTypeElement.publicBuilder( ).isView( ).build( );
+		FunctionTypeElement element = FunctionTypeElement.externalBuilder( ).isView( ).build( );
 
 		element.accept( this.visitor );
 
-		String expected = "function() public view";
+		String expected = "function() external view";
 		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
 	}
 
 	@Test
 	public void testVisitFunctionTypeElement_Payable_CorrectStringReturned( )
 	{
-		FunctionTypeElement element = FunctionTypeElement.publicBuilder( ).isPayable( ).build( );
+		FunctionTypeElement element = FunctionTypeElement.externalBuilder( ).isPayable( ).build( );
 
 		element.accept( this.visitor );
 
-		String expected = "function() public payable";
+		String expected = "function() external payable";
 		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
 	}
 
@@ -555,13 +555,13 @@ public class LibraryVisitorTests
 		ParameterElement parameterElement = ParameterElement.builder( DataTypeElement.STRING )
 															.inMemory( )
 															.build( );
-		FunctionTypeElement element = FunctionTypeElement.publicBuilder( )
+		FunctionTypeElement element = FunctionTypeElement.externalBuilder( )
 														 .addReturnParameter( parameterElement )
 														 .build( );
 
 		element.accept( this.visitor );
 
-		String expected = "function() public returns(string memory)";
+		String expected = "function() external returns(string memory)";
 		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
 	}
 

@@ -48,14 +48,14 @@ public class FunctionTypeElement extends DataTypeElement
 		return returnParameters;
 	}
 
+	public static Builder externalBuilder( )
+	{
+		return new Builder( Keyword.Visibility.EXTERNAL );
+	}
+
 	public static Builder internalBuilder( )
 	{
 		return new Builder( Keyword.Visibility.INTERNAL );
-	}
-
-	public static Builder publicBuilder( )
-	{
-		return new Builder( Keyword.Visibility.PUBLIC );
 	}
 
 	public static final class Builder
