@@ -1,5 +1,6 @@
 package com.tobiasfertig.java.solidityartist.elements.files;
 
+import com.tobiasfertig.java.solidityartist.SolidityFile;
 import com.tobiasfertig.java.solidityartist.elements.SolidityElement;
 import com.tobiasfertig.java.solidityartist.visitors.Visitor;
 
@@ -39,6 +40,11 @@ public class ImportElement implements SolidityElement
 	public String getFileNameAlias( )
 	{
 		return fileNameAlias;
+	}
+
+	public static Builder builder( SolidityFile solidityFile )
+	{
+		return new Builder( solidityFile.getFileName( ) );
 	}
 
 	public static Builder builder( String fileName )

@@ -58,4 +58,19 @@ public class SolidityFile
 		this.fileElement.accept( visitor );
 		return visitor.export( );
 	}
+
+	public String getFileName( )
+	{
+		return fileName;
+	}
+
+	public String getPath( )
+	{
+		return path;
+	}
+
+	public FileElement getFileElement( )
+	{
+		return fileElement;
+	}
 }
