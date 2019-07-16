@@ -4,10 +4,7 @@ import com.tobiasfertig.java.solidityartist.elements.files.FileElement;
 import com.tobiasfertig.java.solidityartist.visitors.FileVisitor;
 import com.tobiasfertig.java.solidityartist.visitors.Visitor;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
@@ -37,6 +34,17 @@ public class SolidityFile
 		bufferedWriter.flush( );
 		fw.flush( );
 		fw.close( );
+	}
+
+	public void saveToOutputStream( OutputStream outputStream ) throws IOException
+	{
+		final OutputStreamWriter outputStreamWriter = new OutputStreamWriter( outputStream, StandardCharsets.UTF_8 );
+		final BufferedWriter bufferedWriter = new BufferedWriter( outputStreamWriter );
+
+		bufferedWriter.write( getFileElementAsString( ) );
+
+		bufferedWriter.flush( );
+		outputStreamWriter.flush( );
 	}
 
 	private String getFullFileName( )
