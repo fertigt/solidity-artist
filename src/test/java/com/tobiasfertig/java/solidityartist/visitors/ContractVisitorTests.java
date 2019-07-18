@@ -27,7 +27,7 @@ public class ContractVisitorTests
 	@Before
 	public void setUp( )
 	{
-		this.visitor = new ContractVisitor( );
+		this.visitor = new ContractVisitor( 99 );
 	}
 
 	@Test
@@ -547,15 +547,18 @@ public class ContractVisitorTests
 
 		FunctionElement _transfer = FunctionElement.internalBuilder( "_transfer" )
 												   .addParameter( ParameterElement.builder( DataTypeElement.ADDRESS )
-																				  .addName( "sender" )
+																				  .addName(
+																					  "sender" )
 																				  .build( ) )
 												   .addParameter( ParameterElement.builder( DataTypeElement.ADDRESS )
-																				  .addName( "recipient" )
+																				  .addName(
+																					  "recipient" )
 																				  .build( )
-												   )
-												   .addParameter( ParameterElement.builder( DataTypeElement.UINT256 )
-																				  .addName( "amount" )
-																				  .build( )
+												   ).isPayable( )
+												   .addReturnParameter(
+													   ParameterElement.builder( DataTypeElement.UINT256 )
+																	   .addName( "amount" )
+																	   .build( )
 												   )
 												   .addCode( CodeElement.builder( )
 																		.addStatement(
@@ -648,7 +651,13 @@ public class ContractVisitorTests
 			"        return _totalSupply;\n" +
 			"    }\n" +
 			"\n" +
-			"    function _transfer(address sender, address recipient, uint256 amount) internal {\n" +
+			"    function _transfer(address sender, address recipient)\n" +
+			"        internal\n" +
+			"        payable\n" +
+			"        returns(\n" +
+			"            uint256 amount\n" +
+			"        )\n" +
+			"    {\n" +
 			"        require(sender != address(0), \"ERC20: transfer from the zero address\");\n" +
 			"        require(recipient != address(0), \"ERC20: transfer to the zero address\");\n" +
 			"        _balances[sender] = _balances[sender].sub(amount);\n" +
@@ -801,6 +810,81 @@ public class ContractVisitorTests
 
 		parameterElement.accept( this.visitor );
 		assertEquals( "Should be the same text", "string indexed test", this.visitor.export( ) );
+	}
+
+	@Test
+	public void testVisitFunctionElement_UntilParametersInline_CorrectStringReturned( )
+	{
+		ParameterElement parameterElement = ParameterElement.builder( DataTypeElement.STRING )
+															.addName( "testSuperLongLong" )
+															.inMemory( )
+															.build( );
+		ParameterElement parameterElement2 = ParameterElement.builder( DataTypeElement.ADDRESS )
+															 .addName( "test2SuperLongLong" )
+															 .build( );
+		CodeElement code = CodeElement.builder( )
+									  .addStatement( "x = 1" )
+									  .build( );
+		FunctionElement function = FunctionElement.publicBuilder( "payableFunction" )
+												  .addReturnParameter( parameterElement )
+												  .addReturnParameter( parameterElement2 )
+												  .isPayable( )
+												  .addCode( code )
+												  .build( );
+
+		function.accept( this.visitor );
+
+		String expected = "function payableFunction()\n" +
+			"    public\n" +
+			"    payable\n" +
+			"    returns(\n" +
+			"        string memory testSuperLongLong,\n" +
+			"        address test2SuperLongLong\n" +
+			"    )\n" +
+			"{\n" +
+			"    x = 1;\n" +
+			"}";
+		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
+	}
+
+	@Test
+	public void testVisitFunctionElement_LineWrapped_CorrectStringReturned( )
+	{
+		ParameterElement parameterElement = ParameterElement.builder( DataTypeElement.STRING )
+															.addName( "testSuperLongLongLongLongLong" )
+															.inMemory( )
+															.build( );
+		ParameterElement parameterElement2 = ParameterElement.builder( DataTypeElement.ADDRESS )
+															 .addName( "test2SuperLongLongLongLongLong" )
+															 .build( );
+		CodeElement code = CodeElement.builder( )
+									  .addStatement( "x = 1" )
+									  .build( );
+		FunctionElement function = FunctionElement.publicBuilder( "payableFunction" )
+												  .addParameter( parameterElement )
+												  .addParameter( parameterElement2 )
+												  .addReturnParameter( parameterElement )
+												  .addReturnParameter( parameterElement2 )
+												  .isPayable( )
+												  .addCode( code )
+												  .build( );
+
+		function.accept( this.visitor );
+
+		String expected = "function payableFunction(\n" +
+			"    string memory testSuperLongLongLongLongLong,\n" +
+			"    address test2SuperLongLongLongLongLong\n" +
+			")\n" +
+			"    public\n" +
+			"    payable\n" +
+			"    returns(\n" +
+			"        string memory testSuperLongLongLongLongLong,\n" +
+			"        address test2SuperLongLongLongLongLong\n" +
+			"    )\n" +
+			"{\n" +
+			"    x = 1;\n" +
+			"}";
+		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
 	}
 
 	@Test
@@ -1120,7 +1204,8 @@ public class ContractVisitorTests
 												   "bool whether the call correctly returned the expected magic value" )
 											   .build( );
 
-		ParameterElement from = ParameterElement.builder( DataTypeElement.ADDRESS ).addName( "from" ).build( );
+		ParameterElement from =
+			ParameterElement.builder( DataTypeElement.ADDRESS ).addName( "from" ).build( );
 
 		ParameterElement to = ParameterElement.builder( DataTypeElement.ADDRESS ).addName( "to" ).build( );
 
@@ -1166,7 +1251,12 @@ public class ContractVisitorTests
 			" * @param _data bytes optional data to send along with the call\n" +
 			" * @return bool whether the call correctly returned the expected magic value\n" +
 			" */\n" +
-			"function _checkOnERC721Received(address from, address to, uint256 tokenId, bytes memory _data) internal returns(bool) {\n" +
+			"function _checkOnERC721Received(address from, address to, uint256 tokenId, bytes memory _data)\n" +
+			"    internal\n" +
+			"    returns(\n" +
+			"        bool\n" +
+			"    )\n" +
+			"{\n" +
 			"    if(!to.isContract()) {\n" +
 			"        return true;\n" +
 			"    }\n" +

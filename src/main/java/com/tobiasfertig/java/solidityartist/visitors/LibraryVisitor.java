@@ -19,12 +19,14 @@ import com.tobiasfertig.java.solidityartist.elements.typedeclarations.StructElem
 import com.tobiasfertig.java.solidityartist.elements.typedeclarations.UsingForElement;
 import com.tobiasfertig.java.solidityartist.utils.Keyword;
 
+import java.util.Collection;
 import java.util.Iterator;
 
 public class LibraryVisitor extends VisitorImpl
 {
-	public LibraryVisitor( )
+	public LibraryVisitor( int lineLength )
 	{
+		super( lineLength );
 	}
 
 	@Override public String export( )
@@ -111,40 +113,54 @@ public class LibraryVisitor extends VisitorImpl
 	@Override public void visit( FunctionElement element )
 	{
 		checkAndAppendComment( element.getComment( ) );
-		indent( );
-		sb.append( Keyword.FUNCTION );
 
-		if ( !element.isFallback( ) )
+		int startIndex = sb.length( );
+		appendFunctionSignatureInline( element );
+		int endIndex = sb.length( );
+
+		//>= is required due to missing opening curly brace"
+		if ( endIndex - startIndex >= this.lineLength )
 		{
-			space( );
-			sb.append( element.getName( ) );
+			sb.delete( startIndex, endIndex );
+			appendFunctionSignatureUntilParametersInline( element );
+			endIndex = sb.length( );
+
+			if ( endIndex - startIndex > this.lineLength )
+			{
+				sb.delete( startIndex, endIndex );
+				appendFunctionSignatureUntilParametersLineWrapped( element );
+			}
+
+			appendFunctionSignatureAfterParametersLineWrapped( element );
 		}
 
-		openBraces( );
-		appendCollectionOfSolidityElements( element.getParameters( ), ", " );
-		closeBraces( );
+		if ( !element.isAbstract( ) )
+		{
+			openCurlyBraces( );
+			element.getCode( ).accept( this );
+			newline( );
+			closeCurlyBraces( );
+		}
+	}
+
+	private void appendFunctionSignatureInline( FunctionElement element )
+	{
+		indent( );
+
+		sb.append( Keyword.FUNCTION );
+		appendNameIfIsNotFallback( element );
+		appendParametersInline( element.getParameters( ) );
+
 		space( );
 		sb.append( element.getVisibility( ) );
-
-		for ( Keyword.Modifier modifier : element.getModifiers( ) )
-		{
-			space( );
-			sb.append( modifier );
-		}
-
-		for ( String customModifier : element.getCustomModifiers( ) )
-		{
-			space( );
-			sb.append( customModifier );
-		}
+		appendObjectsSpaceSeparatedInline( element.getModifiers( ) );
+		appendObjectsSpaceSeparatedInline( element.getCustomModifiers( ) );
 
 		if ( !element.getReturnParameters( ).isEmpty( ) )
 		{
 			space( );
 			sb.append( Keyword.RETURNS );
-			openBraces( );
-			appendCollectionOfSolidityElements( element.getReturnParameters( ), ", " );
-			closeBraces( );
+			appendParametersInline( element.getReturnParameters( ) );
 		}
 
 		if ( element.isAbstract( ) )
@@ -154,10 +170,114 @@ public class LibraryVisitor extends VisitorImpl
 		else
 		{
 			space( );
-			openCurlyBraces( );
-			element.getCode( ).accept( this );
+		}
+	}
+
+	private void appendObjectsSpaceSeparatedInline( Collection<? extends Object> elements )
+	{
+		for ( Object element : elements )
+		{
+			space( );
+			sb.append( element );
+		}
+	}
+
+	private void appendFunctionSignatureUntilParametersInline( FunctionElement element )
+	{
+		indent( );
+
+		sb.append( Keyword.FUNCTION );
+		appendNameIfIsNotFallback( element );
+		appendParametersInline( element.getParameters( ) );
+	}
+
+	private void appendParametersInline(Iterable<ParameterElement> elements )
+	{
+		openBraces( );
+		appendCollectionOfSolidityElements( elements, ", " );
+		closeBraces( );
+	}
+
+	private void appendFunctionSignatureUntilParametersLineWrapped( FunctionElement element )
+	{
+		indent( );
+
+		sb.append( Keyword.FUNCTION );
+		appendNameIfIsNotFallback( element );
+		openBraces( );
+		newline( );
+
+		increaseIndentation( );
+		appendCollectionOfSolidityElementsIndented( element.getParameters( ), ",\n" );
+		decreaseIndentation( );
+		newline( );
+
+		indent( );
+		closeBraces( );
+	}
+
+	private void appendNameIfIsNotFallback( FunctionElement element )
+	{
+		if ( !element.isFallback( ) )
+		{
+			space( );
+			sb.append( element.getName( ) );
+		}
+	}
+
+	private void appendFunctionSignatureAfterParametersLineWrapped( FunctionElement element )
+	{
+		increaseIndentation( );
+
+		newline( );
+		indent( );
+		sb.append( element.getVisibility( ) );
+
+		appendObjectsWrappedAndIndented( element.getModifiers( ) );
+		appendObjectsWrappedAndIndented( element.getCustomModifiers( ) );
+		appendReturnParametersLineWrapped( element.getReturnParameters( ) );
+
+		decreaseIndentation( );
+
+		if ( element.isAbstract( ) )
+		{
+			semicolon( );
+		}
+		else
+		{
 			newline( );
-			closeCurlyBraces( );
+			indent( );
+		}
+	}
+
+	private void appendObjectsWrappedAndIndented( Collection<? extends Object> elements )
+	{
+		for ( Object element : elements )
+		{
+			newline( );
+			indent( );
+			sb.append( element );
+		}
+	}
+
+	private void appendReturnParametersLineWrapped( Collection<ParameterElement> returnParameters )
+	{
+		if ( !returnParameters.isEmpty( ) )
+		{
+			newline( );
+
+			indent( );
+			sb.append( Keyword.RETURNS );
+			openBraces( );
+
+			newline( );
+			increaseIndentation( );
+			appendCollectionOfSolidityElementsIndented( returnParameters, ",\n" );
+			decreaseIndentation( );
+
+			newline( );
+			indent( );
+			closeBraces( );
 		}
 	}
 

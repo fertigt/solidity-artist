@@ -14,12 +14,15 @@ public class SolidityFile
 	private String path;
 	private FileElement fileElement;
 
+	private int lineLength;
+
 	public SolidityFile( String fileName, String path,
-		FileElement fileElement )
+		FileElement fileElement, int lineLength )
 	{
 		this.fileName = fileName;
 		this.path = path.endsWith( "/" ) ? path : path + "/";
 		this.fileElement = fileElement;
+		this.lineLength = lineLength;
 	}
 
 	public void saveToFile( ) throws IOException
@@ -54,7 +57,7 @@ public class SolidityFile
 
 	private String getFileElementAsString( )
 	{
-		Visitor visitor = new FileVisitor( );
+		Visitor visitor = new FileVisitor( this.lineLength );
 		this.fileElement.accept( visitor );
 		return visitor.export( );
 	}

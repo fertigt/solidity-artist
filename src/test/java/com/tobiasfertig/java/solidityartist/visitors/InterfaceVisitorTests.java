@@ -25,7 +25,7 @@ public class InterfaceVisitorTests
 	@Before
 	public void setUp( )
 	{
-		this.visitor = new InterfaceVisitor( );
+		this.visitor = new InterfaceVisitor( 99 );
 	}
 
 	@Test
@@ -166,6 +166,69 @@ public class InterfaceVisitorTests
 
 		parameterElement.accept( this.visitor );
 		assertEquals( "Should be the same text", "string indexed test", this.visitor.export( ) );
+	}
+
+	@Test
+	public void testVisitFunctionElement_UntilParametersInline_CorrectStringReturned( )
+	{
+		ParameterElement parameterElement = ParameterElement.builder( DataTypeElement.STRING )
+															.addName( "testSuperLongLong" )
+															.inMemory( )
+															.build( );
+		ParameterElement parameterElement2 = ParameterElement.builder( DataTypeElement.ADDRESS )
+															 .addName( "test2SuperLongLong" )
+															 .build( );
+
+		FunctionElement function = FunctionElement.publicBuilder( "payableFunction" )
+												  .addReturnParameter( parameterElement )
+												  .addReturnParameter( parameterElement2 )
+												  .isPayable( )
+												  .build( );
+
+		function.accept( this.visitor );
+
+		String expected = "function payableFunction()\n" +
+			"    public\n" +
+			"    payable\n" +
+			"    returns(\n" +
+			"        string memory testSuperLongLong,\n" +
+			"        address test2SuperLongLong\n" +
+			"    );";
+		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
+	}
+
+	@Test
+	public void testVisitFunctionElement_LineWrapped_CorrectStringReturned( )
+	{
+		ParameterElement parameterElement = ParameterElement.builder( DataTypeElement.STRING )
+															.addName( "testSuperLongLongLongLongLong" )
+															.inMemory( )
+															.build( );
+		ParameterElement parameterElement2 = ParameterElement.builder( DataTypeElement.ADDRESS )
+															 .addName( "test2SuperLongLongLongLongLong" )
+															 .build( );
+
+		FunctionElement function = FunctionElement.publicBuilder( "payableFunction" )
+												  .addParameter( parameterElement )
+												  .addParameter( parameterElement2 )
+												  .addReturnParameter( parameterElement )
+												  .addReturnParameter( parameterElement2 )
+												  .isPayable( )
+												  .build( );
+
+		function.accept( this.visitor );
+
+		String expected = "function payableFunction(\n" +
+			"    string memory testSuperLongLongLongLongLong,\n" +
+			"    address test2SuperLongLongLongLongLong\n" +
+			")\n" +
+			"    public\n" +
+			"    payable\n" +
+			"    returns(\n" +
+			"        string memory testSuperLongLongLongLongLong,\n" +
+			"        address test2SuperLongLongLongLongLong\n" +
+			"    );";
+		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
 	}
 
 	@Test

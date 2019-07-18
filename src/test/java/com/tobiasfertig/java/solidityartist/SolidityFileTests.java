@@ -174,7 +174,7 @@ public class SolidityFileTests
 	@Test
 	public void testSaveToFile_WritesSampleContract_CorrectFileWritten( )
 	{
-		SolidityFile solidityFile = new SolidityFile( "A.sol", "./contracts", this.fileElement );
+		SolidityFile solidityFile = new SolidityFile( "A.sol", "./contracts", this.fileElement, 99 );
 
 		try
 		{

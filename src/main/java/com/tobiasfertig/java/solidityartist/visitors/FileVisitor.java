@@ -25,8 +25,9 @@ import java.util.Set;
 
 public class FileVisitor extends VisitorImpl
 {
-	public FileVisitor( )
+	public FileVisitor( int lineLength )
 	{
+		super( lineLength );
 	}
 
 	@Override public String export( )
@@ -46,7 +47,7 @@ public class FileVisitor extends VisitorImpl
 
 	@Override public void visit( ContractElement element )
 	{
-		Visitor contractVisitor = new ContractVisitor( );
+		Visitor contractVisitor = new ContractVisitor( this.lineLength );
 		element.accept( contractVisitor );
 		sb.append( contractVisitor.export( ) );
 	}
@@ -244,14 +245,14 @@ public class FileVisitor extends VisitorImpl
 
 	@Override public void visit( InterfaceElement element )
 	{
-		Visitor interfaceVisitor = new InterfaceVisitor( );
+		Visitor interfaceVisitor = new InterfaceVisitor( this.lineLength );
 		element.accept( interfaceVisitor );
 		sb.append( interfaceVisitor.export( ) );
 	}
 
 	@Override public void visit( LibraryElement element )
 	{
-		Visitor libraryVisitor = new LibraryVisitor( );
+		Visitor libraryVisitor = new LibraryVisitor( this.lineLength );
 		element.accept( libraryVisitor );
 		sb.append( libraryVisitor.export( ) );
 	}

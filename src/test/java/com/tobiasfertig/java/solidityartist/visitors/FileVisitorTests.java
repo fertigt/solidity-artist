@@ -24,7 +24,7 @@ public class FileVisitorTests
 	@Before
 	public void setUp( )
 	{
-		this.visitor = new FileVisitor( );
+		this.visitor = new FileVisitor( 99 );
 	}
 
 	@Test

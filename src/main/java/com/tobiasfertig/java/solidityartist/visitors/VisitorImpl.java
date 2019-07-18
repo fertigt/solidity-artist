@@ -12,11 +12,13 @@ public abstract class VisitorImpl implements Visitor
 
 	private int level = 0;
 
+	int lineLength;
 	StringBuilder sb;
 
-	VisitorImpl( )
+	VisitorImpl( int lineLength )
 	{
 		sb = new StringBuilder( );
+		this.lineLength = lineLength;
 	}
 
 	void closeBraces( )
@@ -29,6 +31,16 @@ public abstract class VisitorImpl implements Visitor
 		this.level--;
 		indent( );
 		sb.append( "}" );
+	}
+
+	void decreaseIndentation( )
+	{
+		this.level--;
+	}
+
+	void increaseIndentation( )
+	{
+		this.level++;
 	}
 
 	void indent( )
