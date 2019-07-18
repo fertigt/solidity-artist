@@ -40,34 +40,26 @@ public class ContractVisitor extends VisitorImpl
 	@Override public void visit( ConstructorElement element )
 	{
 		checkAndAppendComment( element.getComment( ) );
-		indent( );
-		sb.append( Keyword.CONSTRUCTOR );
-		openBraces( );
-		appendCollectionOfSolidityElements( element.getParameters( ), ", " );
-		closeBraces( );
 
-		for ( String inheritanceModifier : element.getInheritanceModifiers( ) )
+		int startIndex = sb.length( );
+		appendConstructorSignatureInline( element );
+		int endIndex = sb.length( );
+
+		if ( endIndex - startIndex > this.lineLength )
 		{
-			space( );
-			sb.append( inheritanceModifier );
+			sb.delete( startIndex, endIndex );
+			appendConstructorSignatureUntilParametersInline( element );
+			endIndex = sb.length( );
+
+			if ( endIndex - startIndex > this.lineLength )
+			{
+				sb.delete( startIndex, endIndex );
+				appendConstructorSignatureUntilParametersLineWrapped( element );
+			}
+
+			appendConstructorSignatureAfterParametersLineWrapped( element );
 		}
 
-		space( );
-		sb.append( element.getVisibility( ) );
-
-		for ( Keyword.Modifier modifier : element.getModifiers( ) )
-		{
-			space( );
-			sb.append( modifier );
-		}
-
-		for ( String customModifier : element.getCustomModifiers( ) )
-		{
-			space( );
-			sb.append( customModifier );
-		}
-
-		space( );
 		openCurlyBraces( );
 
 		if(element.getCode() != null)
@@ -77,6 +69,65 @@ public class ContractVisitor extends VisitorImpl
 
 		newline( );
 		closeCurlyBraces( );
+	}
+
+	private void appendConstructorSignatureInline( ConstructorElement element )
+	{
+		indent( );
+		sb.append( Keyword.CONSTRUCTOR );
+		appendParametersInline( element.getParameters( ) );
+
+		appendObjectsSpaceSeparatedInline( element.getInheritanceModifiers( ) );
+
+		space( );
+		sb.append( element.getVisibility( ) );
+		appendObjectsSpaceSeparatedInline( element.getModifiers( ) );
+		appendObjectsSpaceSeparatedInline( element.getCustomModifiers( ) );
+
+		space( );
+	}
+
+	private void appendConstructorSignatureUntilParametersInline( ConstructorElement element )
+	{
+		indent( );
+
+		sb.append( Keyword.CONSTRUCTOR );
+		appendParametersInline( element.getParameters( ) );
+	}
+
+	private void appendConstructorSignatureUntilParametersLineWrapped( ConstructorElement element )
+	{
+		indent( );
+
+		sb.append( Keyword.CONSTRUCTOR );
+		openBraces( );
+		newline( );
+
+		increaseIndentation( );
+		appendCollectionOfSolidityElementsIndented( element.getParameters( ), ",\n" );
+		decreaseIndentation( );
+		newline( );
+
+		indent( );
+		closeBraces( );
+	}
+
+	private void appendConstructorSignatureAfterParametersLineWrapped( ConstructorElement element )
+	{
+		increaseIndentation( );
+
+		indent( );
+		appendObjectsWrappedAndIndented( element.getInheritanceModifiers( ) );
+		newline( );
+
+		indent( );
+		sb.append( element.getVisibility( ) );
+		appendObjectsWrappedAndIndented( element.getModifiers( ) );
+		appendObjectsWrappedAndIndented( element.getCustomModifiers( ) );
+		decreaseIndentation( );
+		newline( );
+
+		indent( );
 	}
 
 	@Override public void visit( ContractElement element )

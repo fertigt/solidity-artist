@@ -181,7 +181,8 @@ public class ContractVisitorTests
 	@Test
 	public void testVisitConstructorElement_WithInheritanceModifiers_CorrectStringReturned( )
 	{
-		ParameterElement parameter = ParameterElement.builder( DataTypeElement.UINT ).addName( "_y" ).build( );
+		ParameterElement parameter =
+			ParameterElement.builder( DataTypeElement.UINT ).addName( "_y" ).build( );
 		ConstructorElement constructor = ConstructorElement.publicBuilder( )
 														   .addInheritanceModifier( "Base(_y * _y)" )
 														   .addParameter( parameter )
@@ -190,6 +191,52 @@ public class ContractVisitorTests
 		constructor.accept( this.visitor );
 
 		String expected = "constructor(uint _y) Base(_y * _y) public {\n" +
+			"\n" +
+			"}";
+		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
+	}
+
+	@Test
+	public void testVisitConstructorElement_UntilParametersInline_CorrectStringReturned( )
+	{
+		ParameterElement parameter =
+			ParameterElement.builder( DataTypeElement.UINT ).addName(
+				"_yxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" ).build( );
+		ConstructorElement constructor = ConstructorElement.publicBuilder( )
+														   .addInheritanceModifier( "Base(_y * _y)" )
+														   .addParameter( parameter )
+														   .build( );
+
+		constructor.accept( this.visitor );
+
+		String expected = "constructor(uint _yxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx)    \n" +
+			"    Base(_y * _y)\n" +
+			"    public\n" +
+			"{\n" +
+			"\n" +
+			"}";
+		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
+	}
+
+	@Test
+	public void testVisitConstructorElement_LineWrapped_CorrectStringReturned( )
+	{
+		ParameterElement parameter =
+			ParameterElement.builder( DataTypeElement.UINT ).addName(
+				"_yxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" ).build( );
+		ConstructorElement constructor = ConstructorElement.publicBuilder( )
+														   .addInheritanceModifier( "Base(_y * _y)" )
+														   .addParameter( parameter )
+														   .build( );
+
+		constructor.accept( this.visitor );
+
+		String expected = "constructor(\n" +
+			"    uint _yxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n" +
+			")    \n" +
+			"    Base(_y * _y)\n" +
+			"    public\n" +
+			"{\n" +
 			"\n" +
 			"}";
 		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
