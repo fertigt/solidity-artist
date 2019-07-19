@@ -2,14 +2,15 @@ package com.tobiasfertig.java.solidityartist.elements.functions;
 
 import com.tobiasfertig.java.solidityartist.elements.SolidityElement;
 import com.tobiasfertig.java.solidityartist.elements.comments.NatSpecElement;
+import com.tobiasfertig.java.solidityartist.elements.datatypes.DataTypeElement;
 import com.tobiasfertig.java.solidityartist.elements.parameters.ParameterElement;
 import com.tobiasfertig.java.solidityartist.utils.Keyword;
 import com.tobiasfertig.java.solidityartist.visitors.Visitor;
+import org.bouncycastle.jcajce.provider.digest.Keccak;
+import org.bouncycastle.util.encoders.Hex;
 
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
 
 public class FunctionElement implements SolidityElement
 {
@@ -42,6 +43,99 @@ public class FunctionElement implements SolidityElement
 	public void accept( Visitor visitor )
 	{
 		visitor.visit( this );
+	}
+
+	@Override public boolean equals( Object obj )
+	{
+		boolean result;
+
+		if ( this == obj )
+		{
+			result = true;
+		}
+		else if (obj == null )
+		{
+			result = false;
+		}
+		else if ( this.getClass( ) != obj.getClass( ) )
+		{
+			result = false;
+		}
+		else
+		{
+			FunctionElement function = ( FunctionElement ) obj;
+			result = this.getFunctionSelector( ).equals( function.getFunctionSelector( ) );
+		}
+
+		return result;
+	}
+
+	@Override public int hashCode( )
+	{
+		return getFunctionSelector( ).hashCode( );
+	}
+
+	private String getFunctionSelector( )
+	{
+		StringBuilder sb = new StringBuilder( );
+		sb.append( name );
+		sb.append( "(" );
+
+		Iterator<ParameterElement> iterator = parameters.iterator( );
+
+		if ( iterator.hasNext( ) )
+		{
+			ParameterElement parameter = iterator.next( );
+
+			while ( iterator.hasNext( ) )
+			{
+				appendParameterToFunctionSelector( parameter, sb );
+				sb.append( "," );
+
+				parameter = iterator.next( );
+			}
+
+			appendParameterToFunctionSelector( parameter, sb );
+		}
+
+		sb.append( ")" );
+
+		byte[] digest = calculateFunctionSelector( sb.toString( ) );
+		return Hex.toHexString( Arrays.copyOfRange( digest, 0, 4 ) );
+	}
+
+	private void appendParameterToFunctionSelector( ParameterElement parameter, StringBuilder sb )
+	{
+		switch ( parameter.getDataType( ).getTypeName( ) )
+		{
+		case "uint":
+			sb.append( "uint256" );
+			break;
+		case "int":
+			sb.append( "int256" );
+			break;
+		case "ufixed":
+			sb.append( "ufixed128x18" );
+			break;
+		case "fixed":
+			sb.append( "fixed128x18" );
+			break;
+		case "address payable":
+			sb.append( "address" );
+			break;
+		case "byte":
+			sb.append( "bytes1" );
+			break;
+		default:
+			sb.append( parameter.getDataType( ) );
+		}
+	}
+
+	private byte[] calculateFunctionSelector( String functionSignature )
+	{
+		Keccak.Digest256 digest = new Keccak.Digest256( );
+		digest.update( functionSignature.getBytes( StandardCharsets.UTF_8 ) );
+		return digest.digest( );
 	}
 
 	public NatSpecElement getComment( )

@@ -500,6 +500,148 @@ public class ContractVisitorTests
 	}
 
 	@Test
+	public void testVisitContractElement_MultipleExternalFunctions_CorrectStringReturned( )
+	{
+		FunctionElement fallbackFunction =
+			FunctionElement.fallbackBuilder( )
+						   .addCode( CodeElement.builder( ).addStatement( "owner = msg.sender" ).build( ) )
+						   .build( );
+
+		NatSpecElement totalComment = NatSpecElement.builder( )
+													.addTagAtNotice( "This function is a view and returns the total " +
+														"supply of token.")
+													.addTagAtReturn( "uint256 is the total supply of token." )
+													.isMultiLineComment( )
+													.build( );
+
+		FunctionElement total = FunctionElement.externalBuilder( "total" )
+											   .addNatSpec( totalComment )
+											   .isView( )
+											   .addReturnParameter( ParameterElement.builder( DataTypeElement.UINT256 )
+																					.build( )
+											   )
+											   .addCode( CodeElement.builder( )
+																	.addStatement( "return _totalSupply" )
+																	.build( )
+											   )
+											   .build( );
+
+		FunctionElement totalSupply = FunctionElement.externalBuilder( "totalSupply" )
+													 .isPure( )
+													 .addReturnParameter( ParameterElement.builder( DataTypeElement.UINT256 )
+																						  .build( )
+													 )
+													 .addCode( CodeElement.builder( )
+																		  .addStatement( "return _totalSupply" )
+																		  .build( )
+													 )
+													 .build( );
+
+		FunctionElement totalSupply2 = FunctionElement.externalBuilder( "totalSupply2" )
+													 .isPure( )
+													 .addReturnParameter( ParameterElement.builder( DataTypeElement.UINT256 )
+																						  .build( )
+													 )
+													 .addCode( CodeElement.builder( )
+																		  .addStatement( "return _totalSupply" )
+																		  .build( )
+													 )
+													 .build( );
+
+		FunctionElement _transfer = FunctionElement.externalBuilder( "_transfer" )
+												   .addParameter( ParameterElement.builder( DataTypeElement.ADDRESS )
+																				  .addName(
+																					  "sender" )
+																				  .build( ) )
+												   .addParameter( ParameterElement.builder( DataTypeElement.ADDRESS )
+																				  .addName(
+																					  "recipient" )
+																				  .build( )
+												   ).isPayable( )
+												   .addReturnParameter(
+													   ParameterElement.builder( DataTypeElement.UINT256 )
+																	   .addName( "amount" )
+																	   .build( )
+												   )
+												   .addCode( CodeElement.builder( )
+																		.addStatement(
+																			"require(sender != address(0), \"ERC20: transfer from the zero address\")" )
+																		.addStatement(
+																			"require(recipient != address(0), \"ERC20: transfer to the zero address\")" )
+																		.addStatement( "_balances[sender] = " +
+																			"_balances[sender].sub(amount)" )
+																		.addStatement(
+																			"_balances[recipient] = _balances[recipient].add(amount)" )
+																		.addStatement(
+																			"emit Transfer(sender, recipient, amount)" )
+																		.build( )
+												   )
+												   .build( );
+
+		FunctionElement totally = FunctionElement.externalBuilder( "totally" )
+												 .addReturnParameter( ParameterElement.builder( DataTypeElement.UINT256 )
+																					  .build( )
+												 )
+												 .addCode( CodeElement.builder( )
+																	  .addStatement( "return _totalSupply" )
+																	  .build( )
+												 )
+												 .build( );
+
+		ContractElement contract = ContractElement.builder( "ERC20" )
+												  .addInheritedContract( "IERC20" )
+												  .addFallbackFunction( fallbackFunction )
+												  .addExternalFunction( total )
+												  .addExternalFunction( totalSupply2 )
+												  .addExternalFunction( _transfer )
+												  .addExternalFunction( totally )
+												  .addExternalFunction( totalSupply )
+												  .build( );
+
+		contract.accept( this.visitor );
+		String expected = "contract ERC20 is IERC20 {\n" +
+			"    function() external {\n" +
+			"        owner = msg.sender;\n" +
+			"    }\n" +
+			"\n" +
+			"    function _transfer(address sender, address recipient)\n" +
+			"        external\n" +
+			"        payable\n" +
+			"        returns(\n" +
+			"            uint256 amount\n" +
+			"        )\n" +
+			"    {\n" +
+			"        require(sender != address(0), \"ERC20: transfer from the zero address\");\n" +
+			"        require(recipient != address(0), \"ERC20: transfer to the zero address\");\n" +
+			"        _balances[sender] = _balances[sender].sub(amount);\n" +
+			"        _balances[recipient] = _balances[recipient].add(amount);\n" +
+			"        emit Transfer(sender, recipient, amount);\n" +
+			"    }\n" +
+			"\n" +
+			"    function totally() external returns(uint256) {\n" +
+			"        return _totalSupply;\n" +
+			"    }\n" +
+			"\n" +
+			"    /**\n" +
+			"     * @notice This function is a view and returns the total supply of token.\n" +
+			"     * @return uint256 is the total supply of token.\n" +
+			"     */\n" +
+			"    function total() external view returns(uint256) {\n" +
+			"        return _totalSupply;\n" +
+			"    }\n" +
+			"\n" +
+			"    function totalSupply2() external pure returns(uint256) {\n" +
+			"        return _totalSupply;\n" +
+			"    }\n" +
+			"\n" +
+			"    function totalSupply() external pure returns(uint256) {\n" +
+			"        return _totalSupply;\n" +
+			"    }\n" +
+			"}";
+		assertEquals( "Should be the same text", expected, this.visitor.export( ) );
+	}
+
+	@Test
 	public void testVisitContractElement_Complete_CorrectStringReturned( )
 	{
 		UsingForElement usingFor = UsingForElement.builder( "SafeMath", DataTypeElement.UINT256 ).build( );

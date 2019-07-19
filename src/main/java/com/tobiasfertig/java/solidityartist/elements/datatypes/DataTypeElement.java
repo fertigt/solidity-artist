@@ -131,4 +131,9 @@ public class DataTypeElement implements SolidityElement
 	{
 		return typeName;
 	}
+
+	@Override public String toString( )
+	{
+		return typeName;
+	}
 }

@@ -10,10 +10,12 @@ import com.tobiasfertig.java.solidityartist.elements.statevariables.StateVariabl
 import com.tobiasfertig.java.solidityartist.elements.typedeclarations.EnumElement;
 import com.tobiasfertig.java.solidityartist.elements.typedeclarations.StructElement;
 import com.tobiasfertig.java.solidityartist.elements.typedeclarations.UsingForElement;
+import com.tobiasfertig.java.solidityartist.utils.FunctionElementComparator;
 import com.tobiasfertig.java.solidityartist.visitors.Visitor;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.TreeSet;
 
 public class ContractElement implements SolidityElement
 {
@@ -150,10 +152,10 @@ public class ContractElement implements SolidityElement
 		private final Set<ModifierElement> modifierDeclarations = new LinkedHashSet<>( );
 		private ConstructorElement constructor;
 		private FunctionElement fallbackFunction;
-		private final Set<FunctionElement> externalFunctions = new LinkedHashSet<>( );
-		private final Set<FunctionElement> publicFunctions = new LinkedHashSet<>( );
-		private final Set<FunctionElement> internalFunctions = new LinkedHashSet<>( );
-		private final Set<FunctionElement> privateFunctions = new LinkedHashSet<>( );
+		private final Set<FunctionElement> externalFunctions = new TreeSet<>( new FunctionElementComparator( ) );
+		private final Set<FunctionElement> publicFunctions = new TreeSet<>( new FunctionElementComparator( ) );
+		private final Set<FunctionElement> internalFunctions = new TreeSet<>( new FunctionElementComparator( ) );
+		private final Set<FunctionElement> privateFunctions = new TreeSet<>( new FunctionElementComparator( ) );
 
 		private Builder( String name )
 		{
