@@ -332,10 +332,7 @@ public class LibraryVisitor extends VisitorImpl
 		isNotFirstElement = checkAndAppend( element.getStateVariables( ), isNotFirstElement, "\n\n" );
 		isNotFirstElement = checkAndAppend( element.getEventDeclarations( ), isNotFirstElement, "\n\n" );
 		isNotFirstElement = checkAndAppend( element.getModifierDeclarations( ), isNotFirstElement, "\n\n" );
-		isNotFirstElement = checkAndAppend( element.getExternalFunctions( ), isNotFirstElement, "\n\n" );
-		isNotFirstElement = checkAndAppend( element.getPublicFunctions( ), isNotFirstElement, "\n\n" );
-		isNotFirstElement = checkAndAppend( element.getInternalFunctions( ), isNotFirstElement, "\n\n" );
-		checkAndAppend( element.getPrivateFunctions( ), isNotFirstElement, "\n\n" );
+		checkAndAppend( element.getFunctions( ), isNotFirstElement, "\n\n" );
 
 		newline( );
 		closeCurlyBraces( );

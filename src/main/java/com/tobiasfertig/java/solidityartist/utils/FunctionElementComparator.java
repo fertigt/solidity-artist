@@ -14,21 +14,39 @@ public class FunctionElementComparator implements Comparator<FunctionElement>
 		{
 			result = 0;
 		}
-		else if ( ( hasNoFunctionModifiiers( o1 ) || isFunctionPayable( o1 ) ) &&
-			( isFunctionView( o2 ) || isFunctionPure( o2 ) ) )
+		else if ( isExternal( o1 ) && isExternal( o2 ) )
+		{
+			result = compareByModifier( o1, o2 );
+		}
+		else if ( isPublic( o1 ) && isPublic( o2 ) )
+		{
+			result = compareByModifier( o1, o2 );
+		}
+		else if ( isInternal( o1 ) && isInternal( o2 ) )
+		{
+			result = compareByModifier( o1, o2 );
+		}
+		else if ( isPrivate( o1 ) && isPrivate( o2 ) )
+		{
+			result = compareByModifier( o1, o2 );
+		}
+		else if ( isExternal( o1 ) && ( isPublic( o2 ) || isInternal( o2 ) || isPrivate( o2 ) ) )
 		{
 			result = -1;
 		}
-		else if ( isFunctionView( o1 ) && isFunctionPure( o2 ) )
+		else if ( isPublic( o1 ) && ( isInternal( o2 ) || isPrivate( o2 ) ) )
 		{
 			result = -1;
 		}
-		else if ( isFunctionPure( o1 ) && isFunctionView( o2 ) )
+		else if ( isPublic( o1 ) && isExternal( o2 ) )
 		{
 			result = 1;
 		}
-		else if ( ( isFunctionView( o1 ) || isFunctionPure( o1 ) ) &&
-			( hasNoFunctionModifiiers( o2 ) || isFunctionPayable( o2 ) ) )
+		else if ( isInternal( o1 ) && isPrivate( o2 ) )
+		{
+			result = -1;
+		}
+		else if ( isInternal( o1 ) && ( isExternal( o2 ) || isPublic( o2 ) ) )
 		{
 			result = 1;
 		}
@@ -40,12 +58,62 @@ public class FunctionElementComparator implements Comparator<FunctionElement>
 		return result;
 	}
 
-	private boolean hasNoFunctionModifiiers( FunctionElement functionElement )
+	private boolean isExternal( FunctionElement functionElement )
+	{
+		return Keyword.Visibility.EXTERNAL.equals( functionElement.getVisibility( ) );
+	}
+
+	private boolean isPublic( FunctionElement functionElement )
+	{
+		return Keyword.Visibility.PUBLIC.equals( functionElement.getVisibility( ) );
+	}
+
+	private boolean isInternal( FunctionElement functionElement )
+	{
+		return Keyword.Visibility.INTERNAL.equals( functionElement.getVisibility( ) );
+	}
+
+	private boolean isPrivate( FunctionElement functionElement )
+	{
+		return Keyword.Visibility.PRIVATE.equals( functionElement.getVisibility( ) );
+	}
+
+	private int compareByModifier( FunctionElement o1, FunctionElement o2 )
+	{
+		int result;
+
+		if ( ( hasNoModifiiers( o1 ) || isPayable( o1 ) ) &&
+			( isView( o2 ) || isPure( o2 ) ) )
+		{
+			result = -1;
+		}
+		else if ( isView( o1 ) && isPure( o2 ) )
+		{
+			result = -1;
+		}
+		else if ( isPure( o1 ) && isView( o2 ) )
+		{
+			result = 1;
+		}
+		else if ( ( isView( o1 ) || isPure( o1 ) ) &&
+			( hasNoModifiiers( o2 ) || isPayable( o2 ) ) )
+		{
+			result = 1;
+		}
+		else
+		{
+			result = 1;
+		}
+
+		return result;
+	}
+
+	private boolean hasNoModifiiers( FunctionElement functionElement )
 	{
 		return functionElement.getModifiers( ).isEmpty( );
 	}
 
-	private boolean isFunctionPayable( FunctionElement functionElement )
+	private boolean isPayable( FunctionElement functionElement )
 	{
 		boolean result = false;
 
@@ -61,7 +129,7 @@ public class FunctionElementComparator implements Comparator<FunctionElement>
 		return result;
 	}
 
-	private boolean isFunctionView( FunctionElement functionElement )
+	private boolean isView( FunctionElement functionElement )
 	{
 		boolean result = false;
 
@@ -77,7 +145,7 @@ public class FunctionElementComparator implements Comparator<FunctionElement>
 		return result;
 	}
 
-	private boolean isFunctionPure( FunctionElement functionElement )
+	private boolean isPure( FunctionElement functionElement )
 	{
 		boolean result = false;
 

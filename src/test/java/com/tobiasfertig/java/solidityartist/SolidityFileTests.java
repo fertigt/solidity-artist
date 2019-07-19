@@ -153,10 +153,10 @@ public class SolidityFileTests
 												  .addModifierDeclaration( modifier )
 												  .addConstructor( constructor )
 												  .addFallbackFunction( fallbackFunction )
-												  .addExternalFunction( total )
-												  .addPublicFunction( totalSupply )
-												  .addInternalFunction( _transfer )
-												  .addPrivateFunction( totally )
+												  .addFunction( total )
+												  .addFunction( totalSupply )
+												  .addFunction( _transfer )
+												  .addFunction( totally )
 												  .build( );
 
 		this.fileElement = FileElement.builder( )

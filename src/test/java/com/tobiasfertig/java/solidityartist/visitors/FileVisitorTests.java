@@ -143,10 +143,10 @@ public class FileVisitorTests
 												  .addModifierDeclaration( modifier )
 												  .addConstructor( constructor )
 												  .addFallbackFunction( fallbackFunction )
-												  .addExternalFunction( total )
-												  .addPublicFunction( totalSupply )
-												  .addInternalFunction( _transfer )
-												  .addPrivateFunction( totally )
+												  .addFunction( total )
+												  .addFunction( totalSupply )
+												  .addFunction( _transfer )
+												  .addFunction( totally )
 												  .build( );
 
 		contract.accept( this.visitor );
@@ -229,7 +229,7 @@ public class FileVisitorTests
 												  .addUsingForDeclaration( usingFor )
 												  .addStateVariable( _totalSupply )
 												  .addConstructor( constructor )
-												  .addPublicFunction( totalSupply )
+												  .addFunction( totalSupply )
 												  .build( );
 
 		FileElement file = FileElement.builder( )
@@ -466,10 +466,10 @@ public class FileVisitorTests
 													  .addConstantStateVariable( stateVariable )
 													  .addEventDeclaration( event )
 													  .addModifierDeclaration( modifier )
-													  .addExternalFunction( total )
-													  .addPublicFunction( totalSupply )
-													  .addInternalFunction( _transfer )
-													  .addPrivateFunction( totally )
+													  .addFunction( total )
+													  .addFunction( totalSupply )
+													  .addFunction( _transfer )
+													  .addFunction( totally )
 													  .build( );
 
 		FileElement file = FileElement.builder( )
@@ -825,10 +825,10 @@ public class FileVisitorTests
 													  .addConstantStateVariable( stateVariable )
 													  .addEventDeclaration( event )
 													  .addModifierDeclaration( modifier )
-													  .addExternalFunction( total )
-													  .addPublicFunction( totalSupply )
-													  .addInternalFunction( _transfer )
-													  .addPrivateFunction( totally )
+													  .addFunction( total )
+													  .addFunction( totalSupply )
+													  .addFunction( _transfer )
+													  .addFunction( totally )
 													  .build( );
 
 		libraryElement.accept( this.visitor );

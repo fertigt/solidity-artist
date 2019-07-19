@@ -30,10 +30,7 @@ public class ContractElement implements SolidityElement
 	private final Set<ModifierElement> modifierDeclarations;
 	private final ConstructorElement constructor;
 	private final FunctionElement fallbackFunction;
-	private final Set<FunctionElement> externalFunctions;
-	private final Set<FunctionElement> publicFunctions;
-	private final Set<FunctionElement> internalFunctions;
-	private final Set<FunctionElement> privateFunctions;
+	private final Set<FunctionElement> functions;
 
 	private ContractElement( Builder builder )
 	{
@@ -48,10 +45,7 @@ public class ContractElement implements SolidityElement
 		this.modifierDeclarations = builder.modifierDeclarations;
 		this.constructor = builder.constructor;
 		this.fallbackFunction = builder.fallbackFunction;
-		this.externalFunctions = builder.externalFunctions;
-		this.publicFunctions = builder.publicFunctions;
-		this.internalFunctions = builder.internalFunctions;
-		this.privateFunctions = builder.privateFunctions;
+		this.functions = builder.functions;
 	}
 
 	@Override public void accept( Visitor visitor )
@@ -114,24 +108,9 @@ public class ContractElement implements SolidityElement
 		return fallbackFunction;
 	}
 
-	public Set<FunctionElement> getExternalFunctions( )
+	public Set<FunctionElement> getFunctions( )
 	{
-		return externalFunctions;
-	}
-
-	public Set<FunctionElement> getPublicFunctions( )
-	{
-		return publicFunctions;
-	}
-
-	public Set<FunctionElement> getInternalFunctions( )
-	{
-		return internalFunctions;
-	}
-
-	public Set<FunctionElement> getPrivateFunctions( )
-	{
-		return privateFunctions;
+		return functions;
 	}
 
 	public static Builder builder( String name )
@@ -152,10 +131,7 @@ public class ContractElement implements SolidityElement
 		private final Set<ModifierElement> modifierDeclarations = new LinkedHashSet<>( );
 		private ConstructorElement constructor;
 		private FunctionElement fallbackFunction;
-		private final Set<FunctionElement> externalFunctions = new TreeSet<>( new FunctionElementComparator( ) );
-		private final Set<FunctionElement> publicFunctions = new TreeSet<>( new FunctionElementComparator( ) );
-		private final Set<FunctionElement> internalFunctions = new TreeSet<>( new FunctionElementComparator( ) );
-		private final Set<FunctionElement> privateFunctions = new TreeSet<>( new FunctionElementComparator( ) );
+		private final Set<FunctionElement> functions = new TreeSet<>( new FunctionElementComparator( ) );
 
 		private Builder( String name )
 		{
@@ -222,27 +198,9 @@ public class ContractElement implements SolidityElement
 			return this;
 		}
 
-		public Builder addExternalFunction( FunctionElement function )
+		public Builder addFunction( FunctionElement function )
 		{
-			this.externalFunctions.add( function );
-			return this;
-		}
-
-		public Builder addPublicFunction( FunctionElement function )
-		{
-			this.publicFunctions.add( function );
-			return this;
-		}
-
-		public Builder addInternalFunction( FunctionElement function )
-		{
-			this.internalFunctions.add( function );
-			return this;
-		}
-
-		public Builder addPrivateFunction( FunctionElement function )
-		{
-			this.privateFunctions.add( function );
+			this.functions.add( function );
 			return this;
 		}
 

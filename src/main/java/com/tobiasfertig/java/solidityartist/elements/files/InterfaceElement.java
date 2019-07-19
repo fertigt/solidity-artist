@@ -8,10 +8,12 @@ import com.tobiasfertig.java.solidityartist.elements.functions.ModifierElement;
 import com.tobiasfertig.java.solidityartist.elements.typedeclarations.EnumElement;
 import com.tobiasfertig.java.solidityartist.elements.typedeclarations.StructElement;
 import com.tobiasfertig.java.solidityartist.elements.typedeclarations.UsingForElement;
+import com.tobiasfertig.java.solidityartist.utils.FunctionElementComparator;
 import com.tobiasfertig.java.solidityartist.visitors.Visitor;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.TreeSet;
 
 public class InterfaceElement implements SolidityElement
 {
@@ -103,7 +105,7 @@ public class InterfaceElement implements SolidityElement
 		private final Set<EventElement> eventDeclarations = new LinkedHashSet<>( );
 		private final Set<ModifierElement> modifierDeclarations = new LinkedHashSet<>( );
 		private FunctionElement fallbackFunction;
-		private final Set<FunctionElement> externalFunctions = new LinkedHashSet<>( );
+		private final Set<FunctionElement> externalFunctions = new TreeSet<>( new FunctionElementComparator( ) );
 
 		private Builder( String name )
 		{

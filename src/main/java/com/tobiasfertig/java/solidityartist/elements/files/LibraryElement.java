@@ -9,10 +9,12 @@ import com.tobiasfertig.java.solidityartist.elements.statevariables.StateVariabl
 import com.tobiasfertig.java.solidityartist.elements.typedeclarations.EnumElement;
 import com.tobiasfertig.java.solidityartist.elements.typedeclarations.StructElement;
 import com.tobiasfertig.java.solidityartist.elements.typedeclarations.UsingForElement;
+import com.tobiasfertig.java.solidityartist.utils.FunctionElementComparator;
 import com.tobiasfertig.java.solidityartist.visitors.Visitor;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.TreeSet;
 
 public class LibraryElement implements SolidityElement
 {
@@ -24,10 +26,7 @@ public class LibraryElement implements SolidityElement
 	private final Set<StateVariableElement> stateVariables;
 	private final Set<EventElement> eventDeclarations;
 	private final Set<ModifierElement> modifierDeclarations;
-	private final Set<FunctionElement> externalFunctions;
-	private final Set<FunctionElement> publicFunctions;
-	private final Set<FunctionElement> internalFunctions;
-	private final Set<FunctionElement> privateFunctions;
+	private final Set<FunctionElement> functions;
 
 	private LibraryElement( Builder builder )
 	{
@@ -39,10 +38,7 @@ public class LibraryElement implements SolidityElement
 		this.stateVariables = builder.stateVariables;
 		this.eventDeclarations = builder.eventDeclarations;
 		this.modifierDeclarations = builder.modifierDeclarations;
-		this.externalFunctions = builder.externalFunctions;
-		this.publicFunctions = builder.publicFunctions;
-		this.internalFunctions = builder.internalFunctions;
-		this.privateFunctions = builder.privateFunctions;
+		this.functions = builder.functions;
 	}
 
 	@Override public void accept( Visitor visitor )
@@ -90,24 +86,9 @@ public class LibraryElement implements SolidityElement
 		return modifierDeclarations;
 	}
 
-	public Set<FunctionElement> getExternalFunctions( )
+	public Set<FunctionElement> getFunctions( )
 	{
-		return externalFunctions;
-	}
-
-	public Set<FunctionElement> getPublicFunctions( )
-	{
-		return publicFunctions;
-	}
-
-	public Set<FunctionElement> getInternalFunctions( )
-	{
-		return internalFunctions;
-	}
-
-	public Set<FunctionElement> getPrivateFunctions( )
-	{
-		return privateFunctions;
+		return functions;
 	}
 
 	public static Builder builder( String name )
@@ -125,10 +106,7 @@ public class LibraryElement implements SolidityElement
 		private final Set<StateVariableElement> stateVariables = new LinkedHashSet<>( );
 		private final Set<EventElement> eventDeclarations = new LinkedHashSet<>( );
 		private final Set<ModifierElement> modifierDeclarations = new LinkedHashSet<>( );
-		private final Set<FunctionElement> externalFunctions = new LinkedHashSet<>( );
-		private final Set<FunctionElement> publicFunctions = new LinkedHashSet<>( );
-		private final Set<FunctionElement> internalFunctions = new LinkedHashSet<>( );
-		private final Set<FunctionElement> privateFunctions = new LinkedHashSet<>( );
+		private final Set<FunctionElement> functions = new TreeSet<>( new FunctionElementComparator( ) );
 
 		private Builder( String name )
 		{
@@ -177,27 +155,9 @@ public class LibraryElement implements SolidityElement
 			return this;
 		}
 
-		public Builder addExternalFunction( FunctionElement function )
+		public Builder addFunction( FunctionElement function )
 		{
-			this.externalFunctions.add( function );
-			return this;
-		}
-
-		public Builder addPublicFunction( FunctionElement function )
-		{
-			this.publicFunctions.add( function );
-			return this;
-		}
-
-		public Builder addInternalFunction( FunctionElement function )
-		{
-			this.internalFunctions.add( function );
-			return this;
-		}
-
-		public Builder addPrivateFunction( FunctionElement function )
-		{
-			this.privateFunctions.add( function );
+			this.functions.add( function );
 			return this;
 		}
 

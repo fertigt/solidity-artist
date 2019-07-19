@@ -401,7 +401,7 @@ public class ContractVisitorTests
 												  .addUsingForDeclaration( usingFor )
 												  .addStateVariable( _totalSupply )
 												  .addConstructor( constructor )
-												  .addPublicFunction( totalSupply )
+												  .addFunction( totalSupply )
 												  .build( );
 
 		contract.accept( this.visitor );
@@ -470,8 +470,8 @@ public class ContractVisitorTests
 												  .addUsingForDeclaration( usingFor )
 												  .addStateVariable( _totalSupply )
 												  .addConstructor( constructor )
-												  .addPublicFunction( totalSupply )
-												  .addInternalFunction( _transfer )
+												  .addFunction( totalSupply )
+												  .addFunction( _transfer )
 												  .build( );
 
 		contract.accept( this.visitor );
@@ -591,11 +591,11 @@ public class ContractVisitorTests
 		ContractElement contract = ContractElement.builder( "ERC20" )
 												  .addInheritedContract( "IERC20" )
 												  .addFallbackFunction( fallbackFunction )
-												  .addExternalFunction( total )
-												  .addExternalFunction( totalSupply2 )
-												  .addExternalFunction( _transfer )
-												  .addExternalFunction( totally )
-												  .addExternalFunction( totalSupply )
+												  .addFunction( total )
+												  .addFunction( totalSupply2 )
+												  .addFunction( _transfer )
+												  .addFunction( totally )
+												  .addFunction( totalSupply )
 												  .build( );
 
 		contract.accept( this.visitor );
@@ -785,10 +785,10 @@ public class ContractVisitorTests
 												  .addModifierDeclaration( modifier )
 												  .addConstructor( constructor )
 												  .addFallbackFunction( fallbackFunction )
-												  .addExternalFunction( total )
-												  .addPublicFunction( totalSupply )
-												  .addInternalFunction( _transfer )
-												  .addPrivateFunction( totally )
+												  .addFunction( total )
+												  .addFunction( totalSupply )
+												  .addFunction( _transfer )
+												  .addFunction( totally )
 												  .build( );
 
 		contract.accept( this.visitor );
